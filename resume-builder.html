@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Builder — Student Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><div class="sidebar-brand-icon">🎓</div><div><div class="sidebar-brand-text">Student Portal</div><div class="sidebar-brand-sub">Placement Ready</div></div></div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Main Menu</span>
+    <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a href="aptitude.html" class="nav-link"><span class="nav-icon">🧠</span> Aptitude</a>
+    <a href="dsa.html" class="nav-link"><span class="nav-icon">💻</span> DSA Practice</a>
+    <a href="mock-interview.html" class="nav-link"><span class="nav-icon">🎤</span> Mock‑Interview</a>
+    <span class="nav-section-label">Career Tools</span>
+    <a href="resume-builder.html" class="nav-link active"><span class="nav-icon">📄</span> Resume Builder</a>
+    <a href="resume-scanner.html" class="nav-link"><span class="nav-icon">🔍</span> Resume Scanner</a>
+    <a href="announcements.html" class="nav-link"><span class="nav-icon">📢</span> Announcements</a>
+    <span class="nav-section-label">Support</span>
+    <a href="ai-assistant.html" class="nav-link ai-btn"><span class="nav-icon">🤖</span> AI Assistant</a>
+    <span class="nav-section-label">Account</span>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span> Profile</a>
+    <a href="logout.html" class="nav-link logout-link"><span class="nav-icon">🚪</span> Logout</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user-avatar">S</div><div><div class="sidebar-user-name">Student</div><div class="sidebar-user-role">B.Tech CSE</div></div></div>
+</aside>
+
+<div class="main-content">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div><div class="topbar-title">Resume Builder</div><div class="topbar-subtitle">Build a professional resume instantly</div></div>
+    </div>
+    <div class="topbar-right"><div class="topbar-bell" id="topbarBell">🔔<span class="topbar-bell-dot"></span></div></div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="page-header-greeting">Career Tool</div>
+      <h1>Resume Builder 📄</h1>
+      <p>Fill in the form and generate a clean, ATS-friendly resume instantly.</p>
+    </div>
+
+    <div class="two-col" style="gap:28px; align-items:start;">
+      <!-- Form -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">✍️ Your Information</span></div>
+        <div class="card-body">
+          <div class="two-col" style="gap:14px;">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" class="form-control" id="rb-name" placeholder="e.g. Rahul Sharma" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="rb-phone" placeholder="+91 9876543210" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" class="form-control" id="rb-email" placeholder="yourname@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Professional Summary</label>
+            <textarea class="form-control" id="rb-summary" placeholder="A motivated B.Tech CSE graduate with strong foundation in Java, SQL, and OOP. Seeking a trainee developer role to contribute and grow..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Education</label>
+            <textarea class="form-control" id="rb-education" placeholder="B.Tech Computer Science — ABC College, 2025 (CGPA: 8.2&#10;12th — XYZ School, 2021 (82%)&#10;10th — XYZ School, 2019 (88%)"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Technical Skills</label>
+            <textarea class="form-control" id="rb-skills" placeholder="Languages: Java, Python, JavaScript&#10;Web: HTML, CSS, React&#10;Database: MySQL, MongoDB&#10;Tools: Git, VS Code, ServiceNow"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Projects</label>
+            <textarea class="form-control" id="rb-projects" placeholder="Student Management System — Java, MySQL&#10;Built a full-stack system to manage student records with CRUD operations.&#10;&#10;Portfolio Website — HTML, CSS, JavaScript&#10;Responsive personal portfolio with animations."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Experience / Internships</label>
+            <textarea class="form-control" id="rb-experience" placeholder="Web Dev Intern — TechCorp, June 2024&#10;Developed REST APIs using Node.js, improved response time by 20%."></textarea>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+            <button class="btn btn-primary btn-lg" onclick="generateResume()" style="flex:1;">⚡ Generate Resume</button>
+            <button class="btn btn-outline" onclick="clearForm()">🗑 Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div>
+        <div class="card-header" style="padding:0 0 14px; border:none; display:flex; align-items:center; justify-content:space-between;">
+          <span class="card-title" style="font-size:16px;">👁 Preview</span>
+          <button class="btn btn-outline btn-sm hidden" id="downloadResumeBtn" onclick="downloadResume()">🖨 Print / Download</button>
+        </div>
+        <div class="resume-preview" id="resumePreview">
+          <div style="text-align:center; color:#94a3b8; padding:60px 20px;">
+            <div style="font-size:48px; margin-bottom:16px;">📄</div>
+            <p style="font-size:15px; font-family:Georgia,serif;">Fill the form and click <b>Generate Resume</b><br>to see your resume preview here.</p>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="card mt-4">
+          <div class="card-header"><span class="card-title">💡 Resume Tips</span></div>
+          <div class="card-body">
+            <div class="activity-list">
+              <div class="activity-item"><div class="activity-icon" style="background:#dcfce7;">✅</div><div><div class="activity-text">Keep it to 1 page for freshers</div></div></div>
+              <div class="activity-item"><div class="activity-icon" style="background:#dbeafe;">✅</div><div><div class="activity-text">Quantify achievements (e.g. 1000+ users)</div></div></div>
+              <div class="activity-item"><div class="activity-icon" style="background:#fef9c3;">✅</div><div><div class="activity-text">Use action verbs: Built, Developed, Led</div></div></div>
+              <div class="activity-item"><div class="activity-icon" style="background:#ede9fe;">✅</div><div><div class="activity-text">Add GitHub & LinkedIn profile links</div></div></div>
+              <div class="activity-item"><div class="activity-icon" style="background:#ffedd5;">✅</div><div><div class="activity-text">Match keywords from job description</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="scripts.js"></script>
+<script>
+function clearForm() {
+  ['rb-name','rb-email','rb-phone','rb-summary','rb-education','rb-skills','rb-projects','rb-experience'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('resumePreview').innerHTML = '<div style="text-align:center;color:#94a3b8;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">📄</div><p style="font-size:15px;font-family:Georgia,serif;">Fill the form and click <b>Generate Resume</b>.</p></div>';
+  document.getElementById('downloadResumeBtn')?.classList.add('hidden');
+}
+</script>
+</body>
+</html>

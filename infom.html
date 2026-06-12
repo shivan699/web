@@ -1,0 +1,208 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>College Placement Student Profile</title>
+
+    <style>
+        body {
+            width: 80%;
+            margin: auto;
+            font-family: Arial;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field label {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .field input,
+        .field textarea {
+            padding: 10px;
+            border: 1px solid #999;
+            border-radius: 4px;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- ---------------- PERSONAL DETAILS ---------------- -->
+    <h2>Personal Details</h2>
+
+    <div class="row">
+        <div class="field">
+            <label>Name</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>Roll Number</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Father Name</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>Branch</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Mobile Number</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>Email</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Address</label>
+            <textarea rows="3"></textarea>
+        </div>
+
+        <div class="field">
+            <label>Native</label>
+            <textarea rows="3"></textarea>
+        </div>
+    </div>
+
+
+
+    <!-- ---------------- CURRENT ACADEMIC ---------------- -->
+    <h2>Current Academic Details</h2>
+
+    <div class="row">
+        <div class="field">
+            <label>College Name</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>Course</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Branch</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>Semester</label>
+            <input type="text" value=" ">
+        </div>
+    </div>
+
+
+
+    <!-- ---------------- PAST ACADEMIC ---------------- -->
+    <h2>Past Academic Details</h2>
+
+    <div class="row">
+        <div class="field">
+            <label>SSC Board</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>HSC Board</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>HSC Start Year</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>HSC End Year</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>SSC Start Year</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>SSC End Year</label>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="field">
+            <label>Admission Through</label>
+            <input type="text">
+        </div>
+
+        <div class="field">
+            <label>Gap</label>
+            <input type="text">
+        </div>
+    </div>
+
+
+
+    <!-- ---------------- RESUME ---------------- -->
+    <h2>Resume</h2>
+
+    <div class="row">
+        <div class="field full-width">
+            <label>Resume Link</label>
+            <input type="text">
+        </div>
+    </div>
+
+
+    <!-- ---------------- LINKEDIN ---------------- -->
+    <h2>LinkedIn Profile</h2>
+
+    <div class="row">
+        <div class="field full-width">
+            <label>LinkedIn URL</label>
+            <input type="text">
+        </div>
+    </div>
+
+</body>
+</html>

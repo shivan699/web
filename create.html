@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — AKTU Campus Job Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ══════════════════════════════════════════
+       AKTU Campus Portal — Create Account Page
+       Same system, registration focus
+    ══════════════════════════════════════════ */
+
+    :root {
+      --maroon:   #8B0000;
+      --maroon2:  #A52020;
+      --gold:     #C8972A;
+      --gold-lt:  #E8B84B;
+      --bg:       #0B0E1A;
+      --surface:  #13172A;
+      --surface2: #1A1F35;
+      --border:   rgba(200,151,42,.18);
+      --text:     #F0EDE6;
+      --muted:    #8A8FA8;
+      --white:    #FFFFFF;
+      --success:  #22C55E;
+      --error:    #EF4444;
+      --info:     #3B82F6;
+      --warn:     #F59E0B;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+
+    body {
+      font-family: 'Satoshi', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ── TOAST ── */
+    #toastWrap {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+      max-width: 360px; width: calc(100% - 40px);
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--surface2); border-radius: 14px; padding: 14px 18px;
+      display: flex; align-items: flex-start; gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      animation: toastIn .4s cubic-bezier(.175,.885,.32,1.275) forwards;
+      pointer-events: auto; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .toast::before {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      height: 3px; border-radius: 0 0 0 14px;
+      background: var(--toast-color, var(--gold));
+      animation: toastBar var(--toast-dur, 4s) linear forwards;
+    }
+    .toast.success { --toast-color: var(--success); }
+    .toast.error   { --toast-color: var(--error); }
+    .toast.info    { --toast-color: var(--info); }
+    .toast.warn    { --toast-color: var(--warn); }
+    @keyframes toastIn  { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes toastOut { to{opacity:0;transform:translateX(60px);max-height:0;padding:0;margin:0} }
+    @keyframes toastBar { from{width:100%} to{width:0} }
+    .toast-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .toast-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .toast-msg   { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      width: 480px; flex-shrink: 0;
+      background: linear-gradient(160deg, #050A1A 0%, #0D1525 50%, #1A0505 100%);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 48px 52px;
+      position: relative; overflow: hidden;
+    }
+    .left-panel::before {
+      content: '';
+      position: absolute; top: -100px; left: -100px;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,151,42,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .left-panel::after {
+      content: '';
+      position: absolute; bottom: -60px; right: -60px;
+      width: 260px; height: 260px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,0,0,.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .grid-overlay {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,151,42,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,151,42,.04) 1px, transparent 1px);
+      background-size: 40px 40px; pointer-events: none;
+    }
+
+    .left-top { position: relative; z-index: 1; }
+    .university-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(200,151,42,.1); border: 1px solid rgba(200,151,42,.25);
+      border-radius: 50px; padding: 8px 18px; margin-bottom: 44px;
+    }
+    .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px rgba(200,151,42,.6); animation: bp 2s ease-in-out infinite; }
+    @keyframes bp { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+    .badge-text { font-size: 12px; font-weight: 600; color: var(--gold-lt); letter-spacing: .8px; text-transform: uppercase; }
+
+    .left-heading {
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 40px; font-weight: 700; line-height: 1.1; letter-spacing: -1.5px;
+    }
+    .left-heading span { color: var(--gold); }
+    .left-sub { font-size: 14px; color: var(--muted); line-height: 1.7; margin-top: 14px; max-width: 320px; }
+
+    /* Progress steps */
+    .progress-steps {
+      margin-top: 40px;
+      position: relative; z-index: 1;
+    }
+    .progress-step {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding-bottom: 24px; position: relative;
+    }
+    .progress-step:last-child { padding-bottom: 0; }
+    .progress-step::before {
+      content: ''; position: absolute; left: 15px; top: 34px;
+      width: 2px; height: calc(100% - 10px);
+      background: rgba(200,151,42,.2);
+    }
+    .progress-step:last-child::before { display: none; }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      background: rgba(200,151,42,.12);
+      border: 1.5px solid rgba(200,151,42,.3);
+      color: var(--gold);
+    }
+    .step-info { }
+    .step-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .step-desc  { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+    /* Allowed domains box */
+    .domains-box {
+      background: rgba(200,151,42,.06);
+      border: 1px solid rgba(200,151,42,.15);
+      border-radius: 12px; padding: 16px 18px;
+      position: relative; z-index: 1;
+    }
+    .domains-title { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px; }
+    .domain-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .domain-tag {
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+      background: rgba(200,151,42,.1); color: rgba(200,151,42,.85);
+      border: 1px solid rgba(200,151,42,.2);
+    }
+
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      flex: 1; display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 32px 60px; background: var(--bg);
+      position: relative; overflow-y: auto;
+    }
+    .right-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(200,151,42,.25), transparent);
+    }
+
+    .form-wrap {
+      width: 100%; max-width: 460px;
+      animation: fadeUp .5s ease .15s both;
+      padding-top: 20px;
+    }
+
+    .form-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+    .form-logo-icon {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--maroon), var(--maroon2));
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+      box-shadow: 0 6px 20px rgba(139,0,0,.4);
+    }
+    .form-logo-text { font-family: 'Clash Display', Georgia, serif; font-size: 18px; font-weight: 600; }
+    .form-logo-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .form-title {
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 28px; font-weight: 700; letter-spacing: -1px; margin-bottom: 5px;
+    }
+    .form-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+    /* Two-column row */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width:500px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* Input */
+    .input-group { margin-bottom: 16px; }
+    .input-label {
+      display: block; font-size: 11.5px; font-weight: 600;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 7px;
+    }
+    .input-wrap { position: relative; }
+    .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; pointer-events: none; z-index: 1;
+    }
+    .input-field {
+      width: 100%; padding: 13px 14px 13px 42px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 12px; font-family: 'Satoshi', sans-serif;
+      font-size: 14px; color: var(--text); outline: none;
+      transition: border-color .22s, box-shadow .22s, background .22s;
+      -webkit-appearance: none;
+    }
+    .input-field::placeholder { color: rgba(138,143,168,.5); }
+    .input-field:focus { border-color: var(--gold); background: var(--surface2); box-shadow: 0 0 0 3px rgba(200,151,42,.1); }
+    .input-field.valid   { border-color: var(--success); }
+    .input-field.invalid { border-color: var(--error); }
+    .input-msg { font-size: 11.5px; margin-top: 5px; padding-left: 2px; display: none; }
+    .input-msg.show { display: block; }
+    .input-msg.err  { color: var(--error); }
+    .input-msg.ok   { color: var(--success); }
+
+    .pwd-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; color: var(--muted); font-size: 16px;
+      transition: color .2s; user-select: none;
+    }
+    .pwd-toggle:hover { color: var(--gold); }
+
+    /* Password strength bar */
+    .pwd-strength { margin-top: 8px; }
+    .pwd-strength-bar {
+      height: 5px; border-radius: 5px; background: rgba(255,255,255,.07);
+      overflow: hidden;
+    }
+    .pwd-strength-fill {
+      height: 100%; border-radius: 5px;
+      transition: width .4s ease, background .4s ease;
+      width: 0;
+    }
+    .pwd-strength-label { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+    /* Department select */
+    select.input-field { padding-left: 42px; cursor: pointer; }
+    select.input-field option { background: #13172a; color: #f0ede6; }
+
+    /* Terms checkbox */
+    .terms-wrap {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 20px; cursor: pointer;
+    }
+    .terms-box {
+      width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+      border: 1.5px solid var(--border); background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s; margin-top: 2px;
+    }
+    .terms-box.checked { background: var(--gold); border-color: var(--gold); }
+    .terms-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .terms-text a { color: var(--gold); text-decoration: none; }
+    .terms-text a:hover { color: var(--gold-lt); }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--maroon) 0%, #C0392B 100%);
+      color: #fff; border: none; border-radius: 12px;
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 16px; font-weight: 600; letter-spacing: .3px;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(139,0,0,.4);
+      transition: all .25s; position: relative; overflow: hidden;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+      transition: left .5s;
+    }
+    .submit-btn:hover::before { left: 100%; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(139,0,0,.5); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .btn-text { transition: opacity .2s; }
+    .btn-loading {
+      display: none; width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .7s linear infinite; margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 20px 0; color: var(--muted); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.07);
+    }
+    .login-link { text-align: center; font-size: 14px; color: var(--muted); }
+    .login-link a { color: var(--gold); font-weight: 700; text-decoration: none; transition: color .2s; }
+    .login-link a:hover { color: var(--gold-lt); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    @media (max-width: 900px) { .left-panel { display: none; } .right-panel::before { display: none; } }
+    @media (max-width: 480px) { .right-panel { padding: 24px 16px 60px; } .form-title { font-size: 22px; } }
+  </style>
+</head>
+<body>
+
+<div id="toastWrap"></div>
+
+<!-- ── LEFT PANEL ── -->
+<div class="left-panel">
+  <div class="grid-overlay"></div>
+
+  <div class="left-top">
+    <div class="university-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">AKTU Official Portal</span>
+    </div>
+
+    <div class="left-heading">Join the<br><span>Campus</span><br>Network</div>
+    <div class="left-sub">Create your AKTU student account to access hundreds of placement drives, internships and job opportunities.</div>
+
+    <div class="progress-steps" style="margin-top:36px;">
+      <div class="progress-step">
+        <div class="step-num">1</div>
+        <div class="step-info">
+          <div class="step-title">Create Account</div>
+          <div class="step-desc">Fill in your personal details and university email</div>
+        </div>
+      </div>
+      <div class="progress-step">
+        <div class="step-num">2</div>
+        <div class="step-info">
+          <div class="step-title">Verify Email</div>
+          <div class="step-desc">A verification link will be sent to your AKTU email</div>
+        </div>
+      </div>
+      <div class="progress-step">
+        <div class="step-num">3</div>
+        <div class="step-info">
+          <div class="step-title">Complete Profile</div>
+          <div class="step-desc">Add resume, skills, and academic details</div>
+        </div>
+      </div>
+      <div class="progress-step">
+        <div class="step-num">4</div>
+        <div class="step-info">
+          <div class="step-title">Start Applying</div>
+          <div class="step-desc">Browse and apply to campus placement drives</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="domains-box">
+    <div class="domains-title">✅ Accepted Email Domains</div>
+    <div class="domain-tags">
+      <span class="domain-tag">@gmail.com</span>
+      <span class="domain-tag">@aktu.ac.in</span>
+      <span class="domain-tag">@university.edu</span>
+      <span class="domain-tag">@hbtu.ac.in</span>
+      <span class="domain-tag">@knit.ac.in</span>
+      <span class="domain-tag">@iet.ac.in</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIGHT PANEL ── -->
+<div class="right-panel">
+  <div class="form-wrap">
+
+    <div class="form-logo">
+      <div class="form-logo-icon">🎓</div>
+      <div>
+        <div class="form-logo-text">AKTU Portal</div>
+        <div class="form-logo-sub">Dr. A.P.J. Abdul Kalam Technical University</div>
+      </div>
+    </div>
+
+    <div class="form-title">Create Your Account 🚀</div>
+    <div class="form-subtitle">Register with your AKTU email to get started</div>
+
+    <form id="registerForm" novalidate autocomplete="off">
+
+      <!-- Name row -->
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label" for="firstName">First Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="firstName" class="input-field" placeholder="Rahul" oninput="validateName('firstName')" />
+          </div>
+          <div class="input-msg" id="firstName-msg"></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="lastName">Last Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="lastName" class="input-field" placeholder="Sharma" oninput="validateName('lastName')" />
+          </div>
+          <div class="input-msg" id="lastName-msg"></div>
+        </div>
+      </div>
+
+      <!-- Roll / Enrollment -->
+      <div class="input-group">
+        <label class="input-label" for="rollNo">Enrollment / Roll Number</label>
+        <div class="input-wrap">
+          <span class="input-icon">🪪</span>
+          <input type="text" id="rollNo" class="input-field" placeholder="e.g. 2100123456789" oninput="validateRoll()" />
+        </div>
+        <div class="input-msg" id="roll-msg"></div>
+      </div>
+
+      <!-- Department & Year row -->
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label" for="dept">Department</label>
+          <div class="input-wrap">
+            <span class="input-icon">🏫</span>
+            <select id="dept" class="input-field" onchange="validateDept()">
+              <option value="">Select Dept.</option>
+              <option>Computer Science</option>
+              <option>Information Technology</option>
+              <option>Electronics & Comm.</option>
+              <option>Mechanical Eng.</option>
+              <option>Civil Engineering</option>
+              <option>Electrical Eng.</option>
+              <option>Chemical Eng.</option>
+              <option>MBA</option>
+              <option>MCA</option>
+            </select>
+          </div>
+          <div class="input-msg" id="dept-msg"></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label" for="year">Year / Batch</label>
+          <div class="input-wrap">
+            <span class="input-icon">📅</span>
+            <select id="year" class="input-field" onchange="validateYear()">
+              <option value="">Select Year</option>
+              <option>1st Year (2028)</option>
+              <option>2nd Year (2027)</option>
+              <option>3rd Year (2026)</option>
+              <option>Final Year (2025)</option>
+              <option>Passed Out (2024)</option>
+            </select>
+          </div>
+          <div class="input-msg" id="year-msg"></div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <label class="input-label" for="email">University Email *</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="email" class="input-field"
+            placeholder="AKTU@123gmail.com" oninput="validateRegEmail()" />
+        </div>
+        <div class="input-msg" id="email-msg"></div>
+      </div>
+
+      <!-- Phone -->
+      <div class="input-group">
+        <label class="input-label" for="phone">Mobile Number</label>
+        <div class="input-wrap">
+          <span class="input-icon">📱</span>
+          <input type="tel" id="phone" class="input-field"
+            placeholder="+91 9876543210" oninput="validatePhone()" maxlength="13" />
+        </div>
+        <div class="input-msg" id="phone-msg"></div>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <label class="input-label" for="password">Create Password *</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" class="input-field"
+            placeholder="Min. 6 characters" oninput="validateRegPwd()" />
+          <span class="pwd-toggle" onclick="togglePwd('password',this)">👁</span>
+        </div>
+        <div class="pwd-strength">
+          <div class="pwd-strength-bar"><div class="pwd-strength-fill" id="pwdBar"></div></div>
+          <div class="pwd-strength-label" id="pwdStrengthLabel"></div>
+        </div>
+        <div class="input-msg" id="pwd-msg"></div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="input-group">
+        <label class="input-label" for="confirmPassword">Confirm Password *</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔐</span>
+          <input type="password" id="confirmPassword" class="input-field"
+            placeholder="Re-enter your password" oninput="validateConfirm()" />
+          <span class="pwd-toggle" onclick="togglePwd('confirmPassword',this)">👁</span>
+        </div>
+        <div class="input-msg" id="confirm-msg"></div>
+      </div>
+
+      <!-- Terms -->
+      <div class="terms-wrap" onclick="toggleTerms()" id="termsWrap">
+        <div class="terms-box" id="termsBox"></div>
+        <div class="terms-text">
+          I agree to the <a href="#" onclick="event.stopPropagation()">Terms of Service</a> and
+          <a href="#" onclick="event.stopPropagation()">Privacy Policy</a> of AKTU Campus Job Portal
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="registerBtn">
+        <span class="btn-text">Create Account</span>
+        <div class="btn-loading" id="regLoader"></div>
+      </button>
+
+    </form>
+
+    <div class="divider">Already registered?</div>
+    <div class="login-link"><a href="LOGIN.html">← Back to Login</a></div>
+
+  </div>
+</div>
+
+<script>
+/* ════════════════════════
+   ALLOWED DOMAINS
+════════════════════════ */
+const ALLOWED_DOMAINS = [
+  'aktu.ac.in', 'gmail.com', 'university.edu',
+  'hbtu.ac.in', 'knit.ac.in', 'iet.ac.in',
+  'biet.ac.in', 'gcet.ac.in', 'mmm.ac.in'
+];
+
+function isValidUniversityEmail(email) {
+  email = email.toLowerCase().trim();
+  if (email === 'aktu@123gmail.com') return true;
+  if (email.includes('aktu')) return true;
+  return ALLOWED_DOMAINS.some(d => email.endsWith('@' + d));
+}
+
+/* ── TOAST ── */
+function toast(type, title, msg, dur = 4500) {
+  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.style.setProperty('--toast-dur', (dur/1000) + 's');
+  el.innerHTML = `
+    <div class="toast-icon">${icons[type]||'ℹ️'}</div>
+    <div class="toast-body">
+      <div class="toast-title">${title}</div>
+      <div class="toast-msg">${msg}</div>
+    </div>`;
+  el.onclick = () => remove(el);
+  document.getElementById('toastWrap').appendChild(el);
+  const t = setTimeout(() => remove(el), dur);
+  el._t = t;
+  function remove(e) { clearTimeout(e._t); e.style.animation='toastOut .3s ease forwards'; setTimeout(()=>e.remove(),300); }
+}
+
+/* ── HELPERS ── */
+function setField(id, msgId, cls, msgCls, txt) {
+  document.getElementById(id).className = 'input-field ' + cls;
+  const m = document.getElementById(msgId);
+  m.className = 'input-msg ' + (txt ? 'show ' : '') + msgCls;
+  m.textContent = txt;
+}
+
+function togglePwd(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+let termsChecked = false;
+function toggleTerms() {
+  termsChecked = !termsChecked;
+  const box = document.getElementById('termsBox');
+  box.classList.toggle('checked', termsChecked);
+  box.textContent = termsChecked ? '✓' : '';
+}
+
+/* ── VALIDATORS ── */
+function validateName(id) {
+  const v = document.getElementById(id).value.trim();
+  const msg = id + '-msg';
+  if (!v) { setField(id, msg, '', '', ''); return false; }
+  if (v.length < 2) { setField(id, msg, 'invalid', 'err', 'Too short'); return false; }
+  if (!/^[a-zA-Z\s]+$/.test(v)) { setField(id, msg, 'invalid', 'err', 'Only letters allowed'); return false; }
+  setField(id, msg, 'valid', 'ok', '✓'); return true;
+}
+
+function validateRoll() {
+  const el = document.getElementById('rollNo');
+  const v = el.value.trim();
+  if (!v) { setField('rollNo','roll-msg','','',''); return true; } // optional
+  if (v.length < 8) { setField('rollNo','roll-msg','invalid','err','Enter a valid roll/enrollment number'); return false; }
+  setField('rollNo','roll-msg','valid','ok','✓ Enrollment looks valid'); return true;
+}
+
+function validateDept() {
+  const v = document.getElementById('dept').value;
+  if (!v) { setField('dept','dept-msg','invalid','err','Please select your department'); return false; }
+  setField('dept','dept-msg','valid','ok','✓'); return true;
+}
+
+function validateYear() {
+  const v = document.getElementById('year').value;
+  if (!v) { setField('year','year-msg','invalid','err','Please select your year'); return false; }
+  setField('year','year-msg','valid','ok','✓'); return true;
+}
+
+function validateRegEmail() {
+  const el = document.getElementById('email');
+  const v = el.value.trim();
+  if (!v) { setField('email','email-msg','','',''); return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { setField('email','email-msg','invalid','err','Enter a valid email format'); return false; }
+  if (!isValidUniversityEmail(v)) { setField('email','email-msg','invalid','err','Use your AKTU university email (e.g., AKTU@123gmail.com)'); return false; }
+
+  // Check duplicate registration
+  const users = JSON.parse(localStorage.getItem('aktu_users') || '[]');
+  if (users.some(u => u.email.toLowerCase() === v.toLowerCase())) {
+    setField('email','email-msg','invalid','err','This email is already registered. Try logging in.'); return false;
+  }
+  setField('email','email-msg','valid','ok','✓ Valid university email'); return true;
+}
+
+function validatePhone() {
+  const el = document.getElementById('phone');
+  const v = el.value.trim().replace(/\s/g,'');
+  if (!v) { setField('phone','phone-msg','','',''); return true; } // optional
+  const digits = v.replace(/[^\d]/g,'');
+  if (digits.length < 10 || digits.length > 12) { setField('phone','phone-msg','invalid','err','Enter a valid 10-digit mobile number'); return false; }
+  setField('phone','phone-msg','valid','ok','✓ Valid mobile number'); return true;
+}
+
+function validateRegPwd() {
+  const v = document.getElementById('password').value;
+  const bar = document.getElementById('pwdBar');
+  const lbl = document.getElementById('pwdStrengthLabel');
+
+  let strength = 0;
+  if (v.length >= 6) strength++;
+  if (v.length >= 10) strength++;
+  if (/[A-Z]/.test(v)) strength++;
+  if (/[0-9]/.test(v)) strength++;
+  if (/[^A-Za-z0-9]/.test(v)) strength++;
+
+  const levels = [
+    { label:'', color:'transparent', w:'0%' },
+    { label:'Very Weak', color:'#EF4444', w:'20%' },
+    { label:'Weak', color:'#F97316', w:'40%' },
+    { label:'Fair', color:'#F59E0B', w:'60%' },
+    { label:'Strong', color:'#22C55E', w:'80%' },
+    { label:'Very Strong 💪', color:'#16A34A', w:'100%' },
+  ];
+  const lvl = levels[Math.min(strength, 5)];
+  bar.style.width = lvl.w;
+  bar.style.background = lvl.color;
+  lbl.textContent = v.length ? lvl.label : '';
+  lbl.style.color = lvl.color;
+
+  if (!v) { setField('password','pwd-msg','','',''); return false; }
+  if (v.length < 6) { setField('password','pwd-msg','invalid','err','Password must be at least 6 characters'); return false; }
+  setField('password','pwd-msg','valid','ok','✓ Password is ' + (lvl.label || 'set')); return true;
+}
+
+function validateConfirm() {
+  const pwd = document.getElementById('password').value;
+  const con = document.getElementById('confirmPassword').value;
+  if (!con) { setField('confirmPassword','confirm-msg','','',''); return false; }
+  if (pwd !== con) { setField('confirmPassword','confirm-msg','invalid','err','Passwords do not match'); return false; }
+  setField('confirmPassword','confirm-msg','valid','ok','✓ Passwords match'); return true;
+}
+
+/* ── REGISTER SUBMIT ── */
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // Run all validations
+  const checks = [
+    validateName('firstName'),
+    validateName('lastName'),
+    validateRegEmail(),
+    validateRegPwd(),
+    validateConfirm(),
+  ];
+  if (checks.some(c => !c)) {
+    toast('error', 'Form Incomplete', 'Please fix all highlighted errors before submitting.', 4500);
+    return;
+  }
+  if (!termsChecked) {
+    toast('warn', 'Terms Required', 'Please accept the Terms of Service to continue.', 4000);
+    return;
+  }
+
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName  = document.getElementById('lastName').value.trim();
+  const name      = firstName + ' ' + lastName;
+  const email     = document.getElementById('email').value.trim();
+  const password  = document.getElementById('password').value;
+  const dept      = document.getElementById('dept').value;
+  const year      = document.getElementById('year').value;
+  const rollNo    = document.getElementById('rollNo').value.trim();
+  const phone     = document.getElementById('phone').value.trim();
+
+  // Loading
+  setBtnLoading(true);
+  toast('info', 'Processing...', 'Creating your account. Please wait a moment.', 2500);
+
+  setTimeout(() => {
+    // Save to localStorage
+    const users = JSON.parse(localStorage.getItem('aktu_users') || '[]');
+    const newUser = {
+      name, firstName, lastName, email, password, dept, year, rollNo, phone,
+      registered: new Date().toISOString()
+    };
+    users.push(newUser);
+    localStorage.setItem('aktu_users', JSON.stringify(users));
+
+    // Success notifications sequence
+    toast('success', `Account Created! 🎉`, `Welcome to AKTU Portal, ${firstName}!`, 6000);
+
+    setTimeout(() => toast('info', '📧 Verification Email Sent', `A confirmation link has been sent to ${email}`, 5000), 800);
+    setTimeout(() => toast('success', '🎓 Profile Ready', 'Complete your profile to start applying for drives!', 5000), 2000);
+    setTimeout(() => toast('info', '🔔 Notifications Enabled', 'You will receive alerts for matching placement drives.', 4500), 3500);
+
+    setBtnLoading(false);
+
+    // Redirect to login after a pause
+    setTimeout(() => {
+      window.location.href = 'LOGIN.html';
+    }, 4000);
+
+  }, 1600);
+});
+
+function setBtnLoading(on) {
+  const btn = document.getElementById('registerBtn');
+  btn.disabled = on;
+  btn.querySelector('.btn-text').style.display = on ? 'none' : 'block';
+  document.getElementById('regLoader').style.display = on ? 'block' : 'none';
+}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => toast('info', 'AKTU Portal 🎓', 'Register with your AKTU email to access campus placement opportunities.', 5000), 500);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aptitude Practice — Student Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-icon">🎓</div>
+    <div><div class="sidebar-brand-text">Student Portal</div><div class="sidebar-brand-sub">Placement Ready</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Main Menu</span>
+    <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a href="aptitude.html" class="nav-link active"><span class="nav-icon">🧠</span> Aptitude</a>
+    <a href="dsa.html" class="nav-link"><span class="nav-icon">💻</span> DSA Practice</a>
+    <a href="mock-interview.html" class="nav-link"><span class="nav-icon">🎤</span> Mock‑Interview</a>
+    <span class="nav-section-label">Career Tools</span>
+    <a href="resume-builder.html" class="nav-link"><span class="nav-icon">📄</span> Resume Builder</a>
+    <a href="resume-scanner.html" class="nav-link"><span class="nav-icon">🔍</span> Resume Scanner</a>
+    <a href="announcements.html" class="nav-link"><span class="nav-icon">📢</span> Announcements</a>
+    <span class="nav-section-label">Support</span>
+    <a href="ai-assistant.html" class="nav-link ai-btn"><span class="nav-icon">🤖</span> AI Assistant</a>
+    <span class="nav-section-label">Account</span>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span> Profile</a>
+    <a href="logout.html" class="nav-link logout-link"><span class="nav-icon">🚪</span> Logout</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user-avatar">S</div><div><div class="sidebar-user-name">Student</div><div class="sidebar-user-role">B.Tech CSE • Final Year</div></div></div>
+</aside>
+
+<div class="main-content">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div><div class="topbar-title">Aptitude Practice</div><div class="topbar-subtitle">Sharpen your quantitative & logical skills</div></div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-bell" id="topbarBell">🔔<span class="topbar-bell-dot"></span></div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="page-header-greeting">Practice Zone</div>
+      <h1>Aptitude Test 🧠</h1>
+      <p>Practice quantitative aptitude, logical reasoning & more. Select a topic and start!</p>
+    </div>
+
+    <!-- Topic Pills -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+      <button class="btn btn-primary btn-sm topic-pill active-pill" onclick="showTopic('quant')">📊 Quantitative</button>
+      <button class="btn btn-outline btn-sm topic-pill" onclick="showTopic('logical')">🔗 Logical Reasoning</button>
+      <button class="btn btn-outline btn-sm topic-pill" onclick="showTopic('verbal')">📝 Verbal Ability</button>
+    </div>
+
+    <div class="two-col" style="gap:20px; align-items:start;">
+      <!-- Questions Column -->
+      <div id="questionsArea">
+        <!-- Quantitative Questions (default) -->
+        <div id="topicQuant">
+          <div class="question-card">
+            <div class="question-text">Q1. A train travels 300 km in 5 hours. What is its average speed?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q1')"><span class="option-letter">A</span> 50 km/h</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'q1')"><span class="option-letter">B</span> 60 km/h</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q1')"><span class="option-letter">C</span> 70 km/h</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q1')"><span class="option-letter">D</span> 80 km/h</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q2. If a product costs ₹500 and is sold for ₹600, what is the profit percentage?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q2')"><span class="option-letter">A</span> 10%</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q2')"><span class="option-letter">B</span> 15%</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'q2')"><span class="option-letter">C</span> 20%</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q2')"><span class="option-letter">D</span> 25%</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q3. A can do a job in 10 days. B can do it in 15 days. Working together, how many days will they take?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q3')"><span class="option-letter">A</span> 5 days</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'q3')"><span class="option-letter">B</span> 6 days</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q3')"><span class="option-letter">C</span> 7 days</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q3')"><span class="option-letter">D</span> 8 days</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q4. What is 15% of 240?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q4')"><span class="option-letter">A</span> 32</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q4')"><span class="option-letter">B</span> 34</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'q4')"><span class="option-letter">C</span> 36</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q4')"><span class="option-letter">D</span> 38</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q5. The ratio of boys to girls in a class is 3:2. If there are 30 boys, how many girls are there?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q5')"><span class="option-letter">A</span> 15</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'q5')"><span class="option-letter">B</span> 20</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q5')"><span class="option-letter">C</span> 25</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'q5')"><span class="option-letter">D</span> 18</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logical Reasoning (hidden by default) -->
+        <div id="topicLogical" style="display:none">
+          <div class="question-card">
+            <div class="question-text">Q1. Find the next number: 2, 6, 12, 20, 30, ___</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l1')"><span class="option-letter">A</span> 38</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l1')"><span class="option-letter">B</span> 40</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'l1')"><span class="option-letter">C</span> 42</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l1')"><span class="option-letter">D</span> 44</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q2. Which does NOT belong: Apple, Mango, Carrot, Banana?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l2')"><span class="option-letter">A</span> Apple</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l2')"><span class="option-letter">B</span> Mango</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'l2')"><span class="option-letter">C</span> Carrot</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l2')"><span class="option-letter">D</span> Banana</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q3. A is the brother of B. B is the sister of C. How is A related to C?</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l3')"><span class="option-letter">A</span> Sister</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'l3')"><span class="option-letter">B</span> Brother</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l3')"><span class="option-letter">C</span> Father</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l3')"><span class="option-letter">D</span> Uncle</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q4. Find the odd one out: 36, 49, 64, 75, 81</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l4')"><span class="option-letter">A</span> 36</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l4')"><span class="option-letter">B</span> 49</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'l4')"><span class="option-letter">C</span> 75</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'l4')"><span class="option-letter">D</span> 81</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verbal (hidden) -->
+        <div id="topicVerbal" style="display:none">
+          <div class="question-card">
+            <div class="question-text">Q1. Choose the correct synonym of "Diligent":</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'v1')"><span class="option-letter">A</span> Lazy</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'v1')"><span class="option-letter">B</span> Hardworking</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'v1')"><span class="option-letter">C</span> Careless</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'v1')"><span class="option-letter">D</span> Slow</div>
+            </div>
+          </div>
+          <div class="question-card">
+            <div class="question-text">Q2. Fill in the blank: "He was so tired that he ______ asleep immediately."</div>
+            <div class="options-list">
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'v2')"><span class="option-letter">A</span> fallen</div>
+              <div class="option-item" data-correct="true" onclick="selectOption(this,true,'v2')"><span class="option-letter">B</span> fell</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'v2')"><span class="option-letter">C</span> fall</div>
+              <div class="option-item" data-correct="false" onclick="selectOption(this,false,'v2')"><span class="option-letter">D</span> falls</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="card hidden" style="margin-top:24px;">
+          <div class="card-body" style="text-align:center; padding:36px;">
+            <div style="font-size:48px; margin-bottom:12px;">🎉</div>
+            <div style="font-size:42px; font-weight:800; color:var(--accent-blue);" class="result-score">—</div>
+            <div style="font-size:18px; font-weight:600; margin:8px 0;" class="result-detail">Score</div>
+            <p class="text-muted" style="margin-bottom:20px;">Keep practicing to improve your score!</p>
+            <button class="btn btn-primary" onclick="location.reload()">🔄 Retake Test</button>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <button class="btn btn-green btn-lg" onclick="startTimer()">⏱ Start Timer</button>
+          <button class="btn btn-outline" onclick="stopTimer()">⏸ Pause</button>
+          <button class="btn btn-primary" onclick="showResults()">✅ Submit Test</button>
+        </div>
+      </div>
+
+      <!-- Right: Timer + Stats -->
+      <div>
+        <div class="timer-box">
+          <div class="timer-label">⏱ Time Remaining</div>
+          <div class="timer-display" id="timerDisplay">30:00</div>
+          <div class="timer-label" style="margin-top:8px;">Press Start Timer to begin</div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header"><span class="card-title">📊 Your Stats</span></div>
+          <div class="card-body">
+            <div class="activity-list">
+              <div class="activity-item"><div>Tests Taken</div><strong>8</strong></div>
+              <div class="activity-item"><div>Best Score</div><strong style="color:var(--accent-green)">92%</strong></div>
+              <div class="activity-item"><div>Avg Score</div><strong>74%</strong></div>
+              <div class="activity-item"><div>Rank</div><strong>#14 in Class</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header"><span class="card-title">💡 Tips</span></div>
+          <div class="card-body">
+            <p class="text-sm text-muted" style="line-height:1.7">
+              ✅ Read questions carefully<br>
+              ✅ Eliminate wrong options first<br>
+              ✅ Manage time — 1 min per question<br>
+              ✅ Attempt all — no negative marking<br>
+              ✅ Practice daily for best results
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="scripts.js"></script>
+<script>
+function showTopic(topic) {
+  document.querySelectorAll('[id^="topic"]').forEach(el => el.style.display = 'none');
+  document.getElementById('topic' + topic.charAt(0).toUpperCase() + topic.slice(1)).style.display = 'block';
+  document.querySelectorAll('.topic-pill').forEach(b => { b.classList.remove('btn-primary'); b.classList.add('btn-outline'); });
+  event.target.classList.remove('btn-outline'); event.target.classList.add('btn-primary');
+  document.getElementById('resultSection').classList.add('hidden');
+}
+</script>
+</body>
+</html>

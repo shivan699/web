@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central Placement Cell</title>
+
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      color: white;
+      background-color: #0a0a3c;
+      background-image: url("back.png");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 64, 0.97);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 40px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    header img {
+      height: 70px;
+    }
+
+    .header-title {
+      text-align: center;
+      flex: 1;
+    }
+
+    .header-title h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .header-title p {
+      font-size: 13px;
+      color: #ccc;
+      margin-top: 2px;
+    }
+
+    nav {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffcc00;
+    }
+
+    /* hamburger menu for mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      border-radius: 3px;
+      transition: 0.3s;
+    }
+
+    /* ===== HERO SECTION WITH VIDEO BACKGROUND ===== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-top: 100px;
+      overflow: hidden;
+    }
+
+    /* Video background */
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* Dark overlay on top of video */
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 50, 0.60);
+      backdrop-filter: blur(2px);
+      z-index: 1;
+    }
+
+    /* Hero content above video */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease forwards;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+    }
+
+    .hero p {
+      font-size: 18px;
+      animation: fadeIn 3s ease forwards;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 100px 50px;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    section h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #ffcc00;
+    }
+
+    section p {
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    /* ===== RECRUITERS ===== */
+    .recruiters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .recruiters img {
+      height: 80px;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+
+    .recruiters img:hover {
+      transform: scale(1.1);
+    }
+
+    /* ===== TEAM ===== */
+    .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .member {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      width: 200px;
+    }
+
+    .member img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    /* ===== TRENDING COMPANIES ===== */
+    .portfolio {
+      padding: 60px 0;
+      background: #1b1b5c;
+    }
+
+    .portfolio h2 {
+      color: #ffcc00;
+    }
+
+    .portfolio-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 0 20px;
+    }
+
+    .portfolio-box {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    .portfolio-box img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .portfolio-box:hover img {
+      transform: scale(1.1);
+    }
+
+    .portfolio-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .portfolio-box:hover .portfolio-layer {
+      opacity: 1;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact {
+      background: #0b0b3c;
+      text-align: center;
+      padding: 80px 10%;
+    }
+
+    .contact h2 {
+      color: #ffcc00;
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .input-box {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .input-box input, textarea {
+      width: 48%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      resize: none;
+    }
+
+    .btn {
+      margin-top: 10px;
+      padding: 12px 30px;
+      background: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #ffd633;
+      transform: translateY(-3px);
+    }
+
+    #msg {
+      margin-top: 10px;
+      color: lightgreen;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #000033;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .footer-iconTop {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+    }
+
+    .footer-iconTop a {
+      display: inline-block;
+      background: #ffcc00;
+      color: #000;
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    /* ===== COMPANIES GRID ===== */
+    #companiesGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 40px;
+      background: #0a0a3c;
+    }
+
+    .company-card {
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(6px);
+      border-radius: 18px;
+      padding: 20px;
+      cursor: pointer;
+      color: white;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .company-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,.5);
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .company-name {
+      margin-top: 15px;
+      font-size: 22px;
+      color: #ffcc00;
+    }
+
+    .desc {
+      font-size: 14px;
+      margin: 10px 0;
+      line-height: 1.4;
+    }
+
+    .roles .role {
+      display: block;
+      margin: 4px 0;
+      color: #9cf;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .apply-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 18px;
+      background: #ffcc00;
+      color: #000;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* ===== PLACED STUDENTS ===== */
+    #companiesGrid2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 40px;
+      background: #000004;
+    }
+    .placed-section {
+      margin: 40px auto;
+      max-width: 1500px;
+      padding: 0 20px;
+    }
+    .placed-title {
+      text-align: center;
+      color: #f4f2ec;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 25px;
+    }
+    .placed-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 22px;
+    }
+    @media(max-width:900px){ .placed-grid { grid-template-columns: repeat(2,1fr);} }
+    @media(max-width:600px){ .placed-grid { grid-template-columns: 1fr;} }
+
+    .placed-card {
+      background: #0a044bf3;
+      backdrop-filter: blur(4px);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 18px rgba(215, 209, 209, 0.942);
+    }
+
+    .placed-card img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .placed-card h3 {
+      margin: 10px 0 4px;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .placed-meta {
+      color: #d0d6f5;
+      font-size: 15px;
+    }
+
+    .placed-quote {
+      margin-top: 8px;
+      color: #cfe6ff;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    /* ===== RECRUITER SLIDER ===== */
+    #recruiters {
+      padding: 90px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .recruiters-title {
+      font-size: 34px;
+      color: #ffcc00;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .recruiter-decor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .recruiter-decor span {
+      width: 80px;
+      height: 3px;
+      background: #ffcc00;
+      border-radius: 50px;
+    }
+
+    .recruiter-decor i {
+      color: #ffcc00;
+      font-size: 24px;
+    }
+
+    .recruiters-slider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .rec-arrow {
+      background: #d49a1f;
+      border: none;
+      font-size: 28px;
+      color: white;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .rec-arrow:hover {
+      background: #ffcc00;
+      color: black;
+    }
+
+    .rec-logos {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .rec-logos img {
+      height: 90px;
+      background: white;
+      padding: 10px 18px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .rec-logos img:hover {
+      transform: scale(1.15);
+    }
+
+    /* ===== STICKY SOCIAL ICONS ===== */
+    .sticky-icon {
+      z-index: 3;
+      position: fixed;
+      top: 31%;
+      left: -1%;
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.5s ease;
+    }
+
+    .sticky-icon a {
+      transform: translate(-160px, 0px);
+      border-radius: 0px 50px 50px 0px;
+      text-align: right;
+      margin: 3px;
+      text-decoration: none;
+      text-transform: uppercase;
+      padding: 3px;
+      font-size: 21px;
+      font-family: 'Oswald', sans-serif;
+      transition: all 0.8s;
+    }
+
+    .sticky-icon a:hover {
+      color: #FFF;
+      transform: translate(0px, 0px);
+    }
+
+    .sticky-icon a:hover i {
+      transform: rotate(360deg);
+    }
+
+    .Facebook { background-color: #2C80D3; color: #FFF; }
+    .Youtube { background-color: #fa0910; color: #FFF; }
+    .Twitter { background-color: #53c5ff; color: #FFF; }
+    .Instagram { background-color: #FD1D1D; color: #FFF; }
+    .Telegram { background-color: #0088cc; color: #FFF; }
+    .Map { background-color: green; color: #FFF; }
+
+    .sticky-icon a i {
+      background-color: #FFF;
+      height: 35px;
+      width: 35px;
+      color: #000;
+      text-align: center;
+      line-height: 37px;
+      border-radius: 50%;
+      transition: all 0.5s;
+      margin-left: 37px;
+    }
+
+    .sticky-icon a i.fa-facebook-f { background-color: #FFF; color: #2C80D3; }
+    .sticky-icon a i.fa-instagram { background-color: #FFF; color: #FD1D1D; }
+    .sticky-icon a i.fa-youtube { background-color: #FFF; color: #fa0910; }
+    .sticky-icon a i.fa-twitter { background-color: #FFF; color: #53c5ff; }
+
+    /* ===== PLACED STUDENTS SECTION CSS ==== */
+    .placed-section {
+      padding: 50px 20px;
+      background: #00114a;
+      text-align: center;
+    }
+
+    .placed-title {
+      font-size: 40px;
+      color: #fffafa;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 10px 15px;
+        gap: 8px;
+      }
+
+      .hamburger {
+        display: flex;
+        position: absolute;
+        right: 15px;
+        top: 18px;
+      }
+
+      nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(0, 0, 64, 0.98);
+        padding: 10px 0;
+        gap: 10px;
+        text-align: center;
+      }
+
+      nav.open {
+        display: flex;
+      }
+
+      .header-title h2 {
+        font-size: 16px;
+      }
+
+      .header-title p {
+        font-size: 11px;
+      }
+
+      header img {
+        height: 50px;
+      }
+
+      .hero h1 {
+        font-size: 26px;
+        padding: 0 15px;
+      }
+
+      .hero p {
+        font-size: 15px;
+        padding: 0 15px;
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+
+      section h2 {
+        font-size: 26px;
+      }
+
+      section p {
+        font-size: 16px;
+      }
+
+      .input-box input {
+        width: 100%;
+      }
+
+      .rec-logos {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .rec-arrow {
+        display: none;
+      }
+
+      .sticky-icon {
+        left: -3%;
+      }
+
+      #companiesGrid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+      }
+
+      .placed-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team {
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sticky-icon {
+        left: -5%;
+      }
+
+      .hero h1 {
+        font-size: 22px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      header {
+        padding: 12px 20px;
+      }
+
+      nav {
+        gap: 15px;
+      }
+
+      nav a {
+        font-size: 13px;
+      }
+
+      .sticky-icon {
+        left: -1%;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .sticky-icon {
+        left: -1%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <img src="t.png" alt="AKTU Logo">
+    <div class="header-title">
+      <h2>Central Placement Cell</h2>
+      <p>Empowering Students for a Bright Future</p>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+    <nav id="mainNav">
+      <a href="#home">HOME</a>
+      <a href="#about">ABOUT US</a>
+      <a href="#recruiters">RECRUITERS</a>
+      <a href="#team">TEAM</a>
+      <a href="#companies">COMPANIES</a>
+      <a href="index.html" target="_blank">DASHBOARD</a>
+      <a href="CP.HTML" target="_blank">STATUS</a>
+      <a href="LOGIN.html">LOGIN</a>
+    </nav>
+  </header>
+
+  <!-- ===== HERO with VIDEO BACKGROUND ===== -->
+  <section id="home" class="hero">
+    <!-- Video background -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <!-- Overlay -->
+    <div class="hero-overlay"></div>
+    <!-- Content -->
+    <div class="hero-content">
+      <h1>Welcome to Campus Placement Portal</h1>
+      <p>Connecting students with top recruiters for career opportunities.</p>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p>
+      The Central Placement Cell aims to bridge the gap between students and the corporate world.
+      We empower students with professional skills, training programs, and placement opportunities 
+      in leading organizations like TCS, Amazon, Google, and more. Our mission is to prepare students 
+      for successful and fulfilling careers.
+    </p>
+  </section>
+
+  <!-- ===== RECRUITERS ===== -->
+  <section id="recruiters">
+    <h2>Esteemed Recruiters</h2>
+    <div class="recruiters">
+      <img src="recuiter.png" alt="TCS">
+      <img src="recuiter2.png" alt="Amazon">
+      <img src="reciter3.png" alt="Google">
+      <img src="ree5.png" alt="PayPal">
+      <img src="recuiter.png" alt="Infosys">
+    </div>
+  </section>
+  <div class="recruiter-decor">
+      <span></span>
+      <i class='bx bxs-florist'></i>
+      <span></span>
+  </div>
+
+  <div class="recruiters-slider">
+      <button class="rec-arrow rec-left">❮</button>
+      <div class="rec-logos">
+          <img src="o (1).jpeg" alt="C2FO">
+          <img src="voltas (1).jpg" alt="voltage">
+          <img src="k (1).jpeg" alt="Deloitte">
+          <img src="r (1).jpeg" alt="DMI">
+          <img src="h.png" alt="Emerson">
+      </div>
+      <button class="rec-arrow rec-right">❯</button>
+  </div>
+
+  <!-- ===== TEAM ===== -->
+  <section id="team">
+    <h2>Our Team</h2>
+    <div class="team">
+      <div class="member">
+        <img src="place.png" alt="Dr. A. K. Sharma">
+        <h3>Dr. A. K. Sharma</h3>
+        <p>Training &amp; Placement Officer</p>
+      </div>
+      <div class="member">
+        <img src="codinatoter.png" alt="Ms. Shivani Jha">
+        <h3>Ms. vani Sharma</h3>
+        <p>Student Coordinator</p>
+      </div>
+      <div class="member">
+        <img src="technical.png" alt="Mr. Rahul Verma">
+        <h3>Mr. Rahul Verma</h3>
+        <p>Technical Head</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🌟 PLACED STUDENTS SECTION START -->
+  <div class="placed-section" id="placedSection">
+    <div class="placed-title">Placed Students &amp; Their Experience</div>
+    <div class="placed-grid" id="placedGrid"></div>
+  </div>
+
+  <script>
+    const placedStudents = [
+      {
+        name: "Amit Sharma",
+        company: "Flipkart",
+        role: "Web Developer",
+        image: "w.jpeg",
+        quote: "Practice DSA daily, revise basics. Panel is very friendly."
+      },
+      {
+        name: "Riya Singh",
+        company: "TCS",
+        role: "System Analyst",
+        image: "q.jpeg",
+        quote: "Strong communication + good projects help a lot!"
+      },
+      {
+        name: "Bani Verma",
+        company: "Wipro",
+        role: "Cloud Engineer",
+        image: "m.jpeg",
+        quote: "Focus on AWS basics & networking fundamentals."
+      }
+    ];
+
+    function renderPlacedStudents(){
+      const grid = document.getElementById("placedGrid");
+      grid.innerHTML = "";
+      placedStudents.forEach(s => {
+        grid.innerHTML += `
+          <div class="placed-card">
+            <img src="${s.image}" alt="${s.name}">
+            <h3>${s.name}</h3>
+            <div class="placed-meta">${s.company} • ${s.role}</div>
+            <div class="placed-quote">"${s.quote}"</div>
+          </div>
+        `;
+      });
+    }
+    renderPlacedStudents();
+  </script>
+  <!-- 🌟 PLACED STUDENTS SECTION END -->
+
+  <!-- ===== TRENDING COMPANIES ===== -->
+  <section id="companies" class="portfolio">
+    <h2>Trending Companies</h2>
+    <main id="companiesGrid">
+
+      <!-- TCS -->
+      <article class="company-card" data-href="TCS.html">
+        <div class="logo-wrap">
+          <img src="tcs.png" alt="TCS">
+        </div>
+        <h3 class="company-name">TCS</h3>
+        <p class="desc">Innovative global IT services, consulting &amp; digital solutions.</p>
+        <div class="roles">
+          <a class="role" href="#">▶ Software Developer</a>
+          <a class="role" href="#">▶ QA Engineer</a>
+          <a class="role" href="#">▶ System Analyst</a>
+        </div>
+        <a class="apply-btn" href="TCS.html" onclick="event.stopPropagation()">Apply Now</a>
+      </article>
+
+      <!-- Amazon -->
+      <article class="company-card" data-href="TCS.html">
+        <div class="logo-wrap">
+          <img src="amozon.png" alt="Amazon">
+        </div>
+        <h3 class="company-name">Amazon</h3>
+        <p class="desc">Innovative global IT services, consulting &amp; digital solutions.</p>
+        <div class="roles">
+          <a class="role" href="#">▶ Web Developer</a>
+          <a class="role" href="#">▶ Data Engineer</a>
+          <a class="role" href="#">▶ Machine Learning Engineer</a>
+        </div>
+        <a class="apply-btn" href="TCS.html" onclick="event.stopPropagation()">Apply Now</a>
+      </article>
+
+      <!-- Flipkart -->
+      <article class="company-card" data-href="TCS.html">
+        <div class="logo-wrap">
+          <img src="flipcard.png" alt="Flipkart">
+        </div>
+        <h3 class="company-name">Flipkart</h3>
+        <p class="desc">Innovative global IT services, consulting &amp; digital solutions.</p>
+        <div class="roles">
+          <a class="role" href="#">▶ Software Developer</a>
+          <a class="role" href="#">▶ QA Engineer</a>
+          <a class="role" href="#">▶ System Analyst</a>
+        </div>
+        <a class="apply-btn" href="TCS.html" onclick="event.stopPropagation()">Apply Now</a>
+      </article>
+
+      <!-- PayPal -->
+      <article class="company-card" data-href="paypal.html">
+        <div class="logo-wrap">
+          <img src="paypal.png" alt="PayPal">
+        </div>
+        <h3 class="company-name">PayPal</h3>
+        <p class="desc">Innovative global IT services, consulting &amp; digital solutions.</p>
+        <div class="roles">
+          <a class="role" href="#">▶ Software Developer</a>
+          <a class="role" href="#">▶ QA Engineer</a>
+          <a class="role" href="#">▶ System Analyst</a>
+        </div>
+        <a class="apply-btn" href="TCS.html" onclick="event.stopPropagation()">Apply Now</a>
+      </article>
+
+    </main>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <form name="submit-to-google-sheet">
+      <div class="input-box">
+        <input type="text" name="Name" placeholder="Full Name" required>
+        <input type="email" name="Email" placeholder="Email Address" required>
+      </div>
+      <div class="input-box">
+        <input type="number" name="Mobile" placeholder="Mobile Number" required>
+        <input type="text" name="Subject" placeholder="Email Subject" required>
+      </div>
+      <textarea name="Message" placeholder="Your Message" required></textarea>
+      <input type="submit" value="Send Message" class="btn">
+    </form>
+    <span id="msg"></span>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-text">
+      <p>© 2025  Training &amp; Placement Cell | All Rights Reserved.</p>
+    </div>
+    <div class="footer-iconTop">
+      <a href="#home"><i class='bx bx-up-arrow-alt'></i></a>
+    </div>
+  </footer>
+
+  <!-- ===== STICKY SOCIAL ICONS ===== -->
+  <div class="sticky-icon">
+    <a href="https://www.instagram.com/brtmultisoftware/" target="_blank" class="Instagram">Instagram <i class="fab fa-instagram"></i></a>
+    <a href="https://www.facebook.com/BRTMULTISOFTWARE" target="_blank" class="Facebook">Facebook <i class="fab fa-facebook-f"></i></a>
+    <a href="https://maps.app.goo.gl/TStedMxj47At5Cnw8" class="Map" target="_blank">Map <i class="fas fa-map-marker-alt"></i></a>
+    <a href="https://t.me/multiapisoftcrypto" target="_blank" class="Telegram">Telegram <i class="fab fa-telegram"></i></a>
+    <a href="https://www.youtube.com/@brtmultisoftware" target="_blank" class="Youtube">Youtube <i class="fab fa-youtube"></i></a>
+    <a href="https://x.com/i/flow/login?redirect_after_login=%2Fbrtmultisoftllp" target="_blank" class="Twitter">Twitter <i class="fab fa-twitter"></i></a>
+  </div>
+
+  <!-- ===== JS ===== -->
+  <script>
+    // Google Sheet Form
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyXfN3Li4YXYawt0BzpFcE80zBOooc5Ak9MA3vDqKtZ/exec'
+    const form = document.forms['submit-to-google-sheet']
+    const msg = document.getElementById("msg")
+
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          msg.innerHTML = "✅ Message sent successfully!"
+          setTimeout(() => { msg.innerHTML = "" }, 4000)
+          form.reset()
+        })
+        .catch(error => {
+          msg.innerHTML = "❌ Failed to send message!"
+          console.error('Error!', error.message)
+        })
+    })
+
+    // Hamburger menu toggle
+    function toggleNav() {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('open');
+    }
+
+    // Close nav when a link is clicked (mobile)
+    document.querySelectorAll('#mainNav a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mainNav').classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>

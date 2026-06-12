@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Company Placement Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN DIRECTION: Refined Tech-Corporate
+   Dark glassmorphism header + crisp white cards
+   Syne display font + DM Sans body
+   Signature accent: electric #00C2FF → #7B61FF
+═══════════════════════════════════════════ */
+
+:root {
+  --bg: #F0F4FF;
+  --card: #FFFFFF;
+  --border: #E4E9F7;
+  --text: #0D1B3E;
+  --muted: #6B7A9E;
+  --accent: #00C2FF;
+  --accent2: #7B61FF;
+  --accent3: #00D68F;
+  --danger: #FF4D6D;
+  --warning: #FFB830;
+  --surface: #F7F9FF;
+  --shadow: 0 4px 24px rgba(13,27,62,.08);
+  --shadow-lg: 0 12px 48px rgba(13,27,62,.14);
+  --r: 16px;
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --sidebar-w: 320px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOTIFICATION SYSTEM ── */
+#notifContainer {
+  position: fixed; top: 20px; right: 20px;
+  z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+  max-width: 360px; width: calc(100% - 40px);
+}
+.notif {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+  display: flex; align-items: flex-start; gap: 13px;
+  border-left: 4px solid var(--accent);
+  animation: notifSlide .4s cubic-bezier(.175,.885,.32,1.275);
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.notif::before {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  animation: notifTimer var(--dur, 4s) linear forwards;
+  border-radius: 0 0 0 14px;
+}
+@keyframes notifTimer { from{width:100%} to{width:0} }
+@keyframes notifSlide { from{opacity:0;transform:translateX(120%)} to{opacity:1;transform:translateX(0)} }
+.notif-exit { animation: notifOut .3s ease forwards; }
+@keyframes notifOut { to{opacity:0;transform:translateX(120%);max-height:0;margin:0;padding:0} }
+.notif.success { border-color: var(--accent3); }
+.notif.warning { border-color: var(--warning); }
+.notif.error   { border-color: var(--danger); }
+.notif-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.notif-body { flex: 1; }
+.notif-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--text); }
+.notif-msg { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+.notif-close {
+  position: absolute; top: 10px; right: 12px;
+  font-size: 16px; color: var(--muted); cursor: pointer;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; transition: background .2s;
+}
+.notif-close:hover { background: #f0f0f0; }
+
+/* ── HERO HEADER ── */
+.hero {
+  background: linear-gradient(135deg, #0D1B3E 0%, #1A2C6E 50%, #0A1F4E 100%);
+  padding: 0 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-glow {
+  position: absolute; top: -80px; right: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,194,255,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute; bottom: -100px; left: 20%;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,97,255,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 32px 0 0;
+  position: relative; z-index: 1;
+}
+
+/* Topbar inside hero */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 36px; flex-wrap: wrap; gap: 12px;
+}
+.topbar-brand {
+  font-family: var(--font-head); font-size: 18px; font-weight: 800;
+  color: #fff; letter-spacing: -.3px;
+  display: flex; align-items: center; gap: 10px;
+}
+.topbar-brand-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 10px var(--accent);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4)} }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-btn {
+  padding: 8px 18px; border-radius: 10px; font-family: var(--font-body);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.85);
+  transition: all .22s; text-decoration: none; display: flex; align-items: center; gap: 6px;
+}
+.topbar-btn:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.4); color: #fff; }
+.topbar-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 4px 14px rgba(0,194,255,.4); }
+
+/* Company selector tabs */
+.company-tabs {
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 0;
+  scrollbar-width: none;
+}
+.company-tabs::-webkit-scrollbar { display: none; }
+.ctab {
+  padding: 10px 20px; border-radius: 12px 12px 0 0;
+  font-family: var(--font-head); font-size: 13px; font-weight: 700;
+  cursor: pointer; border: none; background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.55); transition: all .25s;
+  white-space: nowrap; display: flex; align-items: center; gap: 8px;
+  position: relative; bottom: -1px;
+}
+.ctab:hover { background: rgba(255,255,255,.14); color: rgba(255,255,255,.85); }
+.ctab.active { background: var(--bg); color: var(--text); border-bottom: 2px solid var(--bg); }
+.ctab-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── MAIN LAYOUT ── */
+.main-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+.layout { display: grid; grid-template-columns: 1fr var(--sidebar-w); gap: 24px; align-items: start; }
+
+/* ── COMPANY CARD ── */
+.company-card {
+  background: var(--card);
+  border-radius: var(--r); border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: cardIn .5s ease;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.company-banner {
+  height: 140px;
+  position: relative; overflow: hidden;
+  background: var(--company-gradient, linear-gradient(135deg,#00C2FF,#7B61FF));
+  display: flex; align-items: flex-end; padding: 20px;
+}
+.company-banner::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='2'/%3E%3C/svg%3E") center/cover;
+  pointer-events: none;
+}
+.company-logo-wrap {
+  position: absolute; bottom: -28px; left: 24px;
+  width: 72px; height: 72px; border-radius: 18px;
+  background: #fff; border: 3px solid #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; z-index: 1;
+}
+.company-verified {
+  margin-left: auto; background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 12px; font-weight: 600; color: #fff;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.company-info {
+  padding: 44px 24px 24px;
+}
+.company-name {
+  font-family: var(--font-head); font-size: 28px; font-weight: 800;
+  color: var(--text); letter-spacing: -.5px;
+}
+.company-tagline { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.company-meta {
+  display: flex; flex-wrap: wrap; gap: 16px; margin-top: 18px;
+}
+.meta-chip {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--muted); font-weight: 500;
+}
+.meta-chip strong { color: var(--text); }
+.meta-icon { font-size: 16px; }
+
+/* Rating stars */
+.stars { display: flex; align-items: center; gap: 3px; }
+.star { color: var(--warning); font-size: 14px; }
+.star.empty { color: #D1D9EE; }
+.rating-val { font-weight: 700; color: var(--text); font-size: 14px; margin-right: 4px; }
+
+/* Stats row */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+.stat-box {
+  padding: 16px 20px; text-align: center;
+  border-right: 1px solid var(--border);
+}
+.stat-box:last-child { border-right: none; }
+.stat-val {
+  font-family: var(--font-head); font-size: 22px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.stat-label { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .7px; margin-top: 3px; }
+
+/* Tabs navigation */
+.tabs-nav {
+  display: flex; border-bottom: 2px solid var(--border);
+  margin-bottom: 24px; gap: 0; overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 14px 22px; font-family: var(--font-head); font-size: 14px; font-weight: 700;
+  cursor: pointer; border: none; background: none; color: var(--muted);
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: all .22s; white-space: nowrap; display: flex; align-items: center; gap: 7px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+.tab-badge {
+  background: var(--accent2); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px;
+}
+
+/* Tab content */
+.tab-panel { display: none; animation: fadeTab .3s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeTab { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* About section */
+.about-text { font-size: 15px; line-height: 1.75; color: #3D4A6B; }
+.highlight-box {
+  background: linear-gradient(135deg, #F0F6FF, #F5F0FF);
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 20px; margin-top: 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.highlight-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.highlight-body { font-size: 14px; line-height: 1.65; color: var(--muted); }
+.highlight-body strong { color: var(--text); }
+
+/* Skill tags */
+.skill-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.skill-tag {
+  padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  background: #EEF2FF; color: var(--accent2); border: 1px solid #D8DFFE;
+  transition: all .2s; cursor: default;
+}
+.skill-tag:hover { background: var(--accent2); color: #fff; transform: translateY(-2px); }
+
+/* ── JOB ROLE CARDS ── */
+.roles-grid { display: flex; flex-direction: column; gap: 14px; }
+.role-card {
+  border: 1.5px solid var(--border); border-radius: 14px;
+  overflow: hidden; transition: border-color .22s, box-shadow .22s;
+  background: var(--card);
+}
+.role-card:hover { border-color: var(--accent2); box-shadow: 0 6px 24px rgba(123,97,255,.1); }
+.role-header {
+  padding: 18px 20px; display: flex; align-items: center; gap: 15px;
+  cursor: pointer; user-select: none;
+}
+.role-icon-wrap {
+  width: 46px; height: 46px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+  background: var(--role-bg, #EEF2FF);
+}
+.role-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); }
+.role-salary { font-size: 13px; color: var(--accent3); font-weight: 600; margin-top: 2px; }
+.role-chevron {
+  margin-left: auto; font-size: 18px; color: var(--muted);
+  transition: transform .3s; flex-shrink: 0;
+}
+.role-card.open .role-chevron { transform: rotate(180deg); }
+.role-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.role-badge {
+  padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.badge-new { background: #DCFCE7; color: #16A34A; }
+.badge-hot { background: #FEE2E2; color: #DC2626; }
+.badge-remote { background: #EEF2FF; color: var(--accent2); }
+
+.role-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s cubic-bezier(0.4,0,0.2,1);
+  border-top: 0 solid var(--border);
+}
+.role-card.open .role-body { border-top-width: 1px; }
+.role-body-inner {
+  padding: 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.role-detail-item { }
+.role-detail-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+.role-detail-val { font-size: 13.5px; color: var(--text); font-weight: 500; line-height: 1.6; }
+.apply-role-btn {
+  grid-column: 1/-1;
+  padding: 12px; border-radius: 10px; border: none;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #fff; font-family: var(--font-head); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .22s; letter-spacing: .3px;
+  box-shadow: 0 4px 16px rgba(123,97,255,.35);
+}
+.apply-role-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(123,97,255,.45); }
+
+/* ── PROCESS STEPS ── */
+.process-timeline { position: relative; padding-left: 32px; }
+.process-timeline::before {
+  content: ''; position: absolute; left: 11px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+.process-step { position: relative; padding-bottom: 28px; }
+.process-step:last-child { padding-bottom: 0; }
+.process-step::before {
+  content: ''; position: absolute; left: -24px; top: 4px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--card); border: 2.5px solid var(--accent2);
+  box-shadow: 0 0 0 3px rgba(123,97,255,.15);
+}
+.process-step.done::before { background: var(--accent3); border-color: var(--accent3); }
+.process-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.process-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.process-time { font-size: 11px; color: var(--accent2); font-weight: 600; margin-top: 5px; }
+
+/* Reviews */
+.reviews-list { display: flex; flex-direction: column; gap: 14px; }
+.review-card {
+  background: var(--surface); border-radius: 12px; padding: 16px 18px;
+  border: 1px solid var(--border);
+}
+.review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.review-avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #fff;
+  background: var(--av-bg, linear-gradient(135deg, var(--accent), var(--accent2)));
+}
+.review-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.review-role { font-size: 12px; color: var(--muted); }
+.review-text { font-size: 13.5px; color: #4A5577; line-height: 1.65; }
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.pro-box, .con-box { border-radius: 8px; padding: 10px 12px; font-size: 12.5px; line-height: 1.5; }
+.pro-box { background: #F0FDF4; color: #166534; }
+.con-box { background: #FFF7ED; color: #9A3412; }
+.pro-label, .con-label { font-weight: 700; display: block; margin-bottom: 4px; }
+
+/* ── SIDEBAR ── */
+.sidebar { display: flex; flex-direction: column; gap: 18px; }
+.sidebar-card {
+  background: var(--card); border-radius: var(--r);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.sidebar-card-head {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  font-family: var(--font-head); font-size: 14px; font-weight: 800;
+  color: var(--text); display: flex; align-items: center; gap: 8px;
+}
+.sidebar-card-body { padding: 16px 20px; }
+
+/* Quick apply CTA */
+.cta-card {
+  background: linear-gradient(135deg, #0D1B3E, #1A2C6E);
+  border-radius: var(--r); padding: 24px 20px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(0,194,255,.2) 0%, transparent 60%);
+}
+.cta-icon { font-size: 40px; margin-bottom: 12px; position: relative; }
+.cta-title { font-family: var(--font-head); font-size: 18px; font-weight: 800; color: #fff; position: relative; }
+.cta-sub { font-size: 13px; color: rgba(255,255,255,.65); margin-top: 6px; position: relative; line-height: 1.5; }
+.cta-btn {
+  width: 100%; margin-top: 18px; padding: 14px; border-radius: 12px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #fff; border: none; font-family: var(--font-head);
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,194,255,.35);
+  transition: all .25s; position: relative; letter-spacing: .3px;
+}
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,194,255,.45); }
+.cta-deadline {
+  font-size: 12px; color: rgba(255,255,255,.55);
+  margin-top: 10px; position: relative;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.deadline-urgent { color: #FF8C42; font-weight: 700; }
+
+/* Eligibility checklist */
+.check-list { display: flex; flex-direction: column; gap: 10px; }
+.check-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13.5px; color: var(--text);
+}
+.check-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.check-label { line-height: 1.5; }
+.check-label span { color: var(--muted); font-size: 12px; display: block; margin-top: 2px; }
+
+/* Salary chart */
+.salary-bar-wrap { margin-bottom: 12px; }
+.salary-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+.salary-label strong { font-weight: 600; color: var(--text); }
+.salary-label span { color: var(--muted); }
+.salary-bar { height: 8px; border-radius: 8px; background: #EEF2FF; overflow: hidden; }
+.salary-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+/* Similar companies */
+.sim-company {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: opacity .2s;
+}
+.sim-company:hover { opacity: .75; }
+.sim-company:last-child { border-bottom: none; }
+.sim-logo { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.sim-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.sim-pkg { font-size: 12px; color: var(--accent3); font-weight: 600; margin-top: 2px; }
+.sim-arrow { margin-left: auto; font-size: 18px; color: var(--muted); }
+
+/* ── SUBMIT MODAL ── */
+#submitModal {
+  position: fixed; inset: 0;
+  background: rgba(13,27,62,.65); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center;
+  z-index: 9000; padding: 20px;
+}
+#submitModal.open { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 24px;
+  width: 100%; max-width: 540px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,.25);
+  animation: modalIn .4s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes modalIn { from{opacity:0;transform:scale(.9) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+.modal-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 14px;
+}
+.modal-header-icon { font-size: 32px; }
+.modal-title { font-family: var(--font-head); font-size: 20px; font-weight: 800; color: var(--text); }
+.modal-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.modal-close {
+  margin-left: auto; width: 36px; height: 36px; border-radius: 10px;
+  background: var(--surface); border: none; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); transition: all .2s; flex-shrink: 0;
+}
+.modal-close:hover { background: #fee2e2; color: var(--danger); }
+.modal-body { padding: 24px 28px; }
+.modal-footer { padding: 16px 28px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+
+/* Progress steps */
+.modal-steps {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 28px;
+}
+.mstep {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1;
+}
+.mstep-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+  border: 2px solid var(--border); color: var(--muted); background: #fff;
+  transition: all .3s;
+}
+.mstep.active .mstep-num { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.mstep.done .mstep-num { background: var(--accent3); border-color: var(--accent3); color: #fff; }
+.mstep-label { font-size: 12px; font-weight: 600; color: var(--muted); transition: color .3s; }
+.mstep.active .mstep-label { color: var(--accent2); }
+.mstep.done .mstep-label { color: var(--accent3); }
+.mstep-line { flex: 1; height: 2px; background: var(--border); margin: 0 6px; border-radius: 2px; }
+.mstep-line.active { background: var(--accent2); }
+
+/* Form */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block; font-size: 12px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .8px;
+  margin-bottom: 6px;
+}
+.form-control {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: var(--font-body); font-size: 14px; color: var(--text);
+  background: var(--surface); outline: none;
+  transition: border-color .22s, box-shadow .22s;
+  -webkit-appearance: none;
+}
+.form-control:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(123,97,255,.12);
+  background: #fff;
+}
+.form-control::placeholder { color: #B0BCDC; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+.form-error { font-size: 11.5px; color: var(--danger); margin-top: 5px; display: none; }
+.form-control.invalid { border-color: var(--danger); }
+.form-control.valid { border-color: var(--accent3); }
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 12px;
+  padding: 28px; text-align: center; cursor: pointer;
+  transition: all .22s; background: var(--surface);
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--accent2); background: #F5F0FF;
+}
+.upload-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-text { font-size: 14px; font-weight: 600; color: var(--text); }
+.upload-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.upload-success {
+  display: flex; align-items: center; gap: 10px;
+  background: #F0FDF4; border: 1.5px solid #BBF7D0;
+  border-radius: 10px; padding: 12px 14px; margin-top: 12px;
+  font-size: 13px; font-weight: 600; color: #166534;
+}
+
+/* Skills picker */
+.skills-picker { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+.skill-pick {
+  padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  border: 1.5px solid var(--border); background: #fff; color: var(--muted);
+  cursor: pointer; transition: all .2s;
+}
+.skill-pick:hover { border-color: var(--accent2); color: var(--accent2); }
+.skill-pick.selected { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+
+/* Slider */
+.range-wrap { position: relative; }
+.range-input {
+  -webkit-appearance: none; width: 100%; height: 6px;
+  border-radius: 6px; outline: none; cursor: pointer;
+  background: linear-gradient(to right, var(--accent2) 0%, var(--accent2) var(--pct, 50%), var(--border) var(--pct, 50%), var(--border) 100%);
+}
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--accent2);
+  box-shadow: 0 2px 8px rgba(123,97,255,.3); cursor: pointer;
+}
+.range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 6px; }
+.range-val {
+  display: inline-block; background: var(--accent2); color: #fff;
+  font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 20px;
+  margin-top: 8px;
+}
+
+/* Checkbox custom */
+.checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+.checkbox-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.checkbox-box {
+  width: 20px; height: 20px; border-radius: 6px;
+  border: 2px solid var(--border); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .2s; font-size: 12px;
+}
+.checkbox-item.checked .checkbox-box { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.checkbox-label { font-size: 13.5px; color: var(--text); }
+
+/* Success animation */
+.success-screen { text-align: center; padding: 20px 0; }
+.success-ring {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent3), #00A86B);
+  margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  box-shadow: 0 8px 30px rgba(0,214,143,.3);
+  animation: successPop .5s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes successPop { from{transform:scale(0)} to{transform:scale(1)} }
+.success-title { font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--text); }
+.success-msg { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.6; max-width: 360px; margin-inline: auto; }
+.tracking-id {
+  margin-top: 16px; background: var(--surface); border-radius: 10px;
+  padding: 12px 18px; display: inline-block;
+  font-family: monospace; font-size: 15px; font-weight: 700;
+  color: var(--accent2); border: 1px solid var(--border);
+}
+.tracking-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+
+/* Btn styles */
+.btn {
+  padding: 12px 24px; border-radius: 10px; font-family: var(--font-head);
+  font-size: 14px; font-weight: 700; cursor: pointer; border: none;
+  transition: all .22s; letter-spacing: .3px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #fff; box-shadow: 0 4px 16px rgba(123,97,255,.3);
+  flex: 1;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(123,97,255,.4); }
+.btn-outline {
+  background: transparent; color: var(--muted);
+  border: 1.5px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--accent2); color: var(--accent2); }
+.btn-success {
+  background: linear-gradient(135deg, var(--accent3), #00A86B);
+  color: #fff; flex: 1; box-shadow: 0 4px 16px rgba(0,214,143,.3);
+}
+
+/* ── FLOATING BUTTONS ── */
+.fab-group {
+  position: fixed; bottom: 28px; right: 28px;
+  display: flex; flex-direction: column; gap: 10px;
+  z-index: 800; align-items: flex-end;
+}
+.fab {
+  width: 54px; height: 54px; border-radius: 50%;
+  border: none; cursor: pointer; font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.2); transition: all .25s;
+}
+.fab:hover { transform: translateY(-3px) scale(1.08); }
+.fab-main { background: linear-gradient(135deg, var(--accent2), var(--accent)); width: 60px; height: 60px; font-size: 26px; }
+.fab-secondary { background: #fff; color: var(--accent2); }
+.fab-label {
+  background: rgba(13,27,62,.85); color: #fff;
+  font-size: 12px; font-weight: 600; padding: 5px 12px;
+  border-radius: 20px; white-space: nowrap;
+  opacity: 0; transition: opacity .2s;
+}
+.fab-item:hover .fab-label { opacity: 1; }
+.fab-item { display: flex; align-items: center; gap: 10px; flex-direction: row-reverse; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 968px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { order: -1; display: grid; grid-template-columns: 1fr 1fr; }
+  .cta-card { grid-column: 1/-1; }
+}
+@media (max-width: 680px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stats-row .stat-box:nth-child(2) { border-right: none; }
+  .stats-row .stat-box:nth-child(3) { border-top: 1px solid var(--border); }
+  .form-row { grid-template-columns: 1fr; }
+  .role-body-inner { grid-template-columns: 1fr; }
+  .sidebar { grid-template-columns: 1fr; }
+  .company-tabs { padding-left: 8px; }
+  .pros-cons { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .main-wrap { padding: 20px 16px 80px; }
+  .modal-header, .modal-body, .modal-footer { padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NOTIFICATION CONTAINER ── -->
+<div id="notifContainer"></div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-brand">
+        <div class="topbar-brand-dot"></div>
+        PlacementHub
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn" onclick="notify('info','Saved!','Company added to your watchlist 📌',3000)">🔖 Save</button>
+        <button class="topbar-btn" onclick="shareCompany()">↗ Share</button>
+        <button class="topbar-btn active" onclick="openModal(null)">Apply Now</button>
+      </div>
+    </div>
+
+    <!-- Company tabs -->
+    <div class="company-tabs">
+      <button class="ctab active" onclick="switchCompany('tcs',this)">
+        <span class="ctab-dot" style="background:#00C2FF;"></span> TCS
+      </button>
+      <button class="ctab" onclick="switchCompany('infosys',this)">
+        <span class="ctab-dot" style="background:#7B61FF;"></span> Infosys
+      </button>
+      <button class="ctab" onclick="switchCompany('wipro',this)">
+        <span class="ctab-dot" style="background:#00D68F;"></span> Wipro
+      </button>
+      <button class="ctab" onclick="switchCompany('amazon',this)">
+        <span class="ctab-dot" style="background:#FFB830;"></span> Amazon
+      </button>
+      <button class="ctab" onclick="switchCompany('servicenow',this)">
+        <span class="ctab-dot" style="background:#FF4D6D;"></span> ServiceNow
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-wrap">
+  <div class="layout">
+
+    <!-- LEFT: Main Company Card -->
+    <div>
+      <div class="company-card" id="companyCard">
+
+        <!-- Banner -->
+        <div class="company-banner" id="companyBanner">
+          <div class="company-logo-wrap" id="companyLogo">🏢</div>
+          <div class="company-verified">✅ Verified</div>
+        </div>
+
+        <!-- Info -->
+        <div class="company-info">
+          <div class="company-name" id="companyName">Tata Consultancy Services</div>
+          <div class="company-tagline" id="companyTagline">Experience certainty. IT Services, Consulting & Business Solutions</div>
+
+          <div class="company-meta">
+            <div class="meta-chip"><span class="meta-icon">📍</span> <strong id="companyCity">Mumbai, India</strong></div>
+            <div class="meta-chip"><span class="meta-icon">🌐</span> <strong id="companyType">IT Services & Consulting</strong></div>
+            <div class="meta-chip"><span class="meta-icon">👥</span> <strong>600,000+ Employees</strong></div>
+            <div class="meta-chip">
+              <span class="stars" id="companyStars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                <span class="star">★</span><span class="star empty">★</span>
+              </span>
+              <span class="rating-val" style="margin-left:6px;" id="companyRating">4.1</span>
+              <span style="font-size:12px;color:var(--muted);">(12,400 reviews)</span>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-box"><div class="stat-val" id="statPackage">₹7–22</div><div class="stat-label">LPA Range</div></div>
+            <div class="stat-box"><div class="stat-val" id="statRoles">8</div><div class="stat-label">Open Roles</div></div>
+            <div class="stat-box"><div class="stat-val" id="statDeadline">12</div><div class="stat-label">Days Left</div></div>
+            <div class="stat-box"><div class="stat-val" id="statSelected">340</div><div class="stat-label">Selected/Year</div></div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div style="padding: 20px 24px 0;">
+          <div class="tabs-nav" id="tabsNav">
+            <button class="tab-btn active" onclick="switchTab('overview',this)">📋 Overview</button>
+            <button class="tab-btn" onclick="switchTab('roles',this)">💼 Roles <span class="tab-badge" id="rolesCount">8</span></button>
+            <button class="tab-btn" onclick="switchTab('process',this)">🔄 Process</button>
+            <button class="tab-btn" onclick="switchTab('reviews',this)">⭐ Reviews</button>
+          </div>
+        </div>
+
+        <div style="padding: 0 24px 28px;">
+
+          <!-- Overview Panel -->
+          <div id="panel-overview" class="tab-panel active">
+            <div class="about-text" id="companyAbout">
+              Tata Consultancy Services (TCS) is a global leader in IT services, consulting, and business solutions headquartered in Mumbai. With a presence in 55+ countries and over 600,000 employees, TCS serves clients across industries including BFSI, Healthcare, Manufacturing, and Retail.
+            </div>
+            <div class="highlight-box" style="margin-top:20px;">
+              <div class="highlight-icon">🎯</div>
+              <div class="highlight-body">
+                <strong>Why Join TCS?</strong><br>
+                World-class learning programs, global exposure, strong campus culture, structured career growth, and one of the highest fresher intake in India — 40,000+ freshers annually.
+              </div>
+            </div>
+            <div style="margin-top:20px;">
+              <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">Key Skills Required</div>
+              <div class="skill-tags" id="companySkills">
+                <span class="skill-tag">Java</span><span class="skill-tag">Python</span>
+                <span class="skill-tag">SQL</span><span class="skill-tag">OOP</span>
+                <span class="skill-tag">Data Structures</span><span class="skill-tag">REST APIs</span>
+                <span class="skill-tag">Agile</span><span class="skill-tag">Communication</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Roles Panel -->
+          <div id="panel-roles" class="tab-panel">
+            <div class="roles-grid" id="rolesGrid"><!-- injected by JS --></div>
+          </div>
+
+          <!-- Process Panel -->
+          <div id="panel-process" class="tab-panel">
+            <div class="process-timeline" id="processTimeline"><!-- injected by JS --></div>
+          </div>
+
+          <!-- Reviews Panel -->
+          <div id="panel-reviews" class="tab-panel">
+            <div class="reviews-list" id="reviewsList"><!-- injected by JS --></div>
+          </div>
+
+        </div>
+      </div><!-- /company-card -->
+    </div><!-- /left -->
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- CTA Card -->
+      <div class="cta-card sidebar-card">
+        <div class="cta-icon">🚀</div>
+        <div class="cta-title">Ready to Apply?</div>
+        <div class="cta-sub" id="ctaSub">Submit your application in under 3 minutes. Positions are filling fast!</div>
+        <button class="cta-btn" onclick="openModal(null)">⚡ Quick Apply</button>
+        <div class="cta-deadline">⏰ Deadline: <span class="deadline-urgent" id="ctaDeadline">May 15, 2025</span></div>
+      </div>
+
+      <!-- Eligibility -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">✅ Eligibility Criteria</div>
+        <div class="sidebar-card-body">
+          <div class="check-list" id="eligList"><!-- injected --></div>
+        </div>
+      </div>
+
+      <!-- Salary Range -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">💰 Salary Breakdown</div>
+        <div class="sidebar-card-body" id="salaryChart"><!-- injected --></div>
+      </div>
+
+      <!-- Similar Companies -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">🏢 Similar Companies</div>
+        <div class="sidebar-card-body" id="similarCo"><!-- injected --></div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+  </div><!-- /layout -->
+</div><!-- /main -->
+
+<!-- ── FLOATING BUTTONS ── -->
+<div class="fab-group">
+  <div class="fab-item">
+    <span class="fab-label">Quick Apply</span>
+    <button class="fab fab-main" onclick="openModal(null)">⚡</button>
+  </div>
+  <div class="fab-item">
+    <span class="fab-label">Save for later</span>
+    <button class="fab fab-secondary" onclick="notify('info','Saved!','Company saved to your list 📌',3000)">🔖</button>
+  </div>
+  <div class="fab-item">
+    <span class="fab-label">Share</span>
+    <button class="fab fab-secondary" onclick="shareCompany()">↗</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MULTI-STEP APPLICATION MODAL
+══════════════════════════════════════ -->
+<div id="submitModal">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <span class="modal-header-icon" id="modalIcon">📝</span>
+      <div>
+        <div class="modal-title" id="modalTitle">Apply to TCS</div>
+        <div class="modal-subtitle" id="modalSub">Fill in your details — takes less than 3 minutes</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <!-- Progress steps -->
+    <div style="padding:20px 28px 0;">
+      <div class="modal-steps">
+        <div class="mstep active" id="mstep1">
+          <div class="mstep-num">1</div>
+          <div class="mstep-label">Personal</div>
+        </div>
+        <div class="mstep-line" id="mline1"></div>
+        <div class="mstep" id="mstep2">
+          <div class="mstep-num">2</div>
+          <div class="mstep-label">Academics</div>
+        </div>
+        <div class="mstep-line" id="mline2"></div>
+        <div class="mstep" id="mstep3">
+          <div class="mstep-num">3</div>
+          <div class="mstep-label">Resume</div>
+        </div>
+        <div class="mstep-line" id="mline3"></div>
+        <div class="mstep" id="mstep4">
+          <div class="mstep-num">4</div>
+          <div class="mstep-label">Review</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-body" id="modalBody">
+      <!-- Injected by JS -->
+    </div>
+
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn btn-outline" id="modalBack" onclick="modalPrev()" style="display:none;">← Back</button>
+      <button class="btn btn-primary" id="modalNext" onclick="modalNext()">Continue →</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT — FULL DYNAMIC ENGINE
+════════════════════════════════════ -->
+<script>
+/* ════════════════════════════
+   DATA — All companies
+════════════════════════════ */
+const COMPANIES = {
+  tcs: {
+    name: 'Tata Consultancy Services', short: 'TCS',
+    tagline: 'Experience certainty. IT Services, Consulting & Business Solutions',
+    logo: '🏢', city: 'Mumbai, India', type: 'IT Services & Consulting',
+    gradient: 'linear-gradient(135deg, #00C2FF 0%, #0062FF 100%)',
+    rating: 4.1, reviews: '12,400',
+    package: '₹7–22', roles: 8, deadline: 'May 15, 2025', selected: '340',
+    about: 'Tata Consultancy Services (TCS) is a global leader in IT services, consulting, and business solutions headquartered in Mumbai. With a presence in 55+ countries and over 600,000 employees, TCS serves clients across BFSI, Healthcare, Manufacturing, and Retail.',
+    whyjoin: 'World-class learning programs, global exposure, strong campus culture, structured career growth, and one of the highest fresher intake — 40,000+ freshers annually.',
+    skills: ['Java','Python','SQL','OOP','Data Structures','REST APIs','Agile','Communication'],
+    jobRoles: [
+      { icon:'🌐', bg:'#EEF2FF', title:'Web Developer', salary:'₹6–16 LPA', badge:'badge-new', badgeText:'New',
+        skills:'HTML, CSS, JavaScript, React, API Integration', eligibility:'BCA / B.Tech / MCA (CS/IT)', experience:'Freshers / 0–2 years', location:'Bangalore, Pune, Hyderabad', openings:'120' },
+      { icon:'📊', bg:'#F0FDF4', title:'Data Engineer', salary:'₹12–30 LPA', badge:'badge-hot', badgeText:'Hot',
+        skills:'Python, SQL, ETL, AWS, Big Data, Spark', eligibility:'B.Tech / B.Sc Data Science / MCA', experience:'Freshers / 0–3 years', location:'Chennai, Bangalore', openings:'65' },
+      { icon:'🤖', bg:'#FFF7ED', title:'ML Engineer', salary:'₹18–45 LPA', badge:'badge-hot', badgeText:'Hot',
+        skills:'Python, ML, Deep Learning, TensorFlow, NLP', eligibility:'B.Tech / M.Tech (AI/ML)', experience:'0–2 years', location:'Hyderabad, Bangalore', openings:'40' },
+      { icon:'☁️', bg:'#F0F6FF', title:'Cloud Engineer', salary:'₹10–25 LPA', badge:'badge-remote', badgeText:'Remote OK',
+        skills:'AWS / Azure / GCP, DevOps, Kubernetes, Terraform', eligibility:'B.Tech / BCA', experience:'Freshers', location:'PAN India / Remote', openings:'90' },
+    ],
+    process: [
+      { title:'Online Application', desc:'Submit your profile on TCS NextStep portal. Ensure your NQT is completed.', time:'Instant' },
+      { title:'TCS NQT (National Qualifier Test)', desc:'Online aptitude test: Verbal, Reasoning, Quantitative, Programming MCQs.', time:'90 minutes' },
+      { title:'Technical Round 1', desc:'Core CS topics — OOP, DBMS, OS, DSA, Java/Python basics.', time:'45–60 minutes' },
+      { title:'Technical Round 2 (Digital role)', desc:'Coding challenge + system design. Only for Digital / Prime track.', time:'60–90 minutes' },
+      { title:'Managerial Round', desc:'Project discussion, team scenario questions, cultural fit.', time:'30–45 minutes' },
+      { title:'HR Round', desc:'Offer discussion, relocation preferences, salary expectations.', time:'20–30 minutes' },
+    ],
+    reviews: [
+      { name:'Rahul S.', role:'Software Engineer • Joined 2024', av:'RS', avBg:'linear-gradient(135deg,#00C2FF,#0062FF)',
+        stars:4, text:'TCS has a great learning culture. The first 6 months are full training, so you have time to settle in. Work-life balance is decent at the starting level.',
+        pros:'Great training, job security, brand value', cons:'Slow growth for first 2 years' },
+      { name:'Priya M.', role:'Data Engineer • Joined 2023', av:'PM', avBg:'linear-gradient(135deg,#7B61FF,#00C2FF)',
+        stars:4, text:'As a fresher, TCS gave me a strong foundation. The DEx track is very competitive. Mentors are helpful and the projects are real-world.',
+        pros:'Exposure to latest tech, mentorship', cons:'Salary could be better for experienced' },
+    ],
+    eligibility: [
+      { icon:'🎓', label:'60%+ in 10th, 12th & Graduation', detail:'No backlogs at time of joining' },
+      { icon:'🗓', label:'Graduation Year 2024 or 2025', detail:'2026 batch eligible for early drive' },
+      { icon:'📍', label:'Willing to relocate', detail:'PAN India posting based on project' },
+    ],
+    salary: [
+      { role:'Web Developer', min:6, max:16 },
+      { role:'Data Engineer', min:12, max:30 },
+      { role:'ML Engineer', min:18, max:45 },
+      { role:'Cloud Engineer', min:10, max:25 },
+    ],
+  },
+
+  infosys: {
+    name: 'Infosys Limited', short: 'Infosys',
+    tagline: 'Navigate your next. Technology, consulting, and outsourcing services',
+    logo: '🌐', city: 'Bangalore, India', type: 'IT Services & Consulting',
+    gradient: 'linear-gradient(135deg, #7B61FF 0%, #4A3AFF 100%)',
+    rating: 4.0, reviews: '9,800', deadline: 'May 22, 2025',
+    package: '₹6.5–24', roles: 6, selected: '280',
+    about: 'Infosys is a global leader in next-generation digital services and consulting. It enables clients across 50+ countries to navigate their digital transformation. With over 340,000 employees, Infosys navigates its clients through their digital journey.',
+    whyjoin: 'Infosys Lex learning platform, structured springboard program for freshers, competitive salaries, strong DEI culture, and opportunity to work on Fortune 500 projects from day 1.',
+    skills: ['Java','JavaScript','Python','SQL','React','Microservices','Testing','Scrum'],
+    jobRoles: [
+      { icon:'🌐', bg:'#EEF2FF', title:'Systems Engineer', salary:'₹6.5 LPA', badge:'badge-new', badgeText:'Open',
+        skills:'Java, SQL, OOP, Basics of Web', eligibility:'B.Tech / BCA / MCA 65%+', experience:'Freshers', location:'Bangalore, Pune, Mysore', openings:'500' },
+      { icon:'🧪', bg:'#F0FDF4', title:'Test Engineer', salary:'₹6 LPA', badge:'badge-new', badgeText:'Open',
+        skills:'Manual Testing, Selenium, JIRA, SQL', eligibility:'B.Tech / BCA', experience:'Freshers', location:'Hyderabad, Chennai', openings:'200' },
+      { icon:'📊', bg:'#FFF7ED', title:'Data Scientist', salary:'₹14–24 LPA', badge:'badge-hot', badgeText:'Hot',
+        skills:'Python, ML, Pandas, Power BI, Tableau', eligibility:'B.Tech / M.Sc Stats / MCA', experience:'0–2 years', location:'Bangalore', openings:'80' },
+    ],
+    process: [
+      { title:'Online Application', desc:'Apply via Infosys recruitment portal or campus placement cell.', time:'Instant' },
+      { title:'HackerRank Assessment', desc:'Quantitative aptitude, Logical reasoning, Verbal ability, Pseudocode.', time:'120 minutes' },
+      { title:'Technical Interview', desc:'Core CS: DBMS, OS, OOP, DSA basics, Java / Python coding questions.', time:'45–60 minutes' },
+      { title:'HR Interview', desc:'Behavioral and situational questions. STAR method recommended.', time:'25–30 minutes' },
+    ],
+    reviews: [
+      { name:'Ankit K.', role:'Systems Engineer • Joined 2024', av:'AK', avBg:'linear-gradient(135deg,#7B61FF,#4A3AFF)',
+        stars:4, text:'The Mysore training centre is amazing — it\'s like a campus. You get 3–4 months of training before project allocation. Great for freshers starting out.',
+        pros:'Excellent training centre, global exposure', cons:'Project allocation can take time' },
+    ],
+    eligibility: [
+      { icon:'🎓', label:'65%+ throughout academics', detail:'No active backlogs' },
+      { icon:'🗓', label:'2024 / 2025 pass-outs', detail:'Campus and off-campus both' },
+      { icon:'🌍', label:'Open to relocation', detail:'Mysore training is mandatory for freshers' },
+    ],
+    salary: [
+      { role:'Systems Engineer', min:6.5, max:8 },
+      { role:'Test Engineer', min:6, max:7.5 },
+      { role:'Data Scientist', min:14, max:24 },
+    ],
+  },
+
+  wipro: {
+    name: 'Wipro Limited', short: 'Wipro',
+    tagline: 'Togetherism. Reimagining technology for a reinvented world',
+    logo: '💻', city: 'Bangalore, India', type: 'IT Services & Technology',
+    gradient: 'linear-gradient(135deg, #00D68F 0%, #00897B 100%)',
+    rating: 3.9, reviews: '8,100', deadline: 'May 30, 2025',
+    package: '₹3.5–18', roles: 5, selected: '220',
+    about: 'Wipro Limited is a leading technology services and consulting company. It serves clients across six continents with 250,000+ employees. Wipro Partners Drive specializes in taking fresh talent and moulding them into enterprise-grade engineers through its rigorous training program.',
+    whyjoin: 'Wipro\'s WILP (Work Integrated Learning Program) is one of the most structured fresher training programs in India — 6 months training + guaranteed project placement.',
+    skills: ['Java','Python','SQL','Manual Testing','Selenium','Cloud Basics','JIRA'],
+    jobRoles: [
+      { icon:'⚙️', bg:'#F0FDF4', title:'Project Engineer', salary:'₹3.5 LPA', badge:'badge-new', badgeText:'WILP',
+        skills:'Java, SQL, Testing, Agile Basics', eligibility:'B.Tech / BCA / MCA 60%+', experience:'Freshers', location:'PAN India', openings:'800' },
+      { icon:'🌐', bg:'#EEF2FF', title:'Software Engineer', salary:'₹6–12 LPA', badge:'badge-hot', badgeText:'Hot',
+        skills:'Full Stack / Java / Python / Cloud', eligibility:'B.Tech 65%+', experience:'0–2 years', location:'Bangalore, Pune', openings:'300' },
+    ],
+    process: [
+      { title:'Online Application', desc:'Apply on Wipro Careers or through campus placement.', time:'Instant' },
+      { title:'Written Test', desc:'Essay writing, Logical reasoning, Verbal ability, Coding MCQs.', time:'90 minutes' },
+      { title:'Technical Interview', desc:'Basic OOP, SQL, language fundamentals, resume discussion.', time:'30–45 minutes' },
+      { title:'HR Interview', desc:'Behavioural questions, relocation, career goals.', time:'20 minutes' },
+    ],
+    reviews: [
+      { name:'Sneha P.', role:'Project Engineer • Joined 2024', av:'SP', avBg:'linear-gradient(135deg,#00D68F,#00897B)',
+        stars:3, text:'WILP program is intense but very rewarding. The training period was some of the best learning I\'ve had. Project allocation varies a lot.',
+        pros:'WILP training, decent work culture', cons:'Low starting salary, slow appraisals' },
+    ],
+    eligibility: [
+      { icon:'🎓', label:'60%+ in all academics', detail:'No backlogs permitted' },
+      { icon:'🗓', label:'2024 / 2025 graduates', detail:'Lateral hiring also open' },
+      { icon:'📍', label:'Open to relocation', detail:'Posted anywhere in India' },
+    ],
+    salary: [
+      { role:'Project Engineer (WILP)', min:3.5, max:5 },
+      { role:'Software Engineer', min:6, max:12 },
+    ],
+  },
+
+  amazon: {
+    name: 'Amazon India', short: 'Amazon',
+    tagline: 'Work hard. Have fun. Make history.',
+    logo: '📦', city: 'Bangalore, India', type: 'E-Commerce & Cloud (AWS)',
+    gradient: 'linear-gradient(135deg, #FFB830 0%, #FF8C00 100%)',
+    rating: 4.3, reviews: '15,200', deadline: 'June 5, 2025',
+    package: '₹24–50', roles: 4, selected: '180',
+    about: 'Amazon is one of the world\'s most customer-centric companies. Amazon India operates across e-commerce, AWS cloud, logistics, and devices. It is known for its leadership principles culture, high hiring bar, and one of the most competitive compensation packages in the Indian tech industry.',
+    whyjoin: 'Unmatched compensation, Amazon Leadership Principles culture, world-class engineering problems, AWS access, fast growth, and direct impact on hundreds of millions of customers.',
+    skills: ['DSA','System Design','Python','Java','AWS','Distributed Systems','Leadership Principles'],
+    jobRoles: [
+      { icon:'💻', bg:'#FFF7ED', title:'SDE-1 (Software Dev Engineer)', salary:'₹24–40 LPA', badge:'badge-hot', badgeText:'High CTC',
+        skills:'DSA, Java/Python, System Design, OOP', eligibility:'B.Tech CS/IT 8.0+ CGPA preferred', experience:'Freshers / 0–1 year', location:'Bangalore, Hyderabad', openings:'60' },
+      { icon:'☁️', bg:'#EEF2FF', title:'Cloud Support Engineer', salary:'₹12–20 LPA', badge:'badge-new', badgeText:'Open',
+        skills:'Linux, Networking, AWS, Python scripting', eligibility:'B.Tech / BCA', experience:'0–2 years', location:'Hyderabad', openings:'80' },
+    ],
+    process: [
+      { title:'Online Application', desc:'Apply via Amazon Jobs portal. Resume screening by ATS & HR.', time:'2–5 days' },
+      { title:'Online Assessment (OA)', desc:'2 DSA coding problems on HackerRank + Debugging + Logic. Very competitive.', time:'105 minutes' },
+      { title:'Phone Screen', desc:'1 coding question + discussion on past projects and LP stories.', time:'45–60 minutes' },
+      { title:'Loop Interviews (4–5 rounds)', desc:'2 Coding rounds + 1 System Design + 2 LP/Behavioural. Each round checks a different Leadership Principle.', time:'Full day' },
+      { title:'Bar Raiser Round', desc:'Final check by a senior Amazonian. Tests culture fit and LP alignment.', time:'45 minutes' },
+      { title:'Offer & Negotiation', desc:'Competitive CTC with stock (RSU) and signing bonus for experienced.', time:'1–2 weeks' },
+    ],
+    reviews: [
+      { name:'Aman T.', role:'SDE-1 • Joined 2024', av:'AT', avBg:'linear-gradient(135deg,#FFB830,#FF8C00)',
+        stars:5, text:'Amazon has the highest bar but the rewards are worth it. The work is challenging, pace is fast. LP culture is very real — you\'ll use it every day.',
+        pros:'World-class compensation, FAANG brand, fast growth', cons:'Work-life balance is tough, high pressure' },
+    ],
+    eligibility: [
+      { icon:'🎓', label:'8.0+ CGPA strongly preferred', detail:'Strong DSA fundamentals essential' },
+      { icon:'🗓', label:'2024 / 2025 graduates', detail:'Lateral roles also open' },
+      { icon:'⚡', label:'200+ LeetCode problems', detail:'Focus on Medium / Hard DSA' },
+    ],
+    salary: [
+      { role:'SDE-1', min:24, max:40 },
+      { role:'Cloud Support Eng', min:12, max:20 },
+    ],
+  },
+
+  servicenow: {
+    name: 'ServiceNow India', short: 'ServiceNow',
+    tagline: 'Making the world of work, work better for people.',
+    logo: '☁️', city: 'Hyderabad, India', type: 'Cloud Platform / SaaS',
+    gradient: 'linear-gradient(135deg, #FF4D6D 0%, #C9184A 100%)',
+    rating: 4.4, reviews: '3,200', deadline: 'June 2, 2025',
+    package: '₹5.5–22', roles: 5, selected: '120',
+    about: 'ServiceNow is a cloud-based platform that digitizes and automates organizational workflows. It is used by 85%+ of Fortune 500 companies for IT service management, HR, customer service, and more. ServiceNow India is growing rapidly and actively hiring freshers.',
+    whyjoin: 'ServiceNow is one of the fastest-growing SaaS companies globally. The platform skills are highly portable, pay is competitive, certification support is provided, and freshers get real project exposure from week 1.',
+    skills: ['JavaScript','ServiceNow Platform','GlideRecord','ITSM/ITIL','HTML/CSS','REST APIs','SQL'],
+    jobRoles: [
+      { icon:'☁️', bg:'#FFF0F3', title:'ServiceNow Developer Trainee', salary:'₹5.5–7 LPA', badge:'badge-new', badgeText:'New',
+        skills:'ServiceNow basics, JavaScript, SQL, ITSM', eligibility:'B.Tech / BCA / MCA 60%+', experience:'Freshers', location:'Hyderabad / Remote', openings:'80' },
+      { icon:'⚙️', bg:'#EEF2FF', title:'Platform Engineer', salary:'₹10–22 LPA', badge:'badge-hot', badgeText:'Hot',
+        skills:'ServiceNow advanced, REST APIs, Integration Hub', eligibility:'B.Tech 65%+', experience:'0–2 years', location:'Hyderabad', openings:'40' },
+    ],
+    process: [
+      { title:'Application Submission', desc:'Apply via campus or ServiceNow Careers portal.', time:'Instant' },
+      { title:'Written Test', desc:'Aptitude + Basic Programming + ITSM basics MCQs.', time:'60–90 minutes' },
+      { title:'Technical Round 1', desc:'JavaScript, OOP, SQL, ServiceNow concepts discussion.', time:'45–60 minutes' },
+      { title:'Technical Round 2', desc:'Live ServiceNow configuration exercise. GlideRecord, Business Rule demo.', time:'60 minutes' },
+      { title:'HR Round', desc:'Culture fit, communication check, offer discussion.', time:'20–30 minutes' },
+    ],
+    reviews: [
+      { name:'Kavya R.', role:'Developer Trainee • Joined 2024', av:'KR', avBg:'linear-gradient(135deg,#FF4D6D,#C9184A)',
+        stars:5, text:'ServiceNow is an amazing place to start your career. The learning curve is steep but rewarding. Certification support is fully sponsored. Great culture!',
+        pros:'Certified support, good WLB, growing platform', cons:'Platform-specific skills, niche market' },
+    ],
+    eligibility: [
+      { icon:'🎓', label:'60%+ in all academics', detail:'No active backlogs' },
+      { icon:'🗓', label:'2024 / 2025 pass-outs', detail:'Off-campus also welcome' },
+      { icon:'📜', label:'ServiceNow CSA is a plus', detail:'Free prep resources provided' },
+    ],
+    salary: [
+      { role:'Developer Trainee', min:5.5, max:7 },
+      { role:'Platform Engineer', min:10, max:22 },
+    ],
+  }
+};
+
+// ── Current state ──
+let currentCompany = 'tcs';
+let currentTab = 'overview';
+let modalStep = 1;
+let selectedRole = null;
+let uploadedFile = null;
+let selectedSkills = [];
+
+// ── Render company ──
+function renderCompany(key) {
+  const c = COMPANIES[key];
+  if (!c) return;
+  currentCompany = key;
+
+  document.getElementById('companyBanner').style.background = c.gradient;
+  document.getElementById('companyLogo').textContent = c.logo;
+  document.getElementById('companyName').textContent = c.name;
+  document.getElementById('companyTagline').textContent = c.tagline;
+  document.getElementById('companyCity').textContent = c.city;
+  document.getElementById('companyType').textContent = c.type;
+  document.getElementById('companyRating').textContent = c.rating;
+  document.getElementById('statPackage').textContent = c.package;
+  document.getElementById('statRoles').textContent = c.roles;
+  document.getElementById('statDeadline').textContent = (() => {
+    const d = new Date(c.deadline) - new Date();
+    return Math.max(0, Math.ceil(d / 86400000));
+  })();
+  document.getElementById('statSelected').textContent = c.selected;
+  document.getElementById('rolesCount').textContent = c.roles;
+  document.getElementById('ctaDeadline').textContent = c.deadline;
+  document.getElementById('ctaSub').textContent = `Apply to ${c.short} — positions filling fast!`;
+  document.getElementById('companyAbout').textContent = c.about;
+  document.querySelector('#panel-overview .highlight-box .highlight-body').innerHTML =
+    `<strong>Why Join ${c.short}?</strong><br>${c.whyjoin}`;
+
+  // Skills
+  document.getElementById('companySkills').innerHTML =
+    c.skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+
+  // Stars
+  const stars = document.getElementById('companyStars');
+  stars.innerHTML = [1,2,3,4,5].map(i =>
+    `<span class="star ${i <= Math.round(c.rating) ? '' : 'empty'}">★</span>`
+  ).join('');
+
+  // Roles
+  renderRoles(c);
+  // Process
+  renderProcess(c);
+  // Reviews
+  renderReviews(c);
+  // Eligibility
+  renderEligibility(c);
+  // Salary
+  renderSalary(c);
+  // Similar
+  renderSimilar(key);
+
+  // Reset to overview tab
+  switchTab('overview', document.querySelector('.tab-btn'));
+}
+
+function renderRoles(c) {
+  const grid = document.getElementById('rolesGrid');
+  grid.innerHTML = c.jobRoles.map(r => `
+    <div class="role-card" onclick="toggleRole(this, '${r.title}')">
+      <div class="role-header">
+        <div class="role-icon-wrap" style="--role-bg:${r.bg}">${r.icon}</div>
+        <div>
+          <div class="role-title">${r.title}</div>
+          <div class="role-salary">${r.salary}</div>
+        </div>
+        <div class="role-badges"><span class="role-badge ${r.badge}">${r.badgeText}</span></div>
+        <div class="role-chevron">⌄</div>
+      </div>
+      <div class="role-body">
+        <div class="role-body-inner">
+          <div class="role-detail-item">
+            <div class="role-detail-label">Skills Required</div>
+            <div class="role-detail-val">${r.skills}</div>
+          </div>
+          <div class="role-detail-item">
+            <div class="role-detail-label">Eligibility</div>
+            <div class="role-detail-val">${r.eligibility}</div>
+          </div>
+          <div class="role-detail-item">
+            <div class="role-detail-label">Experience</div>
+            <div class="role-detail-val">${r.experience}</div>
+          </div>
+          <div class="role-detail-item">
+            <div class="role-detail-label">Location</div>
+            <div class="role-detail-val">📍 ${r.location}</div>
+          </div>
+          <div class="role-detail-item">
+            <div class="role-detail-label">Openings</div>
+            <div class="role-detail-val">👥 ${r.openings} positions</div>
+          </div>
+          <button class="apply-role-btn" onclick="event.stopPropagation(); openModal('${r.title}')">
+            ⚡ Apply for ${r.title}
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleRole(card, title) {
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.role-card.open').forEach(c => {
+    c.classList.remove('open');
+    c.querySelector('.role-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    card.classList.add('open');
+    const body = card.querySelector('.role-body');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+function renderProcess(c) {
+  document.getElementById('processTimeline').innerHTML = c.process.map((p, i) => `
+    <div class="process-step ${i < 2 ? 'done' : ''}">
+      <div class="process-title">${p.title}</div>
+      <div class="process-desc">${p.desc}</div>
+      <div class="process-time">⏱ ${p.time}</div>
+    </div>
+  `).join('');
+}
+
+function renderReviews(c) {
+  document.getElementById('reviewsList').innerHTML = c.reviews.map(r => `
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar" style="--av-bg:${r.avBg}">${r.av}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-role">${r.role}</div>
+        </div>
+        <div class="stars" style="margin-left:auto;">
+          ${[1,2,3,4,5].map(i => `<span class="star ${i<=r.stars?'':'empty'}">★</span>`).join('')}
+        </div>
+      </div>
+      <div class="review-text">${r.text}</div>
+      <div class="pros-cons">
+        <div class="pro-box"><span class="pro-label">✅ Pros</span>${r.pros}</div>
+        <div class="con-box"><span class="con-label">⚠️ Cons</span>${r.cons}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderEligibility(c) {
+  document.getElementById('eligList').innerHTML = c.eligibility.map(e => `
+    <div class="check-item">
+      <span class="check-icon">${e.icon}</span>
+      <div class="check-label">${e.label}<span>${e.detail}</span></div>
+    </div>
+  `).join('');
+}
+
+function renderSalary(c) {
+  const maxVal = Math.max(...c.salary.map(s => s.max));
+  document.getElementById('salaryChart').innerHTML = c.salary.map(s => `
+    <div class="salary-bar-wrap">
+      <div class="salary-label">
+        <strong>${s.role}</strong>
+        <span>₹${s.min}–${s.max} LPA</span>
+      </div>
+      <div class="salary-bar">
+        <div class="salary-fill" data-width="${Math.round((s.max/maxVal)*100)}" style="width:0%"></div>
+      </div>
+    </div>
+  `).join('');
+  // Animate
+  setTimeout(() => {
+    document.querySelectorAll('.salary-fill[data-width]').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 100);
+}
+
+function renderSimilar(currentKey) {
+  const others = Object.entries(COMPANIES).filter(([k]) => k !== currentKey).slice(0, 4);
+  document.getElementById('similarCo').innerHTML = others.map(([key, c]) => `
+    <div class="sim-company" onclick="switchCompany('${key}', null)">
+      <div class="sim-logo" style="background:${c.gradient};font-size:20px;">${c.logo}</div>
+      <div>
+        <div class="sim-name">${c.short}</div>
+        <div class="sim-pkg">${c.package} LPA</div>
+      </div>
+      <div class="sim-arrow">→</div>
+    </div>
+  `).join('');
+}
+
+// ── Tab switching ──
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (el) el.classList.add('active');
+  else document.querySelector(`.tab-btn[onclick*="${tab}"]`)?.classList.add('active');
+}
+
+// ── Company switching ──
+function switchCompany(key, tabEl) {
+  document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+  renderCompany(key);
+  notify('info', `Viewing ${COMPANIES[key].short}`, `${COMPANIES[key].name} profile loaded ✅`, 3000);
+}
+
+/* ════════════════════════════
+   MODAL — MULTI-STEP
+════════════════════════════ */
+function openModal(role) {
+  selectedRole = role;
+  modalStep = 1;
+  selectedSkills = [];
+  uploadedFile = null;
+  const c = COMPANIES[currentCompany];
+  document.getElementById('modalTitle').textContent = `Apply to ${c.short}`;
+  document.getElementById('modalSub').textContent = role ? `Role: ${role}` : 'Select your preferred role below';
+  document.getElementById('submitModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderModalStep(1);
+}
+
+function closeModal() {
+  document.getElementById('submitModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderModalStep(step) {
+  modalStep = step;
+  // Update step UI
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('mstep' + i);
+    el.classList.remove('active','done');
+    if (i < step) el.classList.add('done');
+    else if (i === step) el.classList.add('active');
+    if (i < 4) {
+      const line = document.getElementById('mline' + i);
+      line.classList.toggle('active', i < step);
+    }
+  }
+  document.getElementById('modalBack').style.display = step > 1 ? '' : 'none';
+  document.getElementById('modalNext').textContent = step === 4 ? '🚀 Submit Application' : 'Continue →';
+
+  const c = COMPANIES[currentCompany];
+  const body = document.getElementById('modalBody');
+
+  if (step === 1) {
+    body.innerHTML = `
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input type="text" class="form-control" id="f-name" placeholder="e.g. Rahul Sharma" />
+        <div class="form-error" id="e-name">Please enter your full name</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input type="email" class="form-control" id="f-email" placeholder="you@email.com" />
+          <div class="form-error" id="e-email">Enter a valid email</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" class="form-control" id="f-phone" placeholder="+91 9876543210" />
+          <div class="form-error" id="e-phone">Enter 10-digit number</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Apply for Role *</label>
+        <select class="form-control" id="f-role">
+          <option value="">Select job role</option>
+          ${c.jobRoles.map(r => `<option value="${r.title}" ${selectedRole===r.title?'selected':''}>${r.title} — ${r.salary}</option>`).join('')}
+        </select>
+        <div class="form-error" id="e-role">Please select a role</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location Preference</label>
+        <select class="form-control" id="f-loc">
+          <option>Bangalore</option><option>Hyderabad</option><option>Pune</option>
+          <option>Mumbai</option><option>Chennai</option><option>Remote / Any</option>
+        </select>
+      </div>
+    `;
+  } else if (step === 2) {
+    body.innerHTML = `
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Degree *</label>
+          <select class="form-control" id="f-degree">
+            <option>B.Tech / BE</option><option>BCA</option><option>B.Sc CS/IT</option>
+            <option>MCA</option><option>M.Tech</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Branch / Specialization</label>
+          <input type="text" class="form-control" id="f-branch" placeholder="Computer Science" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">CGPA / Percentage *</label>
+          <input type="text" class="form-control" id="f-cgpa" placeholder="e.g. 8.2 CGPA or 78%" />
+          <div class="form-error" id="e-cgpa">Please enter your CGPA</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Graduation Year *</label>
+          <select class="form-control" id="f-year">
+            <option>2025</option><option>2024</option><option>2026</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">College / University Name *</label>
+        <input type="text" class="form-control" id="f-college" placeholder="e.g. VIT Vellore, BITS Pilani" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Experience Level</label>
+        <div style="margin-top:10px;">
+          <input type="range" class="range-input" id="f-exp" min="0" max="36" value="0"
+            style="--pct:0%" oninput="updateRange(this, 'exp-val', v => v===0?'Fresher':v+'+ months exp')" />
+          <div class="range-labels"><span>Fresher</span><span>3 yrs</span></div>
+          <div class="range-val" id="exp-val">Fresher</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Skills You Have</label>
+        <div class="skills-picker">
+          ${c.skills.map(s=>`<div class="skill-pick" onclick="toggleSkill(this,'${s}')">${s}</div>`).join('')}
+        </div>
+        <div class="form-hint">Click to select your skills</div>
+      </div>
+    `;
+  } else if (step === 3) {
+    body.innerHTML = `
+      <div class="form-group">
+        <label class="form-label">Upload Your Resume *</label>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('resumeFile').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleDrop(event)">
+          <div class="upload-icon">📎</div>
+          <div class="upload-text">Click to upload or drag & drop</div>
+          <div class="upload-sub">PDF, DOC, DOCX — Max 5MB</div>
+        </div>
+        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFileUpload(this)" />
+        <div id="uploadResult"></div>
+        <div class="form-error" id="e-resume">Please upload your resume</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">LinkedIn Profile URL</label>
+        <input type="url" class="form-control" id="f-linkedin" placeholder="https://linkedin.com/in/yourname" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">GitHub / Portfolio URL</label>
+        <input type="url" class="form-control" id="f-github" placeholder="https://github.com/yourname" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cover Note (Optional)</label>
+        <textarea class="form-control" id="f-cover" rows="3" placeholder="Why do you want to join ${c.short}? What makes you a great fit?"></textarea>
+        <div class="form-hint" id="coverCount">0 / 300 characters</div>
+      </div>
+    `;
+    document.getElementById('f-cover')?.addEventListener('input', function() {
+      document.getElementById('coverCount').textContent = `${this.value.length} / 300 characters`;
+      if (this.value.length > 300) this.value = this.value.slice(0,300);
+    });
+  } else if (step === 4) {
+    // Review step — show summary
+    const name = document.getElementById('f-name')?.value || '—';
+    const email = document.getElementById('f-email')?.value || '—';
+    const role = document.getElementById('f-role')?.value || selectedRole || '—';
+    body.innerHTML = `
+      <div style="background:#F7F9FF;border-radius:14px;padding:20px;border:1px solid var(--border);margin-bottom:18px;">
+        <div style="font-family:var(--font-head);font-size:15px;font-weight:800;margin-bottom:14px;color:var(--text);">📋 Application Summary</div>
+        <div style="display:grid;gap:10px;">
+          ${[
+            ['👤 Name', name],
+            ['📧 Email', email],
+            ['🏢 Company', c.name],
+            ['💼 Role', role],
+            ['📎 Resume', uploadedFile ? `✅ ${uploadedFile}` : '⚠️ Not uploaded'],
+          ].map(([l,v]) => `
+            <div style="display:flex;justify-content:space-between;font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--border);">
+              <span style="color:var(--muted);font-weight:500;">${l}</span>
+              <span style="font-weight:600;color:var(--text);text-align:right;max-width:60%;">${v}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="checkbox-group">
+          <div class="checkbox-item" onclick="this.classList.toggle('checked')" id="chk1">
+            <div class="checkbox-box">✓</div>
+            <div class="checkbox-label">I confirm that all information provided is accurate and truthful</div>
+          </div>
+          <div class="checkbox-item" onclick="this.classList.toggle('checked')" id="chk2">
+            <div class="checkbox-box">✓</div>
+            <div class="checkbox-label">I agree to the terms & conditions and privacy policy</div>
+          </div>
+          <div class="checkbox-item" onclick="this.classList.toggle('checked')" id="chk3">
+            <div class="checkbox-box">✓</div>
+            <div class="checkbox-label">I consent to receive placement-related communications via email/SMS</div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('modalNext').textContent = '🚀 Submit Application';
+  }
+}
+
+function modalNext() {
+  if (modalStep === 1) {
+    const name = document.getElementById('f-name')?.value.trim();
+    const email = document.getElementById('f-email')?.value.trim();
+    const phone = document.getElementById('f-phone')?.value.trim();
+    const role = document.getElementById('f-role')?.value;
+    let valid = true;
+    if (!name) { showErr('f-name','e-name'); valid=false; }
+    if (!email || !email.includes('@')) { showErr('f-email','e-email'); valid=false; }
+    if (!phone || phone.replace(/\D/g,'').length < 10) { showErr('f-phone','e-phone'); valid=false; }
+    if (!role) { showErr('f-role','e-role'); valid=false; }
+    if (!valid) { shake(); return; }
+    if (role) selectedRole = role;
+  }
+  if (modalStep === 2) {
+    const cgpa = document.getElementById('f-cgpa')?.value.trim();
+    if (!cgpa) { showErr('f-cgpa','e-cgpa'); shake(); return; }
+  }
+  if (modalStep === 3) {
+    if (!uploadedFile) {
+      document.getElementById('e-resume').style.display = 'block';
+      shake(); return;
+    }
+  }
+  if (modalStep === 4) {
+    const chks = ['chk1','chk2','chk3'];
+    const allChecked = chks.every(id => document.getElementById(id)?.classList.contains('checked'));
+    if (!allChecked) {
+      notify('error','Checkboxes Required','Please check all required checkboxes to proceed.', 4000);
+      shake(); return;
+    }
+    submitApplication();
+    return;
+  }
+  renderModalStep(modalStep + 1);
+}
+
+function modalPrev() {
+  if (modalStep > 1) renderModalStep(modalStep - 1);
+}
+
+function showErr(inputId, errId) {
+  document.getElementById(inputId)?.classList.add('invalid');
+  if (errId) document.getElementById(errId).style.display = 'block';
+  document.getElementById(inputId)?.addEventListener('input', function() {
+    this.classList.remove('invalid'); this.classList.add('valid');
+    if (errId) document.getElementById(errId).style.display = 'none';
+  }, {once:true});
+}
+
+function shake() {
+  const box = document.querySelector('.modal-box');
+  box.style.animation = 'none';
+  setTimeout(() => { box.style.animation = 'shake .4s ease'; }, 10);
+}
+
+function handleFileUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5*1024*1024) { notify('error','File Too Large','Max file size is 5MB.',3000); return; }
+  uploadedFile = file.name;
+  document.getElementById('uploadResult').innerHTML = `
+    <div class="upload-success">📄 ${file.name} <span style="margin-left:auto;opacity:.7;font-size:12px;">${(file.size/1024).toFixed(0)} KB</span></div>
+  `;
+  document.getElementById('e-resume').style.display = 'none';
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) { document.getElementById('resumeFile').files = e.dataTransfer.files; handleFileUpload({files:[file]}); }
+}
+
+function updateRange(input, valId, formatter) {
+  const v = parseInt(input.value);
+  const pct = (v / parseInt(input.max)) * 100;
+  input.style.setProperty('--pct', pct + '%');
+  document.getElementById(valId).textContent = formatter(v);
+}
+
+function toggleSkill(el, skill) {
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) selectedSkills.push(skill);
+  else selectedSkills = selectedSkills.filter(s => s !== skill);
+}
+
+function submitApplication() {
+  const c = COMPANIES[currentCompany];
+  const trackingId = 'PH' + Date.now().toString().slice(-8).toUpperCase();
+
+  // Show success screen
+  document.getElementById('modalBody').innerHTML = `
+    <div class="success-screen">
+      <div class="success-ring">✅</div>
+      <div class="success-title">Application Submitted!</div>
+      <div class="success-msg">Your application to <strong>${c.name}</strong> for <strong>${selectedRole}</strong> has been successfully submitted. You will receive a confirmation email shortly.</div>
+      <div>
+        <div class="tracking-label">Your Tracking ID</div>
+        <div class="tracking-id">${trackingId}</div>
+      </div>
+      <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;align-items:center;">
+        <div style="font-size:13px;color:var(--muted);">📧 Confirmation sent to your email</div>
+        <div style="font-size:13px;color:var(--muted);">📱 SMS notification will follow</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalFooter').innerHTML = `
+    <button class="btn btn-success" style="flex:1;" onclick="closeModal()">🏠 Go to Dashboard</button>
+    <button class="btn btn-outline" onclick="closeModal(); setTimeout(()=>notify('info','Share!','Tell your friends about this opportunity 🎉',4000),300)">📤 Share</button>
+  `;
+  // Hide steps
+  document.querySelector('.modal-steps').style.display = 'none';
+
+  // Fire notifications
+  setTimeout(() => notify('success','Application Submitted! 🎉', `Your ${c.short} application (${trackingId}) is live!`, 6000), 400);
+  setTimeout(() => notify('info','📧 Email Sent', `Confirmation sent to your registered email address.`, 5000), 1800);
+  setTimeout(() => notify('info','📱 SMS Sent', `Tracking ID ${trackingId} sent via SMS.`, 4500), 3200);
+  setTimeout(() => notify('success','🤞 Best of Luck!', `${c.short} typically responds within 5–7 days. Keep practising!`, 5000), 5000);
+}
+
+/* ════════════════════════════
+   NOTIFICATION SYSTEM
+════════════════════════════ */
+function notify(type, title, msg, duration = 4000) {
+  const icons = { success:'✅', info:'ℹ️', warning:'⚠️', error:'❌' };
+  const id = 'n' + Date.now() + Math.random();
+  const el = document.createElement('div');
+  el.className = `notif ${type}`; el.id = id;
+  el.style.setProperty('--dur', (duration/1000) + 's');
+  el.innerHTML = `
+    <div class="notif-icon">${icons[type]||'ℹ️'}</div>
+    <div class="notif-body">
+      <div class="notif-title">${title}</div>
+      <div class="notif-msg">${msg}</div>
+    </div>
+    <div class="notif-close" onclick="dismissNotif('${id}')">✕</div>
+  `;
+  el.onclick = () => dismissNotif(id);
+  document.getElementById('notifContainer').appendChild(el);
+  const timer = setTimeout(() => dismissNotif(id), duration);
+  el._timer = timer;
+}
+
+function dismissNotif(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  clearTimeout(el._timer);
+  el.classList.add('notif-exit');
+  setTimeout(() => el.remove(), 300);
+}
+
+/* ── Share ── */
+function shareCompany() {
+  const c = COMPANIES[currentCompany];
+  if (navigator.share) {
+    navigator.share({ title: c.name + ' — Apply Now', text: `Apply to ${c.name} — ${c.package} LPA! ${c.deadline} deadline.`, url: location.href });
+  } else {
+    navigator.clipboard.writeText(location.href).then(() => notify('success','Link Copied!','Share URL copied to clipboard 📋', 3000));
+  }
+}
+
+/* ── Add shake keyframe ── */
+const style = document.createElement('style');
+style.textContent = `@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}`;
+document.head.appendChild(style);
+
+/* ════════════════════════════
+   INIT
+════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderCompany('tcs');
+
+  // Close modal on backdrop click
+  document.getElementById('submitModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Welcome notification
+  setTimeout(() => notify('info', '👋 Welcome!', 'Browse top companies and apply instantly!', 5000), 600);
+  setTimeout(() => notify('warning', '⏰ Act Fast!', 'TCS Digital deadline in 12 days — apply now!', 5000), 2500);
+});
+</script>
+</body>
+</html>

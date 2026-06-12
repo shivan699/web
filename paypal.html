@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paypal Profile</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #eef2ff;
+        padding: 40px;
+    }
+
+    .profile-box {
+        background: white;
+        padding: 40px;
+        max-width: 800px;
+        margin: auto;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.15);
+        animation: fadeIn 0.7s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(20px);}
+        to   {opacity: 1; transform: translateY(0);}
+    }
+
+    img {
+        width: 200px;
+        display: block;
+        margin: auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #ff9900;
+        font-size: 40px;
+    }
+
+    h3 {
+        margin-top: 25px;
+        color: #222;
+    }
+
+    button {
+        padding: 12px 25px;
+        background: #ff9900;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        display: block;
+        margin: 25px auto;
+        cursor: pointer;
+        font-size: 18px;
+        transition: 0.3s;
+    }
+    button:hover {
+        background: #ffae33;
+    }
+
+    /* Collapsible job details box */
+    .job-box {
+        background: #fff7e6;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 12px;
+        display: none;
+        animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+        from {opacity: 0; transform: scale(0.95);}
+        to   {opacity: 1; transform: scale(1);}
+    }
+
+    .toggle {
+        cursor: pointer;
+        color: #0055cc;
+        font-weight: bold;
+        text-decoration: underline;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+
+    /* Popup form */
+    #applyPopup {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-box {
+        background: white;
+        width: 350px;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        animation: fadeIn 0.4s ease;
+    }
+
+    .popup-box input, .popup-box select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: 1px solid #bbb;
+    }
+
+    .close-btn {
+        background: red;
+        margin-top: 8px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="profile-box">
+    <img src="paypal.png" alt="Amazon">
+    <h1>Paypal</h1>
+
+    <h3>About Company</h3>
+    <p>
+        PayPal is a leading global financial technology company that provides fast, secure, and convenient online payment solutions. Founded in 1998, PayPal allows individuals and businesses to send and receive money electronically, shop online, and manage digital payments with ease.
+    </p>
+
+    <h3>Job Roles</h3>
+
+    <span class="toggle" onclick="toggleJob('webDev')">▶ Web Developer</span>
+    <div id="webDev" class="job-box">
+        <b>Skills:</b> HTML, CSS, JS, React, API Integration<br>
+        <b>Salary:</b> ₹6 LPA – ₹16 LPA<br>
+        <b>Eligibility:</b> BCA / B.Tech / MCA<br>
+    </div>
+
+    <span class="toggle" onclick="toggleJob('dataEng')">▶ Data Engineer</span>
+    <div id="dataEng" class="job-box">
+        <b>Skills:</b> Python, SQL, ETL, AWS, Big Data<br>
+        <b>Salary:</b> ₹12 LPA – ₹30 LPA<br>
+        <b>Eligibility:</b> B.Tech / B.Sc Data Science / MCA<br>
+    </div>
+
+    <span class="toggle" onclick="toggleJob('mlEng')">▶ Machine Learning Engineer</span>
+    <div id="mlEng" class="job-box">
+        <b>Skills:</b> Python, ML, DL, TensorFlow, NLP<br>
+        <b>Salary:</b> ₹18 LPA – ₹45 LPA<br>
+        <b>Eligibility:</b> B.Tech / M.Tech / AI Specialization<br>
+    </div>
+
+    <button onclick="openApply()">Apply Now</button>
+</div>
+
+<!-- Application Popup -->
+<div id="applyPopup">
+    <div class="popup-box">
+        <h2>Apply for Amazon</h2>
+
+        <input type="text" placeholder="Full Name">
+        <input type="email" placeholder="Email">
+        <select>
+            <option>Select Job Role</option>
+            <option>Web Developer</option>
+            <option>Data Engineer</option>
+            <option>Machine Learning Engineer</option>
+        </select>
+
+        <button>Submit Application</button>
+        <button class="close-btn" onclick="closeApply()">Close</button>
+    </div>
+</div>
+
+<script>
+    function toggleJob(id) {
+        const box = document.getElementById(id);
+        box.style.display = box.style.display === "block" ? "none" : "block";
+    }
+
+    function openApply() {
+        document.getElementById('applyPopup').style.display = "flex";
+    }
+
+    function closeApply() {
+        document.getElementById('applyPopup').style.display = "none";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Interview — Student Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><div class="sidebar-brand-icon">🎓</div><div><div class="sidebar-brand-text">Student Portal</div><div class="sidebar-brand-sub">Placement Ready</div></div></div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Main Menu</span>
+    <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a href="aptitude.html" class="nav-link"><span class="nav-icon">🧠</span> Aptitude</a>
+    <a href="dsa.html" class="nav-link"><span class="nav-icon">💻</span> DSA Practice</a>
+    <a href="mock-interview.html" class="nav-link active"><span class="nav-icon">🎤</span> Mock‑Interview</a>
+    <span class="nav-section-label">Career Tools</span>
+    <a href="resume-builder.html" class="nav-link"><span class="nav-icon">📄</span> Resume Builder</a>
+    <a href="resume-scanner.html" class="nav-link"><span class="nav-icon">🔍</span> Resume Scanner</a>
+    <a href="announcements.html" class="nav-link"><span class="nav-icon">📢</span> Announcements</a>
+    <span class="nav-section-label">Support</span>
+    <a href="ai-assistant.html" class="nav-link ai-btn"><span class="nav-icon">🤖</span> AI Assistant</a>
+    <span class="nav-section-label">Account</span>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span> Profile</a>
+    <a href="logout.html" class="nav-link logout-link"><span class="nav-icon">🚪</span> Logout</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user-avatar">S</div><div><div class="sidebar-user-name">Student</div><div class="sidebar-user-role">B.Tech CSE</div></div></div>
+</aside>
+
+<div class="main-content">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div><div class="topbar-title">Mock Interview</div><div class="topbar-subtitle">Practice makes perfect</div></div>
+    </div>
+    <div class="topbar-right"><div class="topbar-bell" id="topbarBell">🔔<span class="topbar-bell-dot"></span></div></div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="page-header-greeting">Interview Simulator</div>
+      <h1>Mock Interview 🎤</h1>
+      <p>Tap a card to reveal the ideal answer. Start a session to practice live questions.</p>
+    </div>
+
+    <!-- Voice UI -->
+    <div class="voice-ui-container mb-6" id="voiceUI" style="display:none">
+      <div class="voice-ring">🎙</div>
+      <h3 style="font-size:18px; font-weight:700; margin-bottom:8px;">Interview in Progress</h3>
+      <p id="currentQuestion" style="font-size:15px; opacity:0.85; max-width:480px; margin:0 auto 20px; line-height:1.6;">"Tell me about yourself."</p>
+      <div class="voice-animation">
+        <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+        <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:#fff;" onclick="showNextQuestion()">⏭ Next Question</button>
+        <button class="btn" style="background:rgba(255,255,255,0.15);color:#fff;" onclick="startMockInterview()">⏹ Stop</button>
+      </div>
+    </div>
+
+    <!-- Start Button -->
+    <div style="text-align:center; margin-bottom:32px;">
+      <button class="btn btn-green btn-lg" id="startInterviewBtn" onclick="startMockInterview()">🎤 Start Mock Interview</button>
+      <p class="text-sm text-muted" style="margin-top:10px;">Simulates a real interview with rotating questions</p>
+    </div>
+
+    <!-- Question Categories -->
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;">
+      <button class="btn btn-primary btn-sm cat-btn" onclick="filterCards('all')">All Questions</button>
+      <button class="btn btn-outline btn-sm cat-btn" onclick="filterCards('hr')">🤝 HR Round</button>
+      <button class="btn btn-outline btn-sm cat-btn" onclick="filterCards('tech')">💻 Technical</button>
+      <button class="btn btn-outline btn-sm cat-btn" onclick="filterCards('sn')">☁️ ServiceNow</button>
+    </div>
+
+    <!-- HR Questions -->
+    <div class="mb-6" id="section-hr">
+      <h3 style="font-size:16px; font-weight:700; margin-bottom:14px; color:var(--text-primary);">🤝 HR Questions <span class="badge badge-purple" style="margin-left:8px;">Click to reveal</span></h3>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px;">
+        <div class="interview-card" data-cat="hr" onclick="revealAnswer(this)">
+          <div class="interview-q">Tell me about yourself.</div>
+          <div class="interview-a">Start with education → key skills → projects → why this role. Keep it under 2 minutes. End with enthusiasm about the opportunity.</div>
+          <div class="reveal-hint">👆 Click to reveal answer</div>
+        </div>
+        <div class="interview-card" data-cat="hr" onclick="revealAnswer(this)">
+          <div class="interview-q">What are your strengths and weaknesses?</div>
+          <div class="interview-a"><b>Strength:</b> "I'm a quick learner — I taught myself JavaScript in 3 weeks."<br><b>Weakness:</b> "I over-engineer solutions. I'm learning to balance perfectionism with deadlines."</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="hr" onclick="revealAnswer(this)">
+          <div class="interview-q">Why should we hire you?</div>
+          <div class="interview-a">Match your skills to the job. "I have strong OOP, SQL, and JS fundamentals. I'm a fast learner, motivated, and committed to growing with your company."</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="hr" onclick="revealAnswer(this)">
+          <div class="interview-q">Where do you see yourself in 5 years?</div>
+          <div class="interview-a">"In 5 years, I see myself as a skilled developer leading small projects and contributing to architectural decisions. I want to grow within your organization."</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="hr" onclick="revealAnswer(this)">
+          <div class="interview-q">How do you handle pressure and tight deadlines?</div>
+          <div class="interview-a">I prioritize tasks by urgency, break them into smaller steps, avoid distractions, and communicate blockers early. Planning ahead reduces last-minute stress.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="hr" onclick="revealAnswer(this)">
+          <div class="interview-q">Describe a time you worked in a team.</div>
+          <div class="interview-a">Use STAR: Situation → Task → Action → Result. Example: "In my college project, I coordinated a 4-person team, assigned tasks, resolved conflicts, and we delivered on time."</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Questions -->
+    <div class="mb-6" id="section-tech">
+      <h3 style="font-size:16px; font-weight:700; margin-bottom:14px;">💻 Technical Questions</h3>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px;">
+        <div class="interview-card" data-cat="tech" onclick="revealAnswer(this)">
+          <div class="interview-q">What are the four pillars of OOP?</div>
+          <div class="interview-a">1. Encapsulation — hiding data via access modifiers<br>2. Inheritance — child class gets parent properties<br>3. Polymorphism — one method, different behaviors<br>4. Abstraction — hiding complexity</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="tech" onclick="revealAnswer(this)">
+          <div class="interview-q">What is the difference between == and .equals() in Java?</div>
+          <div class="interview-a">== compares object references (memory addresses). .equals() compares the actual content/value of objects. Always use .equals() for string comparison.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="tech" onclick="revealAnswer(this)">
+          <div class="interview-q">What is a REST API? Name the HTTP methods.</div>
+          <div class="interview-a">REST is an architectural style using HTTP for data communication. Methods: GET (read), POST (create), PUT (update), DELETE (remove), PATCH (partial update).</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="tech" onclick="revealAnswer(this)">
+          <div class="interview-q">What is the difference between ArrayList and LinkedList?</div>
+          <div class="interview-a">ArrayList: array-backed, fast access O(1), slow insert/delete O(n).<br>LinkedList: node-based, slow access O(n), fast insert/delete O(1) at ends.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="tech" onclick="revealAnswer(this)">
+          <div class="interview-q">What is a SQL INNER JOIN?</div>
+          <div class="interview-a">Returns only rows where there is a match in both tables.<br><code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;">SELECT * FROM A INNER JOIN B ON A.id = B.a_id</code></div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="tech" onclick="revealAnswer(this)">
+          <div class="interview-q">What is Big O notation?</div>
+          <div class="interview-a">Big O describes algorithm efficiency. O(1)=constant, O(log n)=logarithmic, O(n)=linear, O(n²)=quadratic. Lower is better. Used to compare algorithms.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ServiceNow Questions -->
+    <div class="mb-6" id="section-sn">
+      <h3 style="font-size:16px; font-weight:700; margin-bottom:14px;">☁️ ServiceNow Questions</h3>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px;">
+        <div class="interview-card" data-cat="sn" onclick="revealAnswer(this)">
+          <div class="interview-q">What is ServiceNow?</div>
+          <div class="interview-a">ServiceNow is a cloud-based platform for IT Service Management (ITSM). It helps organizations automate digital workflows, manage IT operations, and track incidents, problems, and changes.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="sn" onclick="revealAnswer(this)">
+          <div class="interview-q">What is a Business Rule in ServiceNow?</div>
+          <div class="interview-a">A server-side script that runs automatically when a record is inserted, updated, deleted, or queried. Used to enforce business logic, update fields, or trigger actions.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="sn" onclick="revealAnswer(this)">
+          <div class="interview-q">What is GlideRecord?</div>
+          <div class="interview-a">GlideRecord is the primary API to query and manipulate ServiceNow database tables via server-side scripts. Example: <br><code style="font-size:12px;background:#f1f5f9;padding:2px 6px;border-radius:4px;">var gr = new GlideRecord('incident'); gr.query();</code></div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="sn" onclick="revealAnswer(this)">
+          <div class="interview-q">Difference between Client Script and Business Rule?</div>
+          <div class="interview-a"><b>Client Script:</b> Runs in the browser. Controls form behavior (show/hide fields, validate input).<br><b>Business Rule:</b> Runs on the server. Enforces data logic when records are saved.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="sn" onclick="revealAnswer(this)">
+          <div class="interview-q">What is a UI Policy in ServiceNow?</div>
+          <div class="interview-a">UI Policy controls form behavior (make fields mandatory, read-only, visible) without writing scripts. It's a no-code alternative to Client Scripts for simple field rules.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+        <div class="interview-card" data-cat="sn" onclick="revealAnswer(this)">
+          <div class="interview-q">What is the CMDB?</div>
+          <div class="interview-a">CMDB (Configuration Management Database) stores information about IT assets (Configuration Items / CIs) and their relationships. Helps in impact analysis and root cause analysis.</div>
+          <div class="reveal-hint">👆 Click to reveal</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="scripts.js"></script>
+<script>
+function filterCards(cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => { b.classList.remove('btn-primary'); b.classList.add('btn-outline'); });
+  event.target.classList.add('btn-primary'); event.target.classList.remove('btn-outline');
+  const sections = { hr: 'section-hr', tech: 'section-tech', sn: 'section-sn' };
+  if(cat === 'all') {
+    Object.values(sections).forEach(id => document.getElementById(id).style.display = 'block');
+  } else {
+    Object.entries(sections).forEach(([k, id]) => {
+      document.getElementById(id).style.display = k === cat ? 'block' : 'none';
+    });
+  }
+}
+</script>
+</body>
+</html>

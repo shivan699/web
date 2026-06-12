@@ -1,0 +1,1518 @@
+ <!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Assistant — Student Placement Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    /* ═══════════════════════════════════════════
+       CSS VARIABLES & RESET
+    ═══════════════════════════════════════════ */
+    :root {
+      --sidebar-bg: #1a2d42;
+      --sidebar-hover: #243d56;
+      --sidebar-active: #0f1e2d;
+      --accent: #00c97a;
+      --accent-glow: rgba(0,201,122,0.3);
+      --accent-dark: #00a862;
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --surface2: #f7f9fc;
+      --border: #e2e8f0;
+      --text-primary: #0f1e2d;
+      --text-secondary: #5a6e82;
+      --text-muted: #94a3b8;
+      --user-bubble: #1a2d42;
+      --ai-bubble: #ffffff;
+      --ai-border: #e2e8f0;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
+      --radius: 14px;
+      --radius-sm: 8px;
+      --font: 'Plus Jakarta Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2330;
+      --border: #2d3748;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-muted: #484f58;
+      --ai-bubble: #1c2330;
+      --ai-border: #2d3748;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════
+       SIDEBAR
+    ═══════════════════════════════════════════ */
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      height: 100vh;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 100;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .sidebar-logo .logo-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .logo-text h3 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .logo-text p {
+      color: rgba(255,255,255,0.45);
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      overflow-y: auto;
+    }
+
+    .sidebar-nav::-webkit-scrollbar { width: 0; }
+
+    .nav-section-label {
+      color: rgba(255,255,255,0.3);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 10px 10px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 2px;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      background: var(--sidebar-active);
+      color: #fff;
+    }
+
+    .nav-item .nav-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      font-size: 14px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* AI Assistant nav item special */
+    .nav-item.ai-nav {
+      background: linear-gradient(135deg, rgba(0,201,122,0.18), rgba(0,201,122,0.08));
+      color: var(--accent);
+      border: 1px solid rgba(0,201,122,0.25);
+      margin-top: 4px;
+    }
+
+    .nav-item.ai-nav .nav-icon {
+      background: rgba(0,201,122,0.2);
+    }
+
+    .nav-item.ai-nav:hover, .nav-item.ai-nav.active {
+      background: linear-gradient(135deg, rgba(0,201,122,0.3), rgba(0,201,122,0.15));
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 0 18px var(--accent-glow);
+    }
+
+    .nav-item.ai-nav .nav-badge {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-footer {
+      padding: 14px 10px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* ═══════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════ */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top bar */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+      z-index: 50;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hamburger-btn {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      border-radius: 8px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .topbar-title h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .topbar-title h1 .ai-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+      50% { box-shadow: 0 0 0 6px transparent; }
+    }
+
+    .topbar-title p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      border-radius: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #1a2d42, #243d56);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ═══════════════════════════════════════════
+       BODY CONTENT
+    ═══════════════════════════════════════════ */
+    .content-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════
+       CHAT SECTION (MAIN)
+    ═══════════════════════════════════════════ */
+    .chat-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* Quick-action cards */
+    .quick-cards-bar {
+      padding: 14px 20px 0;
+      flex-shrink: 0;
+    }
+
+    .quick-cards-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .quick-cards {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .quick-cards::-webkit-scrollbar { height: 3px; }
+    .quick-cards::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    .qcard {
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.22s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .qcard:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .qcard .qcard-icon {
+      font-size: 18px;
+    }
+
+    .qcard .qcard-text {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    /* Chat window */
+    .chat-window {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-window::-webkit-scrollbar { width: 5px; }
+    .chat-window::-webkit-scrollbar-track { background: transparent; }
+    .chat-window::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    /* Welcome screen */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 40px 20px;
+      text-align: center;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .welcome-orb {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 8px 32px var(--accent-glow);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .welcome-screen h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .welcome-screen p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 380px;
+      line-height: 1.6;
+    }
+
+    /* Message bubbles */
+    .msg-row {
+      display: flex;
+      animation: fadeUp 0.3s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-row.user { justify-content: flex-end; }
+    .msg-row.ai   { justify-content: flex-start; }
+
+    .msg-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .msg-row.ai .msg-avatar {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      margin-right: 10px;
+    }
+
+    .msg-row.user .msg-avatar {
+      background: var(--user-bubble);
+      margin-left: 10px;
+      order: 2;
+    }
+
+    .msg-body { max-width: 72%; }
+
+    .msg-meta {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .msg-row.user .msg-meta { text-align: right; }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      line-height: 1.65;
+      word-break: break-word;
+    }
+
+    .msg-row.user .msg-bubble {
+      background: var(--user-bubble);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .msg-row.ai .msg-bubble {
+      background: var(--ai-bubble);
+      color: var(--text-primary);
+      border: 1px solid var(--ai-border);
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .msg-bubble strong { font-weight: 700; }
+    .msg-bubble em { font-style: italic; color: var(--text-secondary); }
+    .msg-bubble code {
+      font-family: var(--mono);
+      background: rgba(0,0,0,0.07);
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+    [data-theme="dark"] .msg-bubble code { background: rgba(255,255,255,0.1); }
+
+    .msg-bubble .bullet-list { margin-top: 6px; padding-left: 4px; list-style: none; }
+    .msg-bubble .bullet-list li { padding: 2px 0 2px 14px; position: relative; }
+    .msg-bubble .bullet-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+      top: 3px;
+    }
+
+    /* Typing indicator */
+    .typing-row { display: flex; align-items: flex-start; animation: fadeUp 0.3s ease forwards; }
+
+    .typing-bubble {
+      background: var(--ai-bubble);
+      border: 1px solid var(--ai-border);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      margin-left: 10px;
+    }
+
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: typingAnim 1.3s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.18s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.36s; }
+
+    @keyframes typingAnim {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════
+       INPUT BAR
+    ═══════════════════════════════════════════ */
+    .input-bar {
+      padding: 14px 20px 18px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .input-wrapper {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 10px 12px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    #chatInput {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text-primary);
+      resize: none;
+      outline: none;
+      max-height: 120px;
+      line-height: 1.5;
+    }
+
+    #chatInput::placeholder { color: var(--text-muted); }
+
+    .input-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .input-icon-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .input-icon-btn:hover {
+      background: var(--border);
+      color: var(--text-primary);
+    }
+
+    .input-icon-btn.recording {
+      background: rgba(239,68,68,0.15);
+      color: #ef4444;
+      animation: recPulse 1s infinite;
+    }
+
+    @keyframes recPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+    }
+
+    .send-btn {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .send-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .send-btn:disabled {
+      background: var(--border);
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .input-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════
+       RIGHT PANEL
+    ═══════════════════════════════════════════ */
+    .right-panel {
+      width: 280px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .right-panel::-webkit-scrollbar { width: 4px; }
+    .right-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    .panel-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .panel-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Progress bars */
+    .progress-item { margin-bottom: 12px; }
+    .progress-item:last-child { margin-bottom: 0; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .progress-label span:first-child {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .progress-label span:last-child {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Daily tip */
+    .tip-card {
+      background: linear-gradient(135deg, rgba(0,201,122,0.12), rgba(0,168,98,0.06));
+      border: 1px solid rgba(0,201,122,0.2);
+    }
+
+    .tip-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+
+    .tip-text {
+      font-size: 13px;
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    /* Upcoming drives */
+    .drive-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drive-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .drive-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .drive-info h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .drive-info p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .drive-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    .drive-badge.soon { background: rgba(251,191,36,0.15); color: #d97706; }
+    .drive-badge.open { background: rgba(0,201,122,0.15); color: var(--accent-dark); }
+
+    /* Emoji picker */
+    .emoji-picker {
+      display: none;
+      position: absolute;
+      bottom: 100px;
+      left: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      display: none;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 220px;
+    }
+
+    .emoji-picker.show { display: flex; }
+
+    .emoji-btn-item {
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .emoji-btn-item:hover { background: var(--border); }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .right-panel { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0; bottom: 0;
+        transform: translateX(-100%);
+        z-index: 999;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .sidebar.open { transform: translateX(0); }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 998;
+      }
+
+      .sidebar-overlay.show { display: block; }
+
+      .hamburger-btn { display: flex; }
+
+      .content-area { width: 100%; }
+
+      .quick-cards-bar { padding: 10px 12px 0; }
+      .chat-window { padding: 14px; }
+      .input-bar { padding: 10px 12px 14px; }
+
+      .msg-body { max-width: 88%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="logo-icon">🎓</div>
+      <div class="logo-text">
+        <h3>Campus Portal</h3>
+        <p>Placement Hub</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">🏠</div> Dashboard</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">🧮</div> Aptitude</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">💻</div> DSA Practice</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">🎯</div> Mock Interview</div>
+
+    <div class="nav-section-label" style="margin-top:8px">Tools</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">📄</div> Resume Builder</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">🔍</div> Resume Scanner</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">📢</div> Announcements</div>
+
+    <div class="nav-section-label" style="margin-top:8px">AI</div>
+    <div class="nav-item ai-nav active" onclick="navClick(this)">
+      <div class="nav-icon">🤖</div> AI Assistant
+      <span class="nav-badge">LIVE</span>
+    </div>
+
+    <div class="nav-section-label" style="margin-top:8px">Account</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">👤</div> Profile</div>
+    <div class="nav-item" onclick="navClick(this)"><div class="nav-icon">🚪</div> Logout</div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="nav-item" style="font-size:12px;color:rgba(255,255,255,0.3);cursor:default;padding:6px 10px;">
+      v2.0 · Placement AI
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════ MAIN WRAPPER ═══════════ -->
+<div class="main-wrapper">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title">
+        <h1><span class="ai-dot"></span> AI Student Assistant</h1>
+        <p>Your smart placement partner — powered by AI</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="themeBtn" title="Toggle Theme" onclick="toggleTheme()">🌙</button>
+      <button class="icon-btn" title="Clear Chat" onclick="clearChat()">🗑️</button>
+      <button class="icon-btn" title="Save Chat" onclick="saveChat()">💾</button>
+      <div class="user-avatar" title="Student">S</div>
+    </div>
+  </header>
+
+  <!-- CONTENT AREA -->
+  <div class="content-area">
+
+    <!-- CHAT SECTION -->
+    <section class="chat-section">
+
+      <!-- Quick Cards -->
+      <div class="quick-cards-bar">
+        <div class="quick-cards-label">Quick Ask</div>
+        <div class="quick-cards" id="quickCards">
+          <div class="qcard" onclick="quickAsk('Help me build a strong resume for placements')"><span class="qcard-icon">📄</span><span class="qcard-text">Build Resume</span></div>
+          <div class="qcard" onclick="quickAsk('Give me top interview questions and answers')"><span class="qcard-icon">🎯</span><span class="qcard-text">Interview Q&A</span></div>
+          <div class="qcard" onclick="quickAsk('Help me with coding interview problems')"><span class="qcard-icon">💻</span><span class="qcard-text">Coding Help</span></div>
+          <div class="qcard" onclick="quickAsk('Teach me aptitude tricks for placement exams')"><span class="qcard-icon">🧮</span><span class="qcard-text">Aptitude Tricks</span></div>
+          <div class="qcard" onclick="quickAsk('How do I prepare for ServiceNow interview?')"><span class="qcard-icon">☁️</span><span class="qcard-text">ServiceNow Prep</span></div>
+          <div class="qcard" onclick="quickAsk('Motivate me for placement preparation')"><span class="qcard-icon">⚡</span><span class="qcard-text">Motivation</span></div>
+          <div class="qcard" onclick="quickAsk('Help me with Python interview questions')"><span class="qcard-icon">🐍</span><span class="qcard-text">Python Help</span></div>
+          <div class="qcard" onclick="quickAsk('Give me important SQL queries for interviews')"><span class="qcard-icon">🗄️</span><span class="qcard-text">SQL Queries</span></div>
+        </div>
+      </div>
+
+      <!-- Chat Window -->
+      <div class="chat-window" id="chatWindow">
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-orb">🤖</div>
+          <h2>Hello, I'm your AI Placement Assistant!</h2>
+          <p>Ask me anything about resumes, interviews, DSA, Python, SQL, aptitude, ServiceNow, or placement strategy. I'm here to help you land your dream job! 🚀</p>
+        </div>
+      </div>
+
+      <!-- Emoji Picker -->
+      <div class="emoji-picker" id="emojiPicker">
+        <span class="emoji-btn-item" onclick="insertEmoji('😊')">😊</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('🙏')">🙏</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('💡')">💡</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('🚀')">🚀</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('👍')">👍</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('❤️')">❤️</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('🔥')">🔥</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('✅')">✅</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('📚')">📚</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('💻')">💻</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('🎯')">🎯</span>
+        <span class="emoji-btn-item" onclick="insertEmoji('⭐')">⭐</span>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="input-bar">
+        <div class="input-wrapper">
+          <textarea id="chatInput" rows="1" placeholder="Ask anything about placements, coding, resume, DSA, aptitude…" oninput="autoResize(this)" onkeydown="handleKey(event)"></textarea>
+          <div class="input-actions">
+            <button class="input-icon-btn" id="emojiToggle" title="Emoji" onclick="toggleEmoji()">😊</button>
+            <button class="input-icon-btn" id="micBtn" title="Voice Input" onclick="toggleMic()">🎤</button>
+            <button class="send-btn" id="sendBtn" title="Send" onclick="sendMessage()">➤</button>
+          </div>
+        </div>
+        <p class="input-hint">Press <strong>Enter</strong> to send · <strong>Shift+Enter</strong> for new line · <strong>🎤</strong> for voice input</p>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <aside class="right-panel">
+
+      <!-- Progress -->
+      <div class="panel-card">
+        <div class="panel-card-title">📊 Prep Progress</div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Resume</span><span id="p1">85%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="pf1" style="width:0%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Aptitude</span><span id="p2">70%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="pf2" style="width:0%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Coding</span><span id="p3">60%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="pf3" style="width:0%"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-label"><span>Interview</span><span id="p4">55%</span></div>
+          <div class="progress-track"><div class="progress-fill" id="pf4" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Daily Tip -->
+      <div class="panel-card tip-card">
+        <div class="panel-card-title">💡 Daily Tip</div>
+        <span class="tip-icon" id="tipIcon">🧠</span>
+        <p class="tip-text" id="tipText">Loading tip...</p>
+      </div>
+
+      <!-- Upcoming Drives -->
+      <div class="panel-card">
+        <div class="panel-card-title">🗓️ Upcoming Drives</div>
+        <div class="drive-item">
+          <div class="drive-logo" style="background:rgba(0,120,212,0.1);">💙</div>
+          <div class="drive-info"><h4>Microsoft</h4><p>May 5, 2025 · SDE</p></div>
+          <span class="drive-badge soon">Soon</span>
+        </div>
+        <div class="drive-item">
+          <div class="drive-logo" style="background:rgba(255,153,0,0.1);">🧡</div>
+          <div class="drive-info"><h4>Amazon</h4><p>May 10, 2025 · SDE-1</p></div>
+          <span class="drive-badge open">Open</span>
+        </div>
+        <div class="drive-item">
+          <div class="drive-logo" style="background:rgba(0,201,122,0.1);">💚</div>
+          <div class="drive-info"><h4>TCS Digital</h4><p>May 15, 2025 · Analyst</p></div>
+          <span class="drive-badge open">Open</span>
+        </div>
+        <div class="drive-item">
+          <div class="drive-logo" style="background:rgba(234,67,53,0.1);">❤️</div>
+          <div class="drive-info"><h4>Google</h4><p>May 20, 2025 · L3</p></div>
+          <span class="drive-badge soon">Soon</span>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+/* ── State ── */
+let chatHistory = JSON.parse(localStorage.getItem('ai_chat_history') || '[]');
+let isRecording = false;
+let recognition = null;
+let isSpeaking = false;
+
+/* ── Daily Tips ── */
+const dailyTips = [
+  { icon: '📌', text: 'Tailor your resume for every job description. Use keywords from the JD to pass ATS filters.' },
+  { icon: '🧩', text: 'Solve at least 2 DSA problems daily. Consistency builds pattern recognition.' },
+  { icon: '🗣️', text: 'Record yourself answering HR questions. Playback reveals improvement areas instantly.' },
+  { icon: '📊', text: 'Add metrics to your resume. "Improved API speed by 40%" beats "worked on APIs" every time.' },
+  { icon: '💬', text: 'Use STAR method for behavioral questions: Situation, Task, Action, Result.' },
+  { icon: '🔢', text: 'For aptitude: learn shortcut formulas for percentage, ratio, and time-work problems.' },
+  { icon: '☁️', text: 'ServiceNow tip: understand Incident, Problem, Change modules deeply for ITSM interviews.' },
+  { icon: '🐍', text: 'Python: Master list comprehensions, lambda, decorators, and generators for interviews.' },
+];
+
+/* ── Smart AI Response Engine ── */
+const responses = {
+  resume: {
+    keywords: ['resume', 'cv', 'curriculum', 'ats', 'resume tips', 'build resume', 'strong resume'],
+    reply: (q) => `**Resume Building Guide 📄**\n\nHere are the key principles to build a placement-winning resume:\n\n**Structure:**\n- Keep it to **1 page** for freshers\n- Order: Contact → Summary → Skills → Projects → Education → Certifications\n\n**Content Tips:**\n- Use **strong action verbs**: Built, Designed, Optimized, Led, Reduced\n- Add **quantifiable results**: "Reduced load time by 35%"\n- Include 3–4 impactful **projects** with tech stack + impact\n\n**ATS Optimization:**\n- Mirror keywords from the job description\n- Avoid tables, images, and graphics — ATS can't read them\n- Use standard section headings\n\n**Tools to use:** Canva, Novoresume, or plain LaTeX for maximum ATS compatibility.\n\nWant me to review a specific section of your resume?`
+  },
+  interview: {
+    keywords: ['interview', 'hr', 'hr questions', 'interview prep', 'interview tips', 'behavioral', 'common questions'],
+    reply: (q) => `**Interview Preparation Roadmap 🎯**\n\n**HR Round Essentials:**\n- Tell me about yourself → 60-second pitch: Background + Skills + Goal\n- Why this company? → Research their products, culture, and recent news\n- Strengths & Weaknesses → Be honest, show self-awareness\n\n**Behavioral Questions (STAR Method):**\n- Situation → Task → Action → Result\n- Prepare 5–6 stories covering: leadership, failure, teamwork, pressure\n\n**Technical Round Tips:**\n- Think aloud while solving problems\n- Clarify edge cases before coding\n- Discuss time/space complexity\n\n**Body Language:**\n- Firm handshake, good eye contact, upright posture\n- Pause before answering — don't rush\n- End with: *"Do you have any advice for my growth here?"*\n\nWhich type of interview would you like to deep-dive into?`
+  },
+  python: {
+    keywords: ['python', 'py', 'django', 'flask', 'pandas', 'numpy'],
+    reply: (q) => `**Python Interview Prep 🐍**\n\n**Most Asked Topics:**\n\n**Basics:**\n- Mutable vs Immutable types\n- List vs Tuple vs Set vs Dict\n- \`*args\` and \`**kwargs\`\n\n**Intermediate:**\n- List comprehensions: \`[x*2 for x in range(10)]\`\n- Lambda: \`square = lambda x: x**2\`\n- Decorators and closures\n- Generators (\`yield\`)\n\n**OOP:**\n- Inheritance, Polymorphism, Encapsulation\n- \`__init__\`, \`__str__\`, \`__repr__\`\n- Class vs Static methods\n\n**Common Interview Questions:**\n- How does Python manage memory? (GC + reference counting)\n- What is GIL (Global Interpreter Lock)?\n- Difference between deep copy and shallow copy\n\nNeed a code example for any concept?`
+  },
+  javascript: {
+    keywords: ['javascript', 'js', 'node', 'nodejs', 'react', 'frontend', 'dom'],
+    reply: (q) => `**JavaScript Interview Guide ⚡**\n\n**Core Concepts:**\n- \`var\` vs \`let\` vs \`const\` — scope & hoisting\n- Closures: function remembers its lexical environment\n- Event Loop: Call Stack → Web APIs → Callback Queue\n- Promises & \`async/await\`\n\n**Must-Know ES6+:**\n- Arrow functions, Template literals\n- Destructuring, Spread/Rest operator\n- Modules (\`import/export\`)\n\n**Common Questions:**\n- What is prototypal inheritance?\n- Explain \`this\` keyword in different contexts\n- What is the difference between \`==\` and \`===\`?\n- How does \`debounce\` and \`throttle\` work?\n\n**DOM:**\n- Event delegation, bubbling vs capturing\n- \`querySelector\`, \`addEventListener\`\n\nWant practice problems or a code walkthrough?`
+  },
+  sql: {
+    keywords: ['sql', 'mysql', 'database', 'query', 'joins', 'group by', 'select'],
+    reply: (q) => `**SQL Interview Master Guide 🗄️**\n\n**Essential Queries:**\n\`\`\`sql\n-- Find 2nd highest salary\nSELECT MAX(salary) FROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);\n\n-- Count duplicates\nSELECT name, COUNT(*) FROM table GROUP BY name HAVING COUNT(*) > 1;\n\n-- Inner Join\nSELECT e.name, d.dept FROM employees e\nINNER JOIN departments d ON e.dept_id = d.id;\n\`\`\`\n\n**Must-Know Concepts:**\n- **JOINs**: INNER, LEFT, RIGHT, FULL OUTER\n- **Aggregates**: COUNT, SUM, AVG, MAX, MIN\n- **Subqueries** and **CTEs** (\`WITH\` clause)\n- **Window functions**: \`ROW_NUMBER()\`, \`RANK()\`, \`LEAD()\`\n- **Indexes**: speed up SELECT, slow down INSERT\n\n**Normalization:** 1NF → 2NF → 3NF\n\nWant more complex query practice?`
+  },
+  dsa: {
+    keywords: ['dsa', 'data structure', 'algorithm', 'array', 'linked list', 'tree', 'graph', 'stack', 'queue', 'coding'],
+    reply: (q) => `**DSA Placement Roadmap 🧩**\n\n**Phase 1 — Foundations (Week 1–2):**\n- Arrays & Strings (Two pointers, Sliding window)\n- Recursion & Backtracking\n\n**Phase 2 — Core Structures (Week 3–4):**\n- Linked List (Reverse, Cycle detection, Merge)\n- Stack & Queue (Monotonic stack, BFS)\n- Hashing (Frequency map, Two-sum pattern)\n\n**Phase 3 — Advanced (Week 5–8):**\n- Binary Trees & BST (Traversals, LCA)\n- Graphs (BFS/DFS, Dijkstra, Union-Find)\n- Dynamic Programming (0/1 Knapsack, LCS, LIS)\n\n**Practice Plan:**\n- Easy: 2/day until comfortable\n- Medium: 3/week for each topic\n- Hard: 1/week for stretch problems\n\n**Best Resources:** LeetCode (NeetCode 150), GFG, Codeforces\n\nWhich topic should we drill into first?`
+  },
+  aptitude: {
+    keywords: ['aptitude', 'quant', 'quantitative', 'logical', 'reasoning', 'math', 'percentage', 'profit', 'speed'],
+    reply: (q) => `**Aptitude Tricks & Shortcuts 🧮**\n\n**Percentage Tricks:**\n- x% of y = y% of x (use the easier one!)\n- Successive % change: A then B = A + B + (A×B)/100\n\n**Speed-Distance-Time:**\n- Avg speed for equal distances = 2S₁S₂ / (S₁+S₂)\n- Trains: relative speed = sum when opposite, difference when same direction\n\n**Profit & Loss:**\n- Markup then discount: use successive % formula\n- If CP=x, SP=y → Profit% = (y-x)/x × 100\n\n**Ratio & Proportion:**\n- If A:B = m:n, then A = m/(m+n) × Total\n\n**Work Problems:**\n- If A does in x days, B in y days → Together = xy/(x+y) days\n\n**Number Series Tips:**\n- Check: differences, ratios, squares, cubes, prime patterns\n\n**Practice Daily:** 20 questions/day from RS Aggarwal or IndiaBix\n\nWhich topic needs more practice?`
+  },
+  servicenow: {
+    keywords: ['servicenow', 'itsm', 'snow', 'service now', 'itil', 'workflow'],
+    reply: (q) => `**ServiceNow Interview Prep ☁️**\n\n**What is ServiceNow?**\nA cloud-based platform for IT Service Management (ITSM), automating enterprise workflows.\n\n**Core Modules to Know:**\n- **Incident Management** — Log & resolve IT issues\n- **Problem Management** — Root cause analysis\n- **Change Management** — Risk-controlled change process\n- **Service Catalog** — Self-service request portal\n- **CMDB** — Configuration Management Database\n\n**Technical Concepts:**\n- **GlideRecord** — Server-side JS API to query tables\n- **Business Rules** — Triggered on DB operations\n- **Client Scripts** — Run in the browser (onLoad, onChange)\n- **UI Policies** — Dynamic form behavior without scripts\n- **Flow Designer** — No-code workflow automation\n\n**Common Interview Questions:**\n- Difference between Business Rule and Script Include?\n- What is a Transform Map?\n- How do you create a custom application in ServiceNow?\n\n**Certifications:** CSA (Certified System Admin) → start here!\n\nWant mock interview questions for ServiceNow?`
+  },
+  motivation: {
+    keywords: ['motivat', 'inspire', 'help', 'stuck', 'depressed', 'sad', 'fail', 'frustrated', 'giving up', 'tired'],
+    reply: (q) => `**You've Got This! 💪**\n\nHey — feeling stuck is part of every great journey. Here's what you need to hear:\n\n**The truth about placement success:**\n- Most placed students failed multiple times before succeeding\n- Every rejection is data, not a verdict on your worth\n- The gap between you and your dream job is smaller than it feels\n\n**Your daily action plan:**\n- **Morning (1 hr):** 1 DSA problem + 1 aptitude topic\n- **Afternoon (1 hr):** Resume/project work or new concept\n- **Evening (30 min):** 1 mock interview question out loud\n\n**Mindset shifts:**\n- Compare yourself to **yesterday-you**, not others\n- Progress compounds — 1% better daily = 37× better in a year\n- Skills > Luck. Every skill you build is permanent\n\n**Remember:** Every senior at your dream company was once exactly where you are. They chose to keep going.\n\n*"The best time to start was yesterday. The second best time is now."*\n\nWhat specific area should we work on today?`
+  },
+  job: {
+    keywords: ['job', 'placement', 'offer', 'career', 'hired', 'apply', 'company', 'package', 'ctc', 'salary'],
+    reply: (q) => `**Job Placement Strategy 🏆**\n\n**Application Strategy:**\n- Apply to 10–15 companies weekly (quality > quantity)\n- Use LinkedIn, Naukri, Internshala, company portals\n- Track every application in a spreadsheet\n\n**Resume Optimization:**\n- Tailor for every JD — use their exact keywords\n- Quantify every achievement with numbers\n- Keep ATS-friendly format\n\n**During Job Search:**\n- Connect with seniors at target companies on LinkedIn\n- Engage with posts, show expertise in comments\n- Ask for referrals — 40% of hires come from referrals\n\n**Interview Funnel:**\n- Resume shortlist → Online test → Technical → HR\n- Practice each stage specifically\n\n**Salary Negotiation:**\n- Always negotiate — companies expect it\n- Research market rate on Glassdoor/AmbitionBox\n- Counter with a specific number, not a range\n\n**Timeline:** Most students land offers within 2–4 months of consistent effort.\n\nWhich stage of the job search are you at?`
+  },
+  roadmap: {
+    keywords: ['roadmap', 'plan', 'how to start', 'where to start', 'guide', 'path', 'journey', 'schedule'],
+    reply: (q) => `**Complete Placement Preparation Roadmap 🗺️**\n\n**Month 1 — Foundation:**\n✅ Fix your resume (1-pager, ATS-optimized)\n✅ Learn DSA basics (Arrays, Strings, Recursion)\n✅ Aptitude: Percentage, Ratio, Time-Work\n✅ Start LinkedIn profile optimization\n\n**Month 2 — Build Skills:**\n✅ DSA: Linked List, Stack, Queue, Hashing\n✅ Learn one language deeply (Python/Java)\n✅ SQL fundamentals + 30 practice queries\n✅ Solve 50+ LeetCode Easy problems\n\n**Month 3 — Practice:**\n✅ DSA: Trees, Graphs, DP\n✅ 5 mock interviews (record yourself)\n✅ Prepare 6 STAR stories for HR\n✅ Complete 2–3 portfolio projects\n\n**Month 4 — Apply & Refine:**\n✅ Apply to 50+ companies\n✅ Daily aptitude (30 min)\n✅ Weekly mock interviews\n✅ Improve based on feedback\n\n**Golden Rule:** 2 focused hours daily beats 8 distracted hours.\n\nWhich month are you currently in?`
+  },
+  communication: {
+    keywords: ['communication', 'english', 'speak', 'verbal', 'presentation', 'confidence', 'soft skill'],
+    reply: (q) => `**Communication Skills for Placements 🗣️**\n\n**Why it matters:** 60% of placement decisions are based on communication, not just technical skills.\n\n**Daily Practice Plan:**\n- Read English news for 15 min (The Hindu, BBC)\n- Summarize what you read in 2 minutes out loud\n- Record 1 mock answer daily and review it\n\n**Interview Communication Tips:**\n- **BLUF principle**: Bottom Line Up Front — give the answer first, then explain\n- Use transition words: *"Furthermore, However, That said, As a result"*\n- Pause for 3 seconds before answering — shows confidence\n- Avoid filler words: um, uh, like, basically\n\n**Vocabulary Builders:**\n- Learn 5 new professional words daily\n- Use them in sentences immediately to retain\n\n**Presentation Tips:**\n- Eye contact: look at different people every 10 seconds\n- Vary your pace — slow down on important points\n- End with a clear summary\n\n**Apps:** Speeko, ELSA Speak, Duolingo (for fluency)\n\nWant specific practice scripts for common interview questions?`
+  }
+};
+
+const fallbackReplies = [
+  "I'm here to help with all things placement! You can ask me about **resume building**, **interview prep**, **DSA**, **Python**, **SQL**, **aptitude tricks**, **ServiceNow**, or **career roadmaps**. What would you like to explore? 🚀",
+  "Great question! While I specialize in placement prep, I'm constantly learning. Could you rephrase or clarify? Or pick one of the **Quick Ask** cards above for specific help! 💡",
+  "Let me help you nail those placements! Ask me about **coding interviews**, **HR questions**, **resume ATS tips**, or **study roadmaps**. I'm fully loaded with placement wisdom! 🎯"
+];
+
+let fallbackIndex = 0;
+
+/* ── Get AI Response ── */
+function getAIResponse(input) {
+  const lower = input.toLowerCase();
+  for (const key in responses) {
+    const { keywords, reply } = responses[key];
+    if (keywords.some(kw => lower.includes(kw))) {
+      return reply(input);
+    }
+  }
+  const fb = fallbackReplies[fallbackIndex % fallbackReplies.length];
+  fallbackIndex++;
+  return fb;
+}
+
+/* ── Format reply text → HTML ── */
+function formatReply(text) {
+  // Bold
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  // Code inline
+  text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Code block
+  text = text.replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.07);padding:10px;border-radius:8px;font-family:var(--mono);font-size:12px;overflow-x:auto;margin:6px 0;"><code style="background:none;padding:0;">$1</code></pre>');
+  // Bullet lines (- item)
+  text = text.replace(/^- (.+)$/gm, '<li>$1</li>');
+  text = text.replace(/((<li>.*<\/li>\n?)+)/g, '<ul class="bullet-list">$1</ul>');
+  // Checkmark lines (✅)
+  text = text.replace(/^✅ (.+)$/gm, '<li>✅ $1</li>');
+  // Newlines
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
+
+/* ── Timestamp ── */
+function getTime() {
+  return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+/* ── Append Message ── */
+function appendMessage(role, text, animate = true) {
+  const win = document.getElementById('chatWindow');
+
+  // Remove welcome screen if present
+  const ws = document.getElementById('welcomeScreen');
+  if (ws) ws.remove();
+
+  const row = document.createElement('div');
+  row.className = `msg-row ${role}`;
+  if (!animate) row.style.animation = 'none';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.textContent = role === 'user' ? '👤' : '🤖';
+
+  const body = document.createElement('div');
+  body.className = 'msg-body';
+
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  meta.textContent = `${role === 'user' ? 'You' : 'AI Assistant'} · ${getTime()}`;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (role === 'ai') {
+    bubble.innerHTML = formatReply(text);
+  } else {
+    bubble.textContent = text;
+  }
+
+  body.appendChild(meta);
+  body.appendChild(bubble);
+  row.appendChild(avatar);
+  row.appendChild(body);
+  win.appendChild(row);
+  win.scrollTop = win.scrollHeight;
+  return row;
+}
+
+/* ── Show Typing ── */
+function showTyping() {
+  const win = document.getElementById('chatWindow');
+  const row = document.createElement('div');
+  row.className = 'typing-row';
+  row.id = 'typingRow';
+
+  const av = document.createElement('div');
+  av.className = 'msg-avatar';
+  av.style.cssText = 'background:linear-gradient(135deg,var(--accent),var(--accent-dark));margin-right:10px;';
+  av.textContent = '🤖';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'typing-bubble';
+  bubble.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+  row.appendChild(av);
+  row.appendChild(bubble);
+  win.appendChild(row);
+  win.scrollTop = win.scrollHeight;
+}
+
+function hideTyping() {
+  const tr = document.getElementById('typingRow');
+  if (tr) tr.remove();
+}
+
+/* ── Send Message ── */
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  appendMessage('user', text);
+  input.value = '';
+  autoResize(input);
+
+  // Save to history
+  chatHistory.push({ role: 'user', content: text, time: getTime() });
+
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+
+  showTyping();
+
+  // Simulate realistic delay (600–1400ms)
+  const delay = 600 + Math.random() * 800;
+  setTimeout(() => {
+    hideTyping();
+    const reply = getAIResponse(text);
+    appendMessage('ai', reply);
+    chatHistory.push({ role: 'ai', content: reply, time: getTime() });
+    localStorage.setItem('ai_chat_history', JSON.stringify(chatHistory.slice(-50)));
+    btn.disabled = false;
+
+    // TTS if enabled
+    if (isSpeaking) speakText(reply.replace(/<[^>]+>/g, '').replace(/\*+/g, ''));
+  }, delay);
+}
+
+/* ── Quick Ask ── */
+function quickAsk(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+/* ── Keyboard Handler ── */
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+/* ── Auto-resize textarea ── */
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+/* ── Clear Chat ── */
+function clearChat() {
+  if (!confirm('Clear all chat messages?')) return;
+  chatHistory = [];
+  localStorage.removeItem('ai_chat_history');
+  const win = document.getElementById('chatWindow');
+  win.innerHTML = `
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-orb">🤖</div>
+      <h2>Chat cleared! Ready to help. 🚀</h2>
+      <p>Ask me anything about placements, coding, resume, aptitude, or interviews.</p>
+    </div>`;
+}
+
+/* ── Save Chat ── */
+function saveChat() {
+  const data = chatHistory.map(m => `[${m.time}] ${m.role.toUpperCase()}: ${m.content}`).join('\n\n');
+  if (!data) { alert('No chat to save yet!'); return; }
+  const blob = new Blob([data], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `chat_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+}
+
+/* ── Theme Toggle ── */
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeBtn');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️';
+  }
+}
+
+/* ── Emoji Picker ── */
+function toggleEmoji() {
+  const picker = document.getElementById('emojiPicker');
+  picker.classList.toggle('show');
+}
+
+function insertEmoji(emoji) {
+  const input = document.getElementById('chatInput');
+  const pos = input.selectionStart;
+  input.value = input.value.slice(0, pos) + emoji + input.value.slice(pos);
+  input.focus();
+  input.setSelectionRange(pos + emoji.length, pos + emoji.length);
+  document.getElementById('emojiPicker').classList.remove('show');
+}
+
+// Close emoji picker on outside click
+document.addEventListener('click', (e) => {
+  const picker = document.getElementById('emojiPicker');
+  const toggle = document.getElementById('emojiToggle');
+  if (!picker.contains(e.target) && e.target !== toggle) {
+    picker.classList.remove('show');
+  }
+});
+
+/* ── Voice Input (Speech Recognition) ── */
+function toggleMic() {
+  const btn = document.getElementById('micBtn');
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Voice input is not supported in this browser. Try Chrome!');
+    return;
+  }
+  if (isRecording) {
+    recognition && recognition.stop();
+    isRecording = false;
+    btn.classList.remove('recording');
+    btn.textContent = '🎤';
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-IN';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.onstart = () => {
+    isRecording = true;
+    btn.classList.add('recording');
+    btn.textContent = '⏹️';
+  };
+  recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    document.getElementById('chatInput').value = transcript;
+    autoResize(document.getElementById('chatInput'));
+  };
+  recognition.onend = () => {
+    isRecording = false;
+    btn.classList.remove('recording');
+    btn.textContent = '🎤';
+  };
+  recognition.onerror = () => {
+    isRecording = false;
+    btn.classList.remove('recording');
+    btn.textContent = '🎤';
+  };
+  recognition.start();
+}
+
+/* ── Text-to-Speech ── */
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text.slice(0, 300));
+  utter.lang = 'en-IN';
+  utter.rate = 0.95;
+  window.speechSynthesis.speak(utter);
+}
+
+/* ── Sidebar ── */
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+function navClick(el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  closeSidebar();
+}
+
+/* ── Progress Bars (animate on load) ── */
+function animateProgress() {
+  const bars = [
+    { fill: 'pf1', val: 85 },
+    { fill: 'pf2', val: 70 },
+    { fill: 'pf3', val: 60 },
+    { fill: 'pf4', val: 55 },
+  ];
+  setTimeout(() => {
+    bars.forEach(b => {
+      const el = document.getElementById(b.fill);
+      if (el) el.style.width = b.val + '%';
+    });
+  }, 400);
+}
+
+/* ── Daily Tip ── */
+function loadDailyTip() {
+  const idx = new Date().getDate() % dailyTips.length;
+  const tip = dailyTips[idx];
+  const iconEl = document.getElementById('tipIcon');
+  const textEl = document.getElementById('tipText');
+  if (iconEl) iconEl.textContent = tip.icon;
+  if (textEl) textEl.textContent = tip.text;
+}
+
+/* ── Restore Chat History ── */
+function restoreChat() {
+  if (chatHistory.length === 0) return;
+  const ws = document.getElementById('welcomeScreen');
+  if (ws) ws.remove();
+  chatHistory.forEach(msg => {
+    appendMessage(msg.role, msg.content, false);
+  });
+}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', () => {
+  animateProgress();
+  loadDailyTip();
+  restoreChat();
+
+  // Focus input
+  const input = document.getElementById('chatInput');
+  if (input) input.focus();
+
+  // Save theme preference
+  const savedTheme = localStorage.getItem('ai_theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  }
+
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const theme = document.documentElement.getAttribute('data-theme');
+    localStorage.setItem('ai_theme', theme === 'dark' ? 'light' : 'dark');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSA Practice — Student Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .challenge-detail { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .challenge-code { background:#0f172a; color:#e2e8f0; font-family:var(--font-mono); font-size:13px; padding:16px; border-radius:8px; margin-top:12px; line-height:1.7; white-space:pre; overflow-x:auto; }
+  </style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand"><div class="sidebar-brand-icon">🎓</div><div><div class="sidebar-brand-text">Student Portal</div><div class="sidebar-brand-sub">Placement Ready</div></div></div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Main Menu</span>
+    <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a href="aptitude.html" class="nav-link"><span class="nav-icon">🧠</span> Aptitude</a>
+    <a href="dsa.html" class="nav-link active"><span class="nav-icon">💻</span> DSA Practice</a>
+    <a href="mock-interview.html" class="nav-link"><span class="nav-icon">🎤</span> Mock‑Interview</a>
+    <span class="nav-section-label">Career Tools</span>
+    <a href="resume-builder.html" class="nav-link"><span class="nav-icon">📄</span> Resume Builder</a>
+    <a href="resume-scanner.html" class="nav-link"><span class="nav-icon">🔍</span> Resume Scanner</a>
+    <a href="announcements.html" class="nav-link"><span class="nav-icon">📢</span> Announcements</a>
+    <span class="nav-section-label">Support</span>
+    <a href="ai-assistant.html" class="nav-link ai-btn"><span class="nav-icon">🤖</span> AI Assistant</a>
+    <span class="nav-section-label">Account</span>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span> Profile</a>
+    <a href="logout.html" class="nav-link logout-link"><span class="nav-icon">🚪</span> Logout</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user-avatar">S</div><div><div class="sidebar-user-name">Student</div><div class="sidebar-user-role">B.Tech CSE</div></div></div>
+</aside>
+
+<div class="main-content">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div><div class="topbar-title">DSA Practice</div><div class="topbar-subtitle">Arrays, Strings, Trees, Graphs & more</div></div>
+    </div>
+    <div class="topbar-right"><div class="topbar-bell" id="topbarBell">🔔<span class="topbar-bell-dot"></span></div></div>
+  </header>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="page-header-greeting">Coding Arena</div>
+      <h1>DSA Practice 💻</h1>
+      <p>Click any challenge to view the problem and solution approach.</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="cards-grid" style="margin-bottom:28px;">
+      <div class="stat-card" style="--card-accent:#16a34a;--card-icon-bg:#dcfce7;"><div class="stat-card-icon">✅</div><div class="stat-card-value" data-count="18">0</div><div class="stat-card-label">Solved</div></div>
+      <div class="stat-card" style="--card-accent:#f59e0b;--card-icon-bg:#fef9c3;"><div class="stat-card-icon">🔥</div><div class="stat-card-value" data-count="7">0</div><div class="stat-card-label">Day Streak</div></div>
+      <div class="stat-card" style="--card-accent:#2563eb;--card-icon-bg:#dbeafe;"><div class="stat-card-icon">⚡</div><div class="stat-card-value" data-count="120">0</div><div class="stat-card-label">Total Problems</div></div>
+      <div class="stat-card" style="--card-accent:#7c3aed;--card-icon-bg:#ede9fe;"><div class="stat-card-icon">🏆</div><div class="stat-card-value" data-count="3">0</div><div class="stat-card-label">Badges Earned</div></div>
+    </div>
+
+    <!-- Topics Grid -->
+    <div class="three-col mb-6">
+      <div class="topic-card" style="--topic-color:#2563eb;" onclick="scrollToSection('arrays')">
+        <div class="topic-icon">📦</div>
+        <div class="topic-title">Arrays</div>
+        <div class="topic-count">28 Problems • Fundamental</div>
+      </div>
+      <div class="topic-card" style="--topic-color:#16a34a;" onclick="scrollToSection('strings')">
+        <div class="topic-icon">🔤</div>
+        <div class="topic-title">Strings</div>
+        <div class="topic-count">24 Problems • Common in Interviews</div>
+      </div>
+      <div class="topic-card" style="--topic-color:#ea580c;" onclick="scrollToSection('stackqueue')">
+        <div class="topic-icon">📚</div>
+        <div class="topic-title">Stack & Queue</div>
+        <div class="topic-count">18 Problems • Important</div>
+      </div>
+      <div class="topic-card" style="--topic-color:#7c3aed;" onclick="scrollToSection('arrays')">
+        <div class="topic-icon">🌳</div>
+        <div class="topic-title">Trees</div>
+        <div class="topic-count">22 Problems • Advanced</div>
+      </div>
+      <div class="topic-card" style="--topic-color:#0d9488;" onclick="scrollToSection('arrays')">
+        <div class="topic-icon">🕸</div>
+        <div class="topic-title">Graphs</div>
+        <div class="topic-count">15 Problems • Advanced</div>
+      </div>
+      <div class="topic-card" style="--topic-color:#dc2626;" onclick="scrollToSection('arrays')">
+        <div class="topic-icon">🔗</div>
+        <div class="topic-title">Linked Lists</div>
+        <div class="topic-count">14 Problems • Common</div>
+      </div>
+    </div>
+
+    <!-- Arrays Section -->
+    <div id="arrays" class="mb-6">
+      <div class="card-header" style="padding:0 0 16px; border:none;">
+        <span class="card-title" style="font-size:18px;">📦 Array Challenges</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;">
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Find the Largest Element</div>
+          <div class="challenge-desc">Find the maximum value in an array of integers.</div>
+          <div class="challenge-meta"><span class="badge badge-easy">Easy</span><span class="text-xs text-muted">Arrays • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Java Solution
+int max = arr[0];
+for(int i = 1; i &lt; arr.length; i++){
+    if(arr[i] > max) max = arr[i];
+}
+System.out.println("Max: " + max);</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Two Sum Problem</div>
+          <div class="challenge-desc">Given an array, find two numbers that add up to a target.</div>
+          <div class="challenge-meta"><span class="badge badge-easy">Easy</span><span class="text-xs text-muted">HashMap • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Java - HashMap approach
+Map&lt;Integer,Integer&gt; map = new HashMap&lt;&gt;();
+for(int i = 0; i &lt; nums.length; i++){
+    int comp = target - nums[i];
+    if(map.containsKey(comp))
+        return new int[]{map.get(comp), i};
+    map.put(nums[i], i);
+}</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Rotate Array by K Positions</div>
+          <div class="challenge-desc">Rotate an array to the right by k steps efficiently.</div>
+          <div class="challenge-meta"><span class="badge badge-medium">Medium</span><span class="text-xs text-muted">Arrays • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Reverse approach
+void rotate(int[] nums, int k){
+    k %= nums.length;
+    reverse(nums, 0, nums.length-1);
+    reverse(nums, 0, k-1);
+    reverse(nums, k, nums.length-1);
+}</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Find Duplicate in Array</div>
+          <div class="challenge-desc">Array of 1–n integers has one duplicate. Find it.</div>
+          <div class="challenge-meta"><span class="badge badge-medium">Medium</span><span class="text-xs text-muted">Math • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Sum formula approach
+int n = arr.length - 1;
+int expected = n * (n+1) / 2;
+int actual = 0;
+for(int x : arr) actual += x;
+return actual - expected; // = duplicate</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Kadane's Algorithm (Max Subarray)</div>
+          <div class="challenge-desc">Find the contiguous subarray with the maximum sum.</div>
+          <div class="challenge-meta"><span class="badge badge-hard">Hard</span><span class="text-xs text-muted">DP • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">int maxSum = arr[0], curSum = arr[0];
+for(int i = 1; i &lt; arr.length; i++){
+    curSum = Math.max(arr[i], curSum + arr[i]);
+    maxSum = Math.max(maxSum, curSum);
+}
+return maxSum;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strings Section -->
+    <div id="strings" class="mb-6">
+      <div class="card-header" style="padding:0 0 16px; border:none;">
+        <span class="card-title" style="font-size:18px;">🔤 String Challenges</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;">
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Palindrome Check</div>
+          <div class="challenge-desc">Check if a given string is a palindrome.</div>
+          <div class="challenge-meta"><span class="badge badge-easy">Easy</span><span class="text-xs text-muted">Strings • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Python one-liner
+def isPalindrome(s):
+    s = s.lower().replace(" ", "")
+    return s == s[::-1]
+
+// Java
+String rev = new StringBuilder(s).reverse().toString();
+return s.equals(rev);</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Anagram Check</div>
+          <div class="challenge-desc">Determine if two strings are anagrams of each other.</div>
+          <div class="challenge-meta"><span class="badge badge-easy">Easy</span><span class="text-xs text-muted">Sorting • O(n log n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Java - Sort and Compare
+char[] a1 = s1.toCharArray();
+char[] a2 = s2.toCharArray();
+Arrays.sort(a1);
+Arrays.sort(a2);
+return Arrays.equals(a1, a2);</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Longest Common Prefix</div>
+          <div class="challenge-desc">Find the longest common prefix string among an array of strings.</div>
+          <div class="challenge-meta"><span class="badge badge-medium">Medium</span><span class="text-xs text-muted">Strings • O(n*m)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">String prefix = strs[0];
+for(String s : strs){
+    while(!s.startsWith(prefix))
+        prefix = prefix.substring(0, prefix.length()-1);
+}
+return prefix;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stack & Queue Section -->
+    <div id="stackqueue" class="mb-6">
+      <div class="card-header" style="padding:0 0 16px; border:none;">
+        <span class="card-title" style="font-size:18px;">📚 Stack & Queue Challenges</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;">
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Valid Parentheses</div>
+          <div class="challenge-desc">Check if string of brackets is properly balanced using a stack.</div>
+          <div class="challenge-meta"><span class="badge badge-easy">Easy</span><span class="text-xs text-muted">Stack • O(n)</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">Stack&lt;Character&gt; stack = new Stack&lt;&gt;();
+for(char c : s.toCharArray()){
+    if(c=='('||c=='['||c=='{') stack.push(c);
+    else {
+        if(stack.isEmpty()) return false;
+        char top = stack.pop();
+        if(c==')' &amp;&amp; top!='(') return false;
+        if(c==']' &amp;&amp; top!='[') return false;
+        if(c=='}' &amp;&amp; top!='{') return false;
+    }
+}
+return stack.isEmpty();</div>
+          </div>
+        </div>
+
+        <div class="challenge-card" onclick="toggleChallenge(this)">
+          <div class="challenge-title">Implement Queue using Stacks</div>
+          <div class="challenge-desc">Implement FIFO queue using only two stacks.</div>
+          <div class="challenge-meta"><span class="badge badge-medium">Medium</span><span class="text-xs text-muted">Stack • Classic</span></div>
+          <div class="challenge-detail">
+            <div class="challenge-code">// Use two stacks: s1 (push), s2 (pop)
+void enqueue(int x){ s1.push(x); }
+int dequeue(){
+    if(s2.isEmpty())
+        while(!s1.isEmpty()) s2.push(s1.pop());
+    return s2.pop();
+}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="scripts.js"></script>
+<script>
+function scrollToSection(id){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>

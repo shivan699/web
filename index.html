@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Student Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ── SIDEBAR OVERLAY (mobile) ── -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-icon">🎓</div>
+    <div>
+      <div class="sidebar-brand-text">Student Portal</div>
+      <div class="sidebar-brand-sub">Placement Ready</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Main Menu</span>
+    <a href="" class="nav-link">
+      <span class="nav-icon">🏠</span> Dashboard
+    </a>
+    <a href="aptitude.html" class="nav-link">
+      <span class="nav-icon">🧠</span> Aptitude
+    </a>
+    <a href="dsa.html" class="nav-link">
+      <span class="nav-icon">💻</span> DSA Practice
+    </a>
+    <a href="mock-interview.html" class="nav-link">
+      <span class="nav-icon">🎤</span> MockInterview
+    </a>
+
+    <span class="nav-section-label">Career Tools</span>
+    <a href="resume-builder.html" class="nav-link">
+      <span class="nav-icon">📄</span> Resume Builder
+    </a>
+    <a href="resume-scanner.html" class="nav-link">
+      <span class="nav-icon">🔍</span> Resume Scanner
+    </a>
+      
+    <a href="announcements.html" class="nav-link">
+      <span class="nav-icon">📢</span> Announcements
+    </a>
+
+    <span class="nav-section-label">Support</span>
+    <a href="ai-assistant.html" class="nav-link ai-btn">
+      <span class="nav-icon">🤖</span> AI Assistant
+    </a>
+
+    <span class="nav-section-label">Account</span>
+    <a href="" class="nav-link">
+      <span class="nav-icon">👤</span> Profile
+    </a>
+    <a href="logout.html" class="nav-link logout-link">
+      <span class="nav-icon">🚪</span> Logout
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user-avatar">S</div>
+    <div>
+      <div class="sidebar-user-name">Student</div>
+      <div class="sidebar-user-role">MCA CSE • Final Year</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="main-content">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+      <div>
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-subtitle">Monday, welcome back 👋</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-search">🔍 Search anything...</div>
+      <div class="topbar-bell" id="topbarBell">
+        🔔 <span class="topbar-bell-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="page-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-greeting">Welcome Back</div>
+      <h1>Welcome, Student! 🎓</h1>
+      <p>Track your progress and get placement-ready. You're doing great!</p>
+    </div>
+
+    <!-- Motivational Banner -->
+    <div class="motivational-banner">
+      <h2>💡 Quote of the Day</h2>
+      <p id="quoteText">"Success is not final, failure is not fatal: it is the courage to continue that counts." — Winston Churchill</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="cards-grid">
+      <div class="stat-card" style="--card-accent:#2563eb; --card-icon-bg:#dbeafe;">
+        <div class="stat-card-icon">📝</div>
+        <div class="stat-card-value" data-count="24">0</div>
+        <div class="stat-card-label">Tests Completed</div>
+        <div class="stat-card-change change-up">↑ +3 this week</div>
+      </div>
+      <div class="stat-card" style="--card-accent:#16a34a; --card-icon-bg:#dcfce7;">
+        <div class="stat-card-icon">📄</div>
+        <div class="stat-card-value" data-count="78">0</div>
+        <div class="stat-card-label">Resume Score</div>
+        <div class="stat-card-change change-up">↑ +5 pts</div>
+      </div>
+      <div class="stat-card" style="--card-accent:#7c3aed; --card-icon-bg:#ede9fe;">
+        <div class="stat-card-icon">🎤</div>
+        <div class="stat-card-value" data-count="82">0</div>
+        <div class="stat-card-label">Interview Score</div>
+        <div class="stat-card-change change-up">↑ Good progress</div>
+      </div>
+      <div class="stat-card" style="--card-accent:#ea580c; --card-icon-bg:#ffedd5;">
+        <div class="stat-card-icon">🚀</div>
+        <div class="stat-card-value" data-count="6">0</div>
+        <div class="stat-card-label">Upcoming Drives</div>
+        <div class="stat-card-change change-neutral">This month</div>
+      </div>
+    </div>
+
+    <!-- Two Column Row -->
+    <div class="two-col mb-6">
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📋 Recent Activity</span>
+          <a href="#" class="text-sm text-muted">View All</a>
+        </div>
+        <div class="card-body">
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#dbeafe;">🧠</div>
+              <div>
+                <div class="activity-text">Aptitude Test — Quantitative</div>
+                <div class="activity-meta">Score: 18/25 • 2 hours ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#dcfce7;">💻</div>
+              <div>
+                <div class="activity-text">DSA Challenge — Arrays (Medium)</div>
+                <div class="activity-meta">Solved in 22 mins • Yesterday</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#ede9fe;">🎤</div>
+              <div>
+                <div class="activity-text">Mock Interview — HR Round</div>
+                <div class="activity-meta">Score: 8/10 • 2 days ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#ffedd5;">📄</div>
+              <div>
+                <div class="activity-text">Resume Scanned — ATS Score 74</div>
+                <div class="activity-meta">Improvements suggested • 3 days ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Drives -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🚀 Upcoming Campus Drives</span>
+          <a href="ai-assistant.html" class="text-sm text-muted">All Drives</a>
+        </div>
+        <div class="card-body">
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#dbeafe; font-size:18px;">🏢</div>
+              <div style="flex:1">
+                <div class="activity-text flex-between">TCS Digital <span class="badge badge-blue">Open</span></div>
+                <div class="activity-meta">📅 May 15 • Package: ₹7 LPA • Eligible: 70%+</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#dcfce7; font-size:18px;">🏢</div>
+              <div style="flex:1">
+                <div class="activity-text flex-between">Infosys SP <span class="badge badge-teal">Registering</span></div>
+                <div class="activity-meta">📅 May 22 • Package: ₹6.5 LPA</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#ede9fe; font-size:18px;">☁️</div>
+              <div style="flex:1">
+                <div class="activity-text flex-between">ServiceNow Trainee <span class="badge badge-new">New</span></div>
+                <div class="activity-meta">📅 June 2 • Package: ₹5.5 LPA</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon" style="background:#ffedd5; font-size:18px;">🏢</div>
+              <div style="flex:1">
+                <div class="activity-text flex-between">Wipro WILP <span class="badge badge-orange">Closing Soon</span></div>
+                <div class="activity-meta">📅 May 30 • Package: ₹3.5 LPA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📊 Preparation Progress</span>
+        <span class="badge badge-blue">Overall: 68%</span>
+      </div>
+      <div class="card-body">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px;">
+          <div>
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Aptitude & Reasoning</span><span class="text-sm text-muted">75%</span></div>
+            <div class="progress-wrap"><div class="progress-bar green" data-width="75" style="width:0"></div></div>
+          </div>
+          <div>
+            <div class="flex-between mb-4"><span class="text-sm font-bold">DSA & Coding</span><span class="text-sm text-muted">52%</span></div>
+            <div class="progress-wrap"><div class="progress-bar" data-width="52" style="width:0"></div></div>
+          </div>
+          <div>
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Interview Confidence</span><span class="text-sm text-muted">80%</span></div>
+            <div class="progress-wrap"><div class="progress-bar green" data-width="80" style="width:0"></div></div>
+          </div>
+          <div>
+            <div class="flex-between mb-4"><span class="text-sm font-bold">Resume Quality</span><span class="text-sm text-muted">65%</span></div>
+            <div class="progress-wrap"><div class="progress-bar orange" data-width="65" style="width:0"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="scripts.js"></script>
+<script>
+  // Randomize quote on load
+  const quotes = [
+    '"The secret of getting ahead is getting started." — Mark Twain',
+    '"Push yourself, because no one else is going to do it for you."',
+    '"Success is the sum of small efforts, repeated day in and day out." — R. Collier',
+    '"Believe you can and you\'re halfway there." — Theodore Roosevelt',
+    '"Your time is limited, don\'t waste it living someone else\'s life." — Steve Jobs',
+  ];
+  document.getElementById('quoteText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+</script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — AKTU Campus Job Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ══════════════════════════════════════════
+       AKTU Campus Portal — Login Page
+       Direction: Institutional Dark Elegance
+       Split layout: rich visual left + crisp form right
+    ══════════════════════════════════════════ */
+
+    :root {
+      --maroon:   #8B0000;
+      --maroon2:  #A52020;
+      --gold:     #C8972A;
+      --gold-lt:  #E8B84B;
+      --bg:       #0B0E1A;
+      --surface:  #13172A;
+      --surface2: #1A1F35;
+      --border:   rgba(200,151,42,.18);
+      --text:     #F0EDE6;
+      --muted:    #8A8FA8;
+      --white:    #FFFFFF;
+      --success:  #22C55E;
+      --error:    #EF4444;
+      --info:     #3B82F6;
+      --warn:     #F59E0B;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+
+    body {
+      font-family: 'Satoshi', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ── TOAST NOTIFICATIONS ── */
+    #toastWrap {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+      max-width: 360px; width: calc(100% - 40px);
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--surface2);
+      border-radius: 14px; padding: 14px 18px;
+      display: flex; align-items: flex-start; gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      animation: toastIn .4s cubic-bezier(.175,.885,.32,1.275) forwards;
+      pointer-events: auto; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .toast::before {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      height: 3px; border-radius: 0 0 0 14px;
+      background: var(--toast-color, var(--gold));
+      animation: toastBar var(--toast-dur, 4s) linear forwards;
+    }
+    .toast.success { --toast-color: var(--success); }
+    .toast.error   { --toast-color: var(--error); }
+    .toast.info    { --toast-color: var(--info); }
+    .toast.warn    { --toast-color: var(--warn); }
+    @keyframes toastIn  { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes toastOut { to{opacity:0;transform:translateX(60px);max-height:0;padding:0;margin:0} }
+    @keyframes toastBar { from{width:100%} to{width:0} }
+    .toast-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .toast-body { flex: 1; }
+    .toast-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: -.2px; }
+    .toast-msg   { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      width: 520px; flex-shrink: 0;
+      background: linear-gradient(160deg, #1A0505 0%, #2D0808 40%, #0B0E1A 100%);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 48px 52px;
+      position: relative; overflow: hidden;
+    }
+
+    /* Decorative orbs */
+    .left-panel::before {
+      content: '';
+      position: absolute; top: -120px; right: -120px;
+      width: 380px; height: 380px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,0,0,.45) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .left-panel::after {
+      content: '';
+      position: absolute; bottom: -80px; left: -80px;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,151,42,.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Grid pattern overlay */
+    .grid-overlay {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,151,42,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,151,42,.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .left-top { position: relative; z-index: 1; }
+
+    .university-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(200,151,42,.1);
+      border: 1px solid rgba(200,151,42,.25);
+      border-radius: 50px; padding: 8px 18px;
+      margin-bottom: 48px;
+    }
+    .badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(200,151,42,.6);
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    @keyframes badgePulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:.7} }
+    .badge-text { font-size: 12px; font-weight: 600; color: var(--gold-lt); letter-spacing: .8px; text-transform: uppercase; }
+
+    .left-heading {
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 44px; font-weight: 700; line-height: 1.1;
+      letter-spacing: -1.5px;
+      animation: fadeUp .6s ease .1s both;
+    }
+    .left-heading span { color: var(--gold); }
+
+    .left-sub {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+      margin-top: 16px; max-width: 340px;
+      animation: fadeUp .6s ease .2s both;
+    }
+
+    /* Feature pills */
+    .features {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-top: 40px;
+      animation: fadeUp .6s ease .3s both;
+    }
+    .feature-item {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .feature-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(200,151,42,.12);
+      border: 1px solid rgba(200,151,42,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .feature-text { font-size: 14px; color: rgba(240,237,230,.75); font-weight: 500; }
+
+    /* Stats row */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: rgba(200,151,42,.12);
+      border: 1px solid rgba(200,151,42,.15);
+      border-radius: 16px; overflow: hidden;
+      position: relative; z-index: 1;
+      animation: fadeUp .6s ease .4s both;
+    }
+    .stat-item {
+      background: rgba(13,17,33,.7);
+      padding: 18px 16px; text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .stat-num {
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 26px; font-weight: 700;
+      color: var(--gold); letter-spacing: -1px;
+    }
+    .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-top: 4px; }
+
+    /* ── RIGHT PANEL (Form) ── */
+    .right-panel {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 40px 32px;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .right-panel::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(200,151,42,.3), transparent);
+    }
+
+    .form-wrap {
+      width: 100%; max-width: 420px;
+      animation: fadeUp .5s ease .2s both;
+    }
+
+    .form-logo {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 36px;
+    }
+    .form-logo-icon {
+      width: 46px; height: 46px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--maroon), var(--maroon2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 6px 20px rgba(139,0,0,.4);
+    }
+    .form-logo-text { font-family: 'Clash Display', Georgia, serif; font-size: 18px; font-weight: 600; letter-spacing: -.3px; }
+    .form-logo-sub  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .form-title {
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 30px; font-weight: 700; letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+    .form-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+
+    /* Input group */
+    .input-group { margin-bottom: 18px; }
+    .input-label {
+      display: block; font-size: 12px; font-weight: 600;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .8px;
+      margin-bottom: 8px;
+    }
+    .input-wrap { position: relative; }
+    .input-icon {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      font-size: 17px; pointer-events: none; z-index: 1;
+    }
+    .input-field {
+      width: 100%; padding: 14px 16px 14px 46px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 12px; font-family: 'Satoshi', sans-serif;
+      font-size: 14px; color: var(--text); outline: none;
+      transition: border-color .22s, box-shadow .22s, background .22s;
+      -webkit-appearance: none;
+    }
+    .input-field::placeholder { color: rgba(138,143,168,.55); }
+    .input-field:focus {
+      border-color: var(--gold);
+      background: var(--surface2);
+      box-shadow: 0 0 0 3px rgba(200,151,42,.12);
+    }
+    .input-field.valid   { border-color: var(--success); }
+    .input-field.invalid { border-color: var(--error); }
+    .input-msg {
+      font-size: 12px; margin-top: 6px; padding-left: 4px;
+      display: none;
+    }
+    .input-msg.show { display: block; }
+    .input-msg.err  { color: var(--error); }
+    .input-msg.ok   { color: var(--success); }
+
+    /* Password toggle */
+    .pwd-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; color: var(--muted); font-size: 17px;
+      transition: color .2s; user-select: none;
+    }
+    .pwd-toggle:hover { color: var(--gold); }
+
+    /* Remember & Forgot row */
+    .form-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .remember {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--muted); cursor: pointer;
+    }
+    .remember input[type="checkbox"] { accent-color: var(--gold); width: 15px; height: 15px; cursor: pointer; }
+    .forgot-link {
+      font-size: 13px; color: var(--gold); text-decoration: none;
+      font-weight: 600; transition: color .2s;
+    }
+    .forgot-link:hover { color: var(--gold-lt); }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--maroon) 0%, #C0392B 100%);
+      color: #fff; border: none; border-radius: 12px;
+      font-family: 'Clash Display', Georgia, serif;
+      font-size: 16px; font-weight: 600; letter-spacing: .3px;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(139,0,0,.45);
+      transition: all .25s; position: relative; overflow: hidden;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+      transition: left .5s;
+    }
+    .submit-btn:hover::before { left: 100%; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(139,0,0,.55); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* Loading state */
+    .btn-loading {
+      display: none; width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-text { transition: opacity .2s; }
+
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 22px 0; color: var(--muted); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(255,255,255,.07);
+    }
+
+    .register-link {
+      text-align: center; font-size: 14px; color: var(--muted);
+    }
+    .register-link a {
+      color: var(--gold); font-weight: 700; text-decoration: none;
+      transition: color .2s;
+    }
+    .register-link a:hover { color: var(--gold-lt); }
+
+    /* Domain hint */
+    .domain-hint {
+      background: rgba(200,151,42,.07);
+      border: 1px solid rgba(200,151,42,.15);
+      border-radius: 10px; padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 12.5px; color: rgba(200,151,42,.85);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .left-panel { display: none; }
+      body { justify-content: center; }
+      .right-panel::before { display: none; }
+    }
+    @media (max-width: 480px) {
+      .right-panel { padding: 24px 20px; }
+      .form-title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOAST CONTAINER ── -->
+<div id="toastWrap"></div>
+
+<!-- ── LEFT PANEL ── -->
+<div class="left-panel">
+  <div class="grid-overlay"></div>
+
+  <div class="left-top">
+    <div class="university-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">AKTU Official Portal</span>
+    </div>
+
+    <div class="left-heading">
+      Campus<br><span>Job</span><br>Portal
+    </div>
+    <div class="left-sub">
+      Your gateway to top campus placements, internships, and career opportunities at AKTU-affiliated universities.
+    </div>
+
+    <div class="features">
+      <div class="feature-item">
+        <div class="feature-icon">🏢</div>
+        <div class="feature-text">500+ Recruiting Companies</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-text">Role-based Job Matching</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📋</div>
+        <div class="feature-text">One-click Application Tracking</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔔</div>
+        <div class="feature-text">Real-time Drive Notifications</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num">48K+</div>
+      <div class="stat-lbl">Students</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2.4K</div>
+      <div class="stat-lbl">Placed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">320</div>
+      <div class="stat-lbl">Companies</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIGHT PANEL (FORM) ── -->
+<div class="right-panel">
+  <div class="form-wrap">
+
+    <div class="form-logo">
+      <div class="form-logo-icon">🎓</div>
+      <div>
+        <div class="form-logo-text">AKTU Portal</div>
+        <div class="form-logo-sub">Dr. A.P.J. Abdul Kalam Technical University</div>
+      </div>
+    </div>
+
+    <div class="form-title">Welcome Back 👋</div>
+    <div class="form-subtitle">Sign in to access your campus placement dashboard</div>
+
+    <div class="domain-hint">
+      ℹ️ Use your official AKTU university email ending with <strong>@gmail.com</strong> (e.g. AKTU@123gmail.com)
+    </div>
+
+    <form id="loginForm" novalidate autocomplete="on">
+
+      <!-- Email -->
+      <div class="input-group">
+        <label class="input-label" for="email">University Email</label>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="email" class="input-field"
+            placeholder="AKTU@123gmail.com" autocomplete="email"
+            oninput="validateEmail()" />
+        </div>
+        <div class="input-msg" id="email-msg"></div>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <label class="input-label" for="password">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" class="input-field"
+            placeholder="Enter your password" autocomplete="current-password"
+            oninput="validatePassword()" />
+          <span class="pwd-toggle" onclick="togglePwd('password', this)">👁</span>
+        </div>
+        <div class="input-msg" id="pwd-msg"></div>
+      </div>
+
+      <!-- Meta row -->
+      <div class="form-meta">
+        <label class="remember">
+          <input type="checkbox" id="remember" /> Remember me
+        </label>
+        <a href="#" class="forgot-link" onclick="forgotPassword(event)">Forgot Password?</a>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="submit-btn" id="loginBtn">
+        <span class="btn-text">Login to Portal</span>
+        <div class="btn-loading" id="loginLoader"></div>
+      </button>
+
+    </form>
+
+    <div class="divider">OR</div>
+    <div class="register-link">
+      Don't have an account?
+      <a href="create.html">Create Account →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════
+   ALLOWED EMAIL DOMAINS
+══════════════════════════════ */
+const ALLOWED_DOMAINS = [
+  'aktu.ac.in', 'gmail.com', 'university.edu',
+  'hbtu.ac.in', 'knit.ac.in', 'iet.ac.in',
+  'biet.ac.in', 'gcet.ac.in', 'mmm.ac.in'
+];
+
+/* allow any email that contains 'aktu' or ends with the domains above */
+function isValidUniversityEmail(email) {
+  email = email.toLowerCase().trim();
+  // Explicit AKTU email check (as per user requirement)
+  if (email === 'aktu@123gmail.com') return true;
+  // General AKTU pattern: starts with aktu or contains aktu
+  if (email.includes('aktu')) return true;
+  // Any of the allowed domains
+  return ALLOWED_DOMAINS.some(domain => email.endsWith('@' + domain));
+}
+
+/* ── TOAST ── */
+function toast(type, title, msg, dur = 4500) {
+  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.style.setProperty('--toast-dur', (dur/1000) + 's');
+  el.innerHTML = `
+    <div class="toast-icon">${icons[type] || 'ℹ️'}</div>
+    <div class="toast-body">
+      <div class="toast-title">${title}</div>
+      <div class="toast-msg">${msg}</div>
+    </div>`;
+  el.onclick = () => remove(el);
+  document.getElementById('toastWrap').appendChild(el);
+  const timer = setTimeout(() => remove(el), dur);
+  el._t = timer;
+  function remove(e) {
+    clearTimeout(e._t);
+    e.style.animation = 'toastOut .3s ease forwards';
+    setTimeout(() => e.remove(), 300);
+  }
+}
+
+/* ── VALIDATION ── */
+function validateEmail() {
+  const el = document.getElementById('email');
+  const msg = document.getElementById('email-msg');
+  const v = el.value.trim();
+  if (!v) { setInputState(el, msg, '', ''); return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+    setInputState(el, msg, 'invalid', 'err', 'Enter a valid email address'); return false;
+  }
+  if (!isValidUniversityEmail(v)) {
+    setInputState(el, msg, 'invalid', 'err', 'Please use your AKTU university email'); return false;
+  }
+  setInputState(el, msg, 'valid', 'ok', '✓ Valid university email'); return true;
+}
+
+function validatePassword() {
+  const el = document.getElementById('password');
+  const msg = document.getElementById('pwd-msg');
+  const v = el.value;
+  if (!v) { setInputState(el, msg, '', ''); return false; }
+  if (v.length < 5) {
+    setInputState(el, msg, 'invalid', 'err', 'Password must be at least 5 characters'); return false;
+  }
+  setInputState(el, msg, 'valid', 'ok', '✓ Password looks good'); return true;
+}
+
+function setInputState(input, msgEl, inputClass, msgClass, text = '') {
+  input.className = 'input-field ' + inputClass;
+  msgEl.className = 'input-msg ' + (text ? 'show ' : '') + msgClass;
+  msgEl.textContent = text;
+}
+
+function togglePwd(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function forgotPassword(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  if (!email) {
+    toast('warn', 'Enter Email First', 'Please enter your university email to receive the reset link.', 4000);
+    return;
+  }
+  toast('info', 'Reset Link Sent 📧', `Password reset instructions sent to ${email}. Check your inbox!`, 5000);
+}
+
+/* ── LOGIN FORM SUBMIT ── */
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const emailOk = validateEmail();
+  const pwdOk   = validatePassword();
+  if (!emailOk || !pwdOk) {
+    toast('error', 'Validation Failed', 'Please fix the errors above before logging in.', 4000);
+    return;
+  }
+
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const remember = document.getElementById('remember').checked;
+
+  // Check if account exists in localStorage
+  const users = JSON.parse(localStorage.getItem('aktu_users') || '[]');
+  const found = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+
+  if (!found) {
+    toast('error', 'Login Failed ❌', 'Invalid email or password. Please check your credentials or create an account.', 5000);
+    document.getElementById('password').classList.add('invalid');
+    return;
+  }
+
+  // Show loading
+  setBtnLoading(true);
+
+  setTimeout(() => {
+    // Save session
+    const session = { email: found.email, name: found.name, loggedIn: true, loginTime: new Date().toISOString() };
+    if (remember) localStorage.setItem('aktu_session', JSON.stringify(session));
+    else sessionStorage.setItem('aktu_session', JSON.stringify(session));
+
+    toast('success', `Welcome back, ${found.name}! 🎉`, 'Login successful. Redirecting to your dashboard...', 3500);
+
+    setTimeout(() => {
+      // Redirect to dashboard (index.html or dashboard.html)
+      window.location.href = 'index.html';
+    }, 1800);
+  }, 1400);
+});
+
+function setBtnLoading(on) {
+  const btn = document.getElementById('loginBtn');
+  const txt = btn.querySelector('.btn-text');
+  const ldr = document.getElementById('loginLoader');
+  btn.disabled = on;
+  txt.style.display = on ? 'none' : 'block';
+  ldr.style.display = on ? 'block' : 'none';
+}
+
+/* ── CHECK EXISTING SESSION ── */
+window.addEventListener('DOMContentLoaded', () => {
+  const s = JSON.parse(localStorage.getItem('aktu_session') || sessionStorage.getItem('aktu_session') || 'null');
+  if (s && s.loggedIn) {
+    toast('info', 'Already Logged In', `You are signed in as ${s.name}. Redirecting...`, 3000);
+    setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+  }
+
+  // Pre-fill if remember was checked
+  const email = document.getElementById('email');
+  if (s && s.email) { email.value = s.email; validateEmail(); }
+
+  // Welcome toast
+  setTimeout(() => toast('info', 'AKTU Campus Portal 🎓', 'Login with your AKTU university email to access placement drives.', 5000), 600);
+});
+</script>
+</body>
+</html>

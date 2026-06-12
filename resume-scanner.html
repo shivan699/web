@@ -1,0 +1,507 @@
+ <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+   
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07103a; --card:#0f1630; --muted:#bfc7e6; --accent:#ffcc00; --glass: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box;font-family:Inter, Poppins, system-ui, sans-serif}
+    body{margin:0; background:var(--bg); color:#fff; -webkit-font-smoothing:antialiased;}
+    a{color:inherit}
+    /* header */
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;background:rgba(0,0,0,0.35);position:sticky;top:0;z-index:90}
+    header .brand{display:flex;align-items:center;gap:12px}
+    header img.logo{height:56px;border-radius:8px}
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{color:#fff;text-decoration:none;font-weight:600}
+    /* hero */
+    .hero{
+      min-height:36vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:48px 20px;
+      background-image: url("/mnt/data/A_digital_graphic_design_webpage_of_AKTU_Central_P.png");
+      background-size:cover; background-position:center; position:relative;
+    }
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(7,16,58,0.65), rgba(7,16,58,0.95));}
+    .hero .inner{position:relative;z-index:2;max-width:1100px;padding:16px}
+    .hero h1{font-size:36px;color:var(--accent);margin:0 0 8px}
+    .hero p{color:#dbe6ff;margin:0 0 14px}
+    /* layout */
+    .container{max-width:1200px;margin:28px auto;padding:0 18px}
+    .section-title{text-align:center;margin:8px 0 20px;color:var(--accent);font-weight:800;font-size:24px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}}
+    .company-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:14px;cursor:pointer;display:flex;flex-direction:column;min-height:320px;transition:transform .28s,box-shadow .28s}
+    .company-card:hover{transform:translateY(-8px);box-shadow:0 20px 48px rgba(0,0,0,0.6)}
+    .logo-wrap{height:160px;display:flex;align-items:center;justify-content:center;border-radius:8px;overflow:hidden}
+    .logo-wrap img{max-width:100%;max-height:100%;object-fit:cover}
+    .company-name{color:var(--accent);font-size:20px;margin-top:12px;font-weight:800;text-align:center}
+    .desc{color:#d4d9f2;margin:8px 0;min-height:44px;text-align:center}
+    .roles{margin-top:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+    .role{color:#bfe6ff;padding-left:6px}
+    .apply-row{margin-top:auto;display:flex;gap:10px;justify-content:center}
+    .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+    .btn.primary{background:var(--accent);color:#000}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    /* ATS result small */
+    .ats-badge{display:inline-block;padding:6px 10px;border-radius:10px;font-weight:700}
+    /* cards container (company list) */
+    .cards-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:14px}
+    /* interview tracker area */
+    .tracker{margin-top:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px}
+    table{width:100%;border-collapse:collapse;color:#fff}
+    th,td{padding:10px;border-bottom:1px dashed rgba(255,255,255,0.04);text-align:left}
+    th{color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+    /* placed students */
+    .placed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    @media(max-width:980px){.placed-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.placed-grid{grid-template-columns:1fr}}
+    .placed-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;display:flex;flex-direction:column}
+    .placed-card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+    .placed-card h4{margin:10px 0 6px}
+    .placed-meta{color:#cfe6ff;font-size:14px}
+    /* modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:200}
+    .modal.open{display:flex}
+    .modal-card{background:#07103a;padding:18px;border-radius:12px;min-width:320px;max-width:680px;color:#fff}
+    .form-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+    .form-row input,.form-row textarea, .form-row select{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+    .btn-row{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+    .filters input,.filters select{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+    footer{padding:26px;text-align:center;color:#b8c1e6;margin-top:40px}
+  </style>
+</head>
+<body>
+
+  <header>
+     <header> Central Placement Cell – Dashboard </header>
+      <div style="line-height:1">
+        
+      </div>
+    </div>
+ 
+    <nav>
+      <a href="#companies">Companies</a>
+      <a href="#tracker">Round Tracker</a>
+      <a href="#placed">Placed</a>
+      
+       <a href="CP.HTML" target="_blank">student info</a>
+
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="inner">
+      <h1> Campus Placement Portal</h1>
+      <p>Apply, track rounds, check ATS score and view placed student experiences.</p>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- Summary cards -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px">
+      <div style="background:var(--card);padding:12px;border-radius:10px;text-align:center;min-width:150px">
+        <div class="small">Total Students</div>
+        <div id="totalStudents" style="font-weight:800;font-size:20px">0</div>
+      </div>
+      <div style="background:var(--card);padding:12px;border-radius:10px;text-align:center;min-width:150px">
+        <div class="small">Placed</div>
+        <div id="totalPlaced" style="font-weight:800;font-size:20px">0</div>
+      </div>
+      <div style="background:var(--card);padding:12px;border-radius:10px;text-align:center;min-width:150px">
+        <div class="small">Open Drives</div>
+        <div id="openDrives" style="font-weight:800;font-size:20px">0</div>
+      </div>
+      <div style="background:var(--card);padding:12px;border-radius:10px;text-align:center;min-width:150px">
+        <div class="small">Avg CGPA</div>
+        <div id="avgCgpa" style="font-weight:800;font-size:20px">0.00</div>
+      </div>
+    </div>
+
+    <!-- Companies -->
+    <div id="companies">
+      <div class="section-title">Trending Companies — Click to open</div>
+      <div class="cards-container" id="companyCards"></div>
+    </div>
+
+    <!-- Interview Round Tracker -->
+    <div id="tracker" class="tracker" style="margin-top:22px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Interview Round Tracker</h3>
+        <div class="filters">
+          <input id="searchStudent" placeholder="Search student/roll/company...">
+          <select id="filterRound"><option value="">All Rounds</option><option>Round 1</option><option>Round 2</option><option>Round 3</option><option>HR</option><option>Selected</option><option>Rejected</option></select>
+          <button class="btn ghost" id="addDemoStudent">+ Add Demo Student</button>
+          <button class="btn primary" id="exportCSV">Export CSV</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;overflow:auto">
+        <table id="trackerTable">
+          <thead>
+            <tr><th>Name</th><th>Roll</th><th>Company</th><th>Round</th><th>CGPA</th><th>Action</th></tr>
+          </thead>
+          <tbody id="trackerBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Placed Students -->
+    <div id="placed">
+      <div class="section-title">Placed Students & Their Experience</div>
+      <div class="placed-grid" id="placedGrid"></div>
+    </div>
+
+  </div>
+
+  <!-- Apply Modal -->
+  <div class="modal" id="applyModal" aria-hidden="true">
+    <div class="modal-card">
+      <h3>Apply for Company</h3>
+      <form id="applyForm">
+        <div class="form-row">
+          <input name="name" placeholder="Full name" required>
+          <input name="roll" placeholder="Roll no / ID" required>
+        </div>
+        <div class="form-row">
+          <input name="email" type="email" placeholder="Email" required>
+          <input name="cgpa" type="number" step="0.01" min="0" max="10" placeholder="CGPA">
+        </div>
+        <div class="form-row">
+          <select name="company" required id="companySelect">
+            <option value="">Select Company</option>
+          </select>
+          <select name="round">
+            <option>Round 1</option><option>Round 2</option><option>Round 3</option><option>HR</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <input name="skills" placeholder="Skills (comma separated)">
+        </div>
+        <div class="form-row">
+          <input type="file" name="resume" id="resumeInput" accept=".pdf,.doc,.docx">
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn ghost" id="closeApply">Cancel</button>
+          <button type="submit" class="btn primary">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ATS Popup -->
+  <div id="atsPopup" class="modal" aria-hidden="true">
+    <div class="modal-card" style="max-width:420px">
+      <h3>ATS Score Checker</h3>
+      <p id="atsCompanyName" style="font-weight:700"></p>
+      <input type="file" id="atsResume" accept=".pdf,.doc,.docx" style="margin:10px 0">
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+        <button class="btn ghost" onclick="closeATS()">Close</button>
+        <button class="btn primary" onclick="calculateATS()">Generate Score</button>
+      </div>
+      <div id="atsResult" style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  <!-- Company details popup -->
+  <div id="companyPopup" class="modal" aria-hidden="true">
+    <div class="modal-card" id="companyPopupCard" style="max-width:640px"></div>
+  </div>
+
+  <footer>© 2025 AKTU Central Placement Cell — Demo Dashboard</footer>
+
+<script>
+/* =========================
+   Sample data (persist in localStorage)
+========================= */
+const COMP_KEY = 'pp_companies_v1';
+const STUD_KEY = 'pp_students_v1';
+const PLACED_KEY = 'pp_placed_v1';
+
+const sampleCompanies = [
+  {name:'TCS', ctc:4, stipend:'16000', category:'IT-Service', tier:'Tier 1', status:'Applied', logo:'tcs.png', about:'TCS is a global IT leader.'},
+  {name:'Amazon', ctc:6, stipend:'0', category:'IT-Product', tier:'Tier 1', status:'Shortlisted', logo:'amozon.png', about:'Amazon is global e-commerce & cloud.'},
+  {name:'Flipkart', ctc:5, stipend:'0', category:'Ecommerce', tier:'Tier 1', status:'Applied', logo:'flipcard.png', about:'Flipkart is a leading e-commerce company.'},
+  
+];
+
+const sampleStudents = [
+  {id:'s1', name:'Amit Sharma', roll:'CSE2025-001', email:'amit@example.com', company:'TCS', round:'Round 2', cgpa:8.4, skills:['Java','DSA'], resume:'', notes:['Cleared Round 1']},
+  {id:'s2', name:'Riya Singh', roll:'IT2025-002', email:'riya@example.com', company:'Amazon', round:'HR', cgpa:7.9, skills:['Python','SQL'], resume:'', notes:['CV shortlisted']},
+  {id:'s3', name:'Mohit Verma', roll:'CSE2025-010', email:'mohit@example.com', company:'PayPal', round:'Selected', cgpa:8.9, skills:['C++','ML'], resume:'', notes:['Offer accepted']}
+];
+
+const samplePlaced = [
+  {name:'Amit Sharma', company:'Amazon', role:'Software Developer', image:'u.jpeg', quote:'Practice DSA daily and projects.'},
+  {name:'Riya Singh', company:'TCS', role:'System Analyst', image:'re.jpeg', quote:'Good communication helped a lot.'}
+];
+
+function load(key, fallback){ try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch(e){ return fallback; } }
+function save(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
+
+let companies = load(COMP_KEY, sampleCompanies);
+let students = load(STUD_KEY, sampleStudents);
+let placed = load(PLACED_KEY, samplePlaced);
+
+/* =========================
+   Render: companies cards
+========================= */
+function renderCompanies(){
+  const container = document.getElementById('companyCards');
+  container.innerHTML = '';
+  companies.forEach((c,i) => {
+    const div = document.createElement('div');
+    div.className = 'company-card';
+    div.innerHTML = `
+      <div class="logo-wrap"><img src="${c.logo}" alt="${c.name}"></div>
+      <div class="company-name">${c.name}</div>
+      <div class="desc">${c.about}</div>
+      <div style="margin-top:8px;font-size:14px;color:var(--muted);display:flex;justify-content:space-around;flex-wrap:wrap">
+        <div>CTC: ${c.ctc} LPA</div>
+        <div>Category: ${c.category}</div>
+        <div>Tier: ${c.tier}</div>
+      </div>
+      <div class="apply-row">
+        <button class="btn ghost" onclick="openCompany(${i})">View</button>
+        <button class="btn primary" onclick="openApply('${c.name}')">Apply</button>
+        <button class="btn ghost" style="background:#ff9900;color:#000;border:none" onclick="openATSfromList(${i})">Check ATS</button>
+      </div>
+    `;
+    // make whole card clickable to view
+    div.addEventListener('click', (e)=>{ if(e.target.tagName !== 'BUTTON') openCompany(i); });
+    container.appendChild(div);
+  });
+  // populate company select
+  const sel = document.getElementById('companySelect'); sel.innerHTML = '<option value="">Select Company</option>';
+  companies.forEach(c=> sel.innerHTML += `<option>${c.name}</option>`);
+  // summary
+  document.getElementById('openDrives').textContent = new Set(companies.map(x=>x.name)).size;
+}
+renderCompanies();
+
+/* =========================
+   Apply modal handlers
+========================= */
+const applyModal = document.getElementById('applyModal');
+document.getElementById('closeApply').addEventListener('click', ()=> applyModal.classList.remove('open'));
+
+function openApply(company){
+  applyModal.classList.add('open');
+  applyModal.setAttribute('aria-hidden','false');
+  if(company) document.getElementById('companySelect').value = company;
+}
+
+document.getElementById('applyForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const obj = Object.fromEntries(fd.entries());
+  obj.id = 's'+Math.random().toString(36).slice(2,9);
+  obj.skills = obj.skills ? obj.skills.split(',').map(s=>s.trim()) : [];
+  obj.resume = obj.resume ? obj.resume.name : '';
+  students.unshift(obj);
+  save(STUD_KEY, students);
+  updateStats(); renderTracker(); applyModal.classList.remove('open');
+  alert('Application saved (local demo).');
+});
+
+/* =========================
+   Company popup (view details)
+========================= */
+function openCompany(i){
+  const c = companies[i];
+  const card = document.getElementById('companyPopupCard');
+  card.innerHTML = `
+    <h3 style="color:var(--accent)">${c.name}</h3>
+    <p><b>CTC:</b> ${c.ctc} LPA • <b>Stipend:</b> ${c.stipend}</p>
+    <p><b>Category:</b> ${c.category} • <b>Tier:</b> ${c.tier}</p>
+    <p style="margin-top:8px">${c.about}</p>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn ghost" onclick="closeCompany()">Close</button>
+      <button class="btn primary" onclick="openApply('${c.name}')">Apply</button>
+    </div>
+  `;
+  document.getElementById('companyPopup').classList.add('open');
+}
+function closeCompany(){ document.getElementById('companyPopup').classList.remove('open'); }
+
+/* =========================
+   ATS Checker
+========================= */
+let atsSelectedCompany = null;
+function openATSfromList(i){
+  const c = companies[i]; openATS(i);
+}
+function openATS(i){
+  atsSelectedCompany = companies[i];
+  document.getElementById('atsCompanyName').textContent = 'Company: ' + (atsSelectedCompany ? atsSelectedCompany.name : '');
+  document.getElementById('atsPopup').classList.add('open');
+}
+function closeATS(){ document.getElementById('atsPopup').classList.remove('open'); document.getElementById('atsResult').innerHTML=''; document.getElementById('atsResume').value=''; }
+
+function calculateATS(){
+  const file = document.getElementById('atsResume').files[0];
+  if(!file) { alert('Upload resume (PDF/DOC) to simulate ATS check.'); return; }
+  // Very simple keyword matching simulation: more matches -> higher score
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const text = (e.result || '').toString().toLowerCase();
+    // keywords for demo
+    const keywords = ['java','python','sql','aws','machine','learning','react','node','c++','dsa','algorithms','cloud'];
+    let matches = 0;
+    for(const kw of keywords) if(text.includes(kw)) matches++;
+    // compute score
+    let score = 50 + matches * 5; // base 50
+    if(score > 98) score = 98;
+    // color
+    const color = score >= 80 ? 'green' : score >= 60 ? 'orange' : 'red';
+    document.getElementById('atsResult').innerHTML = `
+      <div style="font-weight:800">ATS Score: ${score}%</div>
+      <div style="width:100%;height:14px;background:#222;border-radius:10px;margin-top:8px">
+        <div style="width:${score}%;height:100%;background:${color};border-radius:10px"></div>
+      </div>
+      <div style="margin-top:8px;color:${color};font-weight:700">
+        ${ score >= 80 ? 'Excellent match' : score >= 60 ? 'Good, can improve' : 'Low match — improve resume' }
+      </div>
+    `;
+  };
+  // attempt to read text (works for txt; for pdf/doc it's approximate)
+  if(file.type === 'text/plain') reader.readAsText(file);
+  else {
+    // try to extract text by reading as binary and searching for plain text keywords (best-effort)
+    reader.readAsText(file);
+  }
+}
+
+/* =========================
+   Interview Round Tracker
+========================= */
+function renderTracker(){
+  const tbody = document.getElementById('trackerBody');
+  const search = document.getElementById('searchStudent').value.trim().toLowerCase();
+  const rf = document.getElementById('filterRound').value;
+  tbody.innerHTML = '';
+  // filter and sort (by name)
+  const rows = students.filter(s=>{
+    if(rf && s.round !== rf) return false;
+    if(!search) return true;
+    return [s.name,s.roll,s.company,(s.skills||[]).join(' ')].join(' ').toLowerCase().includes(search);
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+  for(const s of rows){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${escapeHtml(s.name)}</td>
+                    <td>${escapeHtml(s.roll||'—')}</td>
+                    <td>${escapeHtml(s.company||'—')}</td>
+                    <td>${escapeHtml(s.round||'—')}</td>
+                    <td>${s.cgpa!=null?escapeHtml(String(s.cgpa)):'—'}</td>
+                    <td>
+                      <button class="btn ghost" onclick="prevRound('${s.id}')">◀</button>
+                      <button class="btn primary" onclick="advanceRound('${s.id}')">Advance ▶</button>
+                      <button class="btn ghost" onclick="markSelected('${s.id}')">Select</button>
+                      <button class="btn ghost" onclick="markRejected('${s.id}')">Reject</button>
+                    </td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+/* Round transitions */
+const ROUNDS = ['Applied','Round 1','Round 2','Round 3','HR','Selected'];
+function advanceRound(id){
+  const s = students.find(x=>x.id===id);
+  if(!s) return;
+  const idx = ROUNDS.indexOf(s.round || 'Applied');
+  s.round = ROUNDS[Math.min(ROUNDS.length-1, idx+1)];
+  s.notes = s.notes || [];
+  s.notes.push('Advanced to '+s.round+' @'+new Date().toLocaleString());
+  save(STUD_KEY, students); renderTracker(); updateStats();
+}
+function prevRound(id){
+  const s = students.find(x=>x.id===id);
+  if(!s) return;
+  const idx = ROUNDS.indexOf(s.round || 'Applied');
+  s.round = ROUNDS[Math.max(0, idx-1)];
+  s.notes = s.notes || [];
+  s.notes.push('Moved back to '+s.round+' @'+new Date().toLocaleString());
+  save(STUD_KEY, students); renderTracker(); updateStats();
+}
+function markSelected(id){
+  const s = students.find(x=>x.id===id); if(!s) return;
+  s.round='Selected'; s.notes=s.notes||[]; s.notes.push('Selected @'+new Date().toLocaleString());
+  save(STUD_KEY, students); renderTracker(); updateStats();
+  // add to placed list
+  placed.unshift({name:s.name, company:s.company||'—', role:'—', image:'w.jpeg', quote:'Selected through portal'});
+  save(PLACED_KEY, placed); renderPlaced();
+}
+function markRejected(id){
+  const s = students.find(x=>x.id===id); if(!s) return;
+  s.round='Rejected'; s.notes=s.notes||[]; s.notes.push('Rejected @'+new Date().toLocaleString());
+  save(STUD_KEY, students); renderTracker(); updateStats();
+}
+
+/* Add demo student */
+document.getElementById('addDemoStudent').addEventListener('click', ()=>{
+  const id = 's'+Math.random().toString(36).slice(2,8);
+  const obj = {id,name:'New Student '+id,roll:'ROLL'+Math.floor(Math.random()*900),email:'demo@example.com',company:'TCS',round:'Round 1',cgpa:(6+(Math.random()*3)).toFixed(2),skills:[],notes:[]};
+  students.unshift(obj); save(STUD_KEY, students); renderTracker(); updateStats();
+});
+
+/* Search & filter listeners */
+document.getElementById('searchStudent').addEventListener('input', renderTracker);
+document.getElementById('filterRound').addEventListener('change', renderTracker);
+
+/* Export CSV */
+document.getElementById('exportCSV').addEventListener('click', ()=>{
+  const cols = ['name','roll','company','round','cgpa','email'];
+  const rows = [cols.join(',')].concat(students.map(s=>cols.map(c=>'"'+(s[c]||'')+'"').join(',')));
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='students.csv'; a.click();
+});
+
+/* =========================
+   Placed students render
+========================= */
+function renderPlaced(){
+  const el = document.getElementById('placedGrid');
+  el.innerHTML = '';
+  const data = placed;
+  data.forEach(s=>{
+    const card = document.createElement('div'); card.className='placed-card';
+    card.innerHTML = `<img src="${s.image}" alt="${s.name}"><h4>${escapeHtml(s.name)}</h4><div class="placed-meta">${escapeHtml(s.company)} • ${escapeHtml(s.role)}</div><p style="margin-top:8px;color:#dbe6ff">${escapeHtml(s.quote)}</p>`;
+    el.appendChild(card);
+  });
+}
+renderPlaced();
+
+/* =========================
+   Stats update
+========================= */
+function updateStats(){
+  document.getElementById('totalStudents').textContent = students.length;
+  document.getElementById('totalPlaced').textContent = placed.length;
+  const avg = (students.reduce((a,b)=>a + (Number(b.cgpa)||0),0) / Math.max(1, students.length));
+  document.getElementById('avgCgpa').textContent = isNaN(avg) ? '0.00' : avg.toFixed(2);
+}
+updateStats();
+renderTracker();
+
+/* =========================
+   Company popup close & ATS modal close
+========================= */
+document.getElementById('companyPopup').addEventListener('click', (e)=>{ if(e.target===document.getElementById('companyPopup')) document.getElementById('companyPopup').classList.remove('open'); });
+document.getElementById('atsPopup').addEventListener('click', (e)=>{ if(e.target===document.getElementById('atsPopup')) closeATS(); });
+
+/* helper */
+function escapeHtml(t){ return String(t||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])); }
+
+/* keyboard shortcut: press 'a' to open apply */
+document.addEventListener('keydown', e=>{ if(e.key==='a') openApply(); });
+
+</script>
+</body>
+</html>
+ 

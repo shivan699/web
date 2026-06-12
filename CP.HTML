@@ -1,0 +1,504 @@
+ 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Placement Dashboard</title>
+
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: #151618;
+        transition: 0.3s;
+    }
+
+    /* DARK MODE */
+    body.dark {
+        background: #210eed;
+        color: rgb(80, 16, 219);
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 40px;
+        background: rgb(33, 3, 3);
+        border-bottom: 2px solid #0f0404;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        transition: 0.3s;
+    }
+
+    body.dark nav {
+        background: #111;
+        border-color: #333;
+    }
+
+    nav .links a {
+        margin: 0 20px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 600;
+        color: black;
+        transition: 0.3s;
+    }
+
+    body.dark nav .links a {
+        color: rgb(9, 5, 5);
+    }
+
+    nav .links a.active {
+        color: #1e88e5;
+    }
+
+    /* DARK MODE BUTTON */
+    #darkToggle {
+        padding: 10px 20px;
+        background: #1e88e5;
+        border: none;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    /* SEARCH + SORT AREA */
+    .filter-bar {
+        width: 90%;
+        margin: 25px auto;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .filter-bar input, .filter-bar select {
+        padding: 12px;
+        width: 250px;
+        border-radius: 8px;
+        border: 1px solid #030202;
+        font-size: 16px;
+    }
+
+    .section-title {
+        width: 80%;
+        margin: 25px auto;
+        padding: 12px;
+        font-size: 26px;
+        text-align: center;
+        font-weight: 700;
+        color: rgb(6, 3, 3);
+        border-radius: 10px;
+    }
+
+    .green { background: #0b7237; }
+    .blue { background: #134b88; }
+
+    /* CARDS */
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 25px;
+        width: 90%;
+        margin: auto;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #121415;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: .3s;
+        cursor: pointer;
+        position: relative;
+    }
+
+    body.dark .card {
+        background: #222;
+        border-color: #555;
+        color: white;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+        width: 70px;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+
+    .view-btn {
+        background: #1e88e5;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    /* POPUP */
+    #popup {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.60);
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .popup-box {
+        width: 400px;
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        animation: appear .3s;
+    }
+
+    @keyframes appear {
+        from { transform: scale(0.7); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .close-btn {
+        background: red;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    /* GRAPH */
+    .graph-box {
+        width: 80%;
+        margin: 40px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0px 5px 20px rgba(0,0,0,0.1);
+    }
+</style>
+</head>
+<body>
+     
+
+
+ 
+
+<!-- FILTERS -->
+<div class="filter-bar">
+    <input type="text" id="searchBox" placeholder="Search Company...">
+    <select id="sortBox">
+        <option value="">Sort By</option>
+        <option value="ctc-high">CTC High → Low</option>
+        <option value="ctc-low">CTC Low → High</option>
+        <option value="category">Category</option>
+        <option value="tier">Tier</option>
+    </select>
+</div>
+
+<!-- SECTIONS -->
+<div class="section-title green">Cleared Interviews: 0</div>
+<div class="section-title blue">Applied Companies</div>
+
+<!-- CARDS -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <style>
+/* ==== PLACED STUDENTS SECTION CSS ==== */
+
+.placed-section {
+    padding: 50px 20px;
+    background: #072072;
+    text-align: center;
+}
+
+.placed-title {
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+/* Grid */
+.placed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* Glass Round Card */
+.student-card {
+    background: rgb(91, 90, 137);
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    border: 2px solid rgb(240, 235, 235);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: 0.4s;
+}
+
+/* Hover effect */
+.student-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+/* Round Image with glass border */
+.student-img {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.6);
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+    backdrop-filter: blur(5px);
+}
+
+/* Name text */
+.student-name {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* Company badge */
+.company-tag {
+    margin-top: 5px;
+    display: inline-block;
+    padding: 5px 15px;
+    background: #ff9900;
+    color: white;
+    border-radius: 20px;
+    font-size: 14px;
+}
+</style>
+
+<!-- =============== HTML SECTION =============== -->
+
+<section class="placed-section">
+    <h1 class="placed-title">Our Placed Students</h1>
+
+    <div class="placed-grid">
+
+        <div class="student-card">
+            <img src="m.jpeg" class="student-img">
+            <p class="student-name">Student One</p>
+            <span class="company-tag">Amazon</span>
+        </div>
+
+        <div class="student-card">
+            <img src="q.jpeg" class="student-img">
+            <p class="student-name">Student Two</p>
+            <span class="company-tag">Flipkart</span>
+        </div>
+
+        <div class="student-card">
+            <img src="recuiter.png" class="student-img">
+            <p class="student-name">Student Three</p>
+            <span class="company-tag">Google</span>
+        </div>
+
+        <div class="student-card">
+            <img src="w.jpeg" class="student-img">
+            <p class="student-name">Student Four</p>
+            <span class="company-tag">Infosys</span>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student CV & Round Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #043570;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+        .container {
+            width: 85%;
+            margin: auto;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            color: #003366;
+        }
+        .info-block {
+            background: #e9f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .round {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .completed { background: #b6edc8; }
+        .pending { background: #ffe7a8; }
+        .rejected { background: #ffb3b3; }
+        .upload-btn {
+            background: #003366;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>Student CV & Interview Round Tracker</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Student Information</h2>
+        <div class="info-block"><strong>Name:</strong> John Doe</div>
+        <div class="info-block"><strong>Roll No:</strong> 20CS045</div>
+        <div class="info-block"><strong>Branch:</strong> Computer Science</div>
+        <div class="info-block"><strong>Applied Company:</strong> TCS</div>
+    </div>
+
+    <div class="card">
+        <h2>CV Upload</h2>
+        <p>Upload your latest CV for placement process.</p>
+        <a href="#" class="upload-btn">Upload CV</a>
+    </div>
+
+    <div class="card">
+        <h2>Interview Round Status</h2>
+
+        <div class="round completed"><strong>Round 1: Online Test</strong> – Completed ✔</div>
+        <div class="round completed"><strong>Round 2: Technical Interview</strong> – Completed ✔</div>
+        <div class="round pending"><strong>Round 3: HR Interview</strong> – Pending ⏳</div>
+    </div>
+
+</div>
+
+    <div class="card">
+        <h2>Progress Status</h2>
+        <div style="background:#d9e7ff; width:100%; border-radius:10px; height:25px; overflow:hidden;">
+            <div style="width:70%; background:#003366; height:100%; color:white; text-align:center; line-height:25px;">70% Completed</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Download CV</h2>
+        <a class="upload-btn" href="student_cv.pdf" download>Download CV</a>
+    </div>
+
+    <div class="card">
+        <h2>Admin Update Panel</h2>
+        <label>Update Round Status:</label><br><br>
+        <select style="padding:10px; width:200px; border-radius:5px;">
+            <option>Round 1 Completed</option>
+            <option>Round 2 Completed</option>
+            <option>Round 3 Completed</option>
+            <option>Selected</option>
+            <option>Rejected</option>
+        </select>
+        <br><br>
+        <a class="upload-btn" href="#">Update</a>
+    </div>
+
+    <div class="card">
+        <h2>All Students List</h2>
+        <ul style="font-size:18px;">
+            <li>John Doe – TCS – Round 2 Completed</li>
+            <li>Riya Sharma – Infosys – HR Pending</li>
+            <li>Mohit Verma – Wipro – Selected</li>
+        </ul>
+    </div>
+
+</body>
+</html>
+    <form>
+        <input type="email" placeholder="Enter your university email" required />
+        <button type="submit">Send Reset Link</button>
+    </form>
+    <a href="index.html">Back to Login</a>
+    
+  </div>
+</body>
+</html>

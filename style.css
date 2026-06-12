@@ -1,0 +1,258 @@
+ * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🔹 BACKGROUND WITH UNIVERSITY LOGO */
+body {
+  height: 100vh;
+  background: 
+    linear-gradient(rgba(0, 0, 80, 0.6), rgba(0, 0, 100, 0.6)),
+    url("university-logo.png") no-repeat center center fixed;
+  background-size: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🔹 UNIVERSITY HEADER */
+.university-header {
+  width: 100%;
+  background-color: #000066;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-left .logo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.header-text {
+  text-align: center;
+  line-height: 1.2;
+}
+
+.header-text h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header-text h3 {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #ffcc00;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.navbar a:hover {
+  color: #ffcc00;
+  text-decoration: underline;
+}
+
+/* 🔹 LOGIN FORM BOX */
+.login-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  width: 350px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+  margin-top: 120px; /* so it's below navbar */
+}
+
+.form-box h1 {
+  color: #000066;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 14px;
+  color: #333;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 5px;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #000066;
+  outline: none;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background: #000066;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #001a99;
+}
+
+.extra-links {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.extra-links a {
+  text-decoration: none;
+  color: #000066;
+}
+
+.extra-links a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+/* 🔹 RESPONSIVE DESIGN */
+#slidePanel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -4px 0 15px rgba(0,0,0,0.3);
+    padding: 20px;
+    transition: 0.4s ease;
+    overflow-y: auto;
+}
+.closeBtn {
+    font-size: 28px;
+    cursor: pointer;
+    float: right;
+}
+#panelContent {
+    margin-top: 40px;
+}
+
+
+
+
+
+
+.recruiters-section {
+    text-align: center;
+    padding: 50px 20px;
+    background: #ffffff;
+}
+
+.title {
+    font-size: 32px;
+    color: #0a1a4b;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.decor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.decor span {
+    width: 80px;
+    height: 2px;
+    background: goldenrod;
+    margin: 0 10px;
+    border-radius: 20px;
+}
+
+.decor img {
+    width: 30px;
+}
+
+.recruiters-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.logos {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.logos img {
+    width: 150px;
+    height: auto;
+    transition: 0.3s ease;
+}
+
+.logos img:hover {
+    transform: scale(1.08);
+}
+
+.arrow {
+    background: #d49a1f;
+    border: none;
+    color: white;
+    font-size: 26px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.arrow:hover {
+    background: #b88218;
+}

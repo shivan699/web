@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Announcements — Student Portal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── ANNOUNCEMENT SPECIFIC STYLES ── */
+    .ann-hero {
+      background: linear-gradient(135deg, #1a2c3d 0%, #1e3a5f 50%, #0d4f4f 100%);
+      border-radius: 20px;
+      padding: 32px 36px;
+      color: #fff;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.4s ease;
+    }
+    .ann-hero::before {
+      content: '📢';
+      position: absolute;
+      right: 32px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 100px;
+      opacity: 0.07;
+    }
+    .ann-hero h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .ann-hero p  { font-size: 14px; opacity: 0.78; line-height: 1.6; max-width: 480px; }
+    .ann-hero-stats { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 18px; }
+    .ann-hero-stat { text-align: center; }
+    .ann-hero-stat-value { font-size: 28px; font-weight: 800; color: #86efac; }
+    .ann-hero-stat-label { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 13px; font-weight: 600;
+      border: 1.5px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-main);
+    }
+    .filter-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: #eff6ff; }
+    .filter-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+
+    /* Big Announcement Card */
+    .big-ann-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1.5px solid var(--border-color);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      transition: all 0.22s;
+      animation: fadeUp 0.4s ease both;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .big-ann-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--ann-color, var(--accent-blue));
+      border-radius: 4px 0 0 4px;
+    }
+    .big-ann-card:hover {
+      border-color: var(--ann-color, var(--accent-blue));
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+    }
+    .ann-icon-box {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .ann-card-body { flex: 1; min-width: 0; }
+    .ann-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .ann-card-title { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
+    .ann-card-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-top: 5px; }
+    .ann-card-meta { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+    .ann-meta-item { font-size: 12px; color: var(--text-light); display: flex; align-items: center; gap: 4px; }
+    .ann-card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+    /* Pinned */
+    .pinned-strip {
+      background: linear-gradient(135deg, #fef9c3, #fef3c7);
+      border: 1.5px solid #fde68a;
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+      font-size: 13.5px; font-weight: 600; color: #92400e;
+    }
+
+    /* Drive Timeline */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--border-color);
+    }
+    .timeline-item { position: relative; margin-bottom: 22px; }
+    .timeline-dot {
+      position: absolute;
+      left: -24px; top: 4px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 3px solid var(--card-bg);
+      box-shadow: 0 0 0 2px var(--accent-blue);
+    }
+    .timeline-dot.green { background: var(--accent-green); box-shadow: 0 0 0 2px var(--accent-green); }
+    .timeline-dot.orange { background: #f59e0b; box-shadow: 0 0 0 2px #f59e0b; }
+    .timeline-dot.red { background: #ef4444; box-shadow: 0 0 0 2px #ef4444; }
+    .timeline-date { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+    .timeline-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .timeline-desc { font-size: 13px; color: var(--text-secondary); margin-top: 3px; line-height: 1.5; }
+
+    /* Notification Bell Animation */
+    @keyframes bellShake {
+      0%,100%{ transform:rotate(0) }
+      15%{ transform:rotate(12deg) }
+      30%{ transform:rotate(-10deg) }
+      45%{ transform:rotate(8deg) }
+      60%{ transform:rotate(-6deg) }
+      75%{ transform:rotate(4deg) }
+    }
+    .bell-animated { animation: bellShake 2s ease-in-out infinite; display:inline-block; }
+
+    /* Unread dot */
+    .unread-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #ef4444;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    /* Search */
+    .ann-search {
+      display: flex; align-items: center;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 9px 16px;
+      gap: 10px;
+      flex: 1; max-width: 340px;
+      transition: border-color 0.2s;
+    }
+    .ann-search:focus-within { border-color: var(--accent-blue); }
+    .ann-search input {
+      border: none; outline: none; background: transparent;
+      font-family: var(--font-main); font-size: 13px; color: var(--text-primary);
+      width: 100%;
+    }
+    .ann-search input::placeholder { color: var(--text-light); }
+
+    /* Notice Board Card */
+    .notice-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all 0.22s;
+    }
+    .notice-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-2px); }
+    .notice-card-header { padding: 14px 18px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .notice-card-body { padding: 0 18px 16px; }
+    .notice-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 13.5px;
+    }
+    .notice-item:last-child { border-bottom: none; }
+    .notice-item-text { color: var(--text-primary); font-weight: 500; line-height: 1.5; }
+    .notice-item-date { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+    @media (max-width: 768px) {
+      .ann-hero { flex-direction: column; padding: 24px; }
+      .ann-hero::before { display: none; }
+      .ann-hero-stats { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-icon">🎓</div>
+    <div>
+      <div class="sidebar-brand-text">Student Portal</div>
+      <div class="sidebar-brand-sub">Placement Ready</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section-label">Main Menu</span>
+    <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a href="aptitude.html" class="nav-link"><span class="nav-icon">🧠</span> Aptitude</a>
+    <a href="dsa.html" class="nav-link"><span class="nav-icon">💻</span> DSA Practice</a>
+    <a href="mock-interview.html" class="nav-link"><span class="nav-icon">🎤</span> Mock‑Interview</a>
+    <span class="nav-section-label">Career Tools</span>
+    <a href="resume-builder.html" class="nav-link"><span class="nav-icon">📄</span> Resume Builder</a>
+    <a href="resume-scanner.html" class="nav-link"><span class="nav-icon">🔍</span> Resume Scanner</a>
+    <a href="announcements .html" class="nav-link active"><span class="nav-icon">📢</span> Announcements</a>
+    <span class="nav-section-label">Support</span>
+    <a href="ai-assistant.html" class="nav-link ai-btn"><span class="nav-icon">🤖</span> AI Assistant</a>
+    <span class="nav-section-label">Account</span>
+    <a href="profile.html" class="nav-link"><span class="nav-icon">👤</span> Profile</a>
+    <a href="logout.html" class="nav-link logout-link"><span class="nav-icon">🚪</span> Logout</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user-avatar">S</div>
+    <div>
+      <div class="sidebar-user-name">Student</div>
+      <div class="sidebar-user-role">B.Tech CSE • Final Year</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main-content">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div>
+        <div class="topbar-title">Announcements</div>
+        <div class="topbar-subtitle">Drives, placements & important notices</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-bell" id="topbarBell">
+        <span class="bell-animated">🔔</span>
+        <span class="topbar-bell-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-greeting">Notice Board</div>
+      <h1>Announcements 📢</h1>
+      <p>Stay updated with the latest placement drives, internships, and important notices.</p>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="ann-hero">
+      <div>
+        <h2>🚀 Placement Season 2025 is Live!</h2>
+        <p>Multiple top companies are visiting campus this month. Keep your resume updated, practice DSA, and stay prepared. Check below for all drives and deadlines.</p>
+        <div class="ann-hero-stats">
+          <div class="ann-hero-stat">
+            <div class="ann-hero-stat-value">14</div>
+            <div class="ann-hero-stat-label">Companies Visiting</div>
+          </div>
+          <div class="ann-hero-stat">
+            <div class="ann-hero-stat-value">342</div>
+            <div class="ann-hero-stat-label">Offers This Year</div>
+          </div>
+          <div class="ann-hero-stat">
+            <div class="ann-hero-stat-value">₹8.4L</div>
+            <div class="ann-hero-stat-label">Avg Package</div>
+          </div>
+          <div class="ann-hero-stat">
+            <div class="ann-hero-stat-value">89%</div>
+            <div class="ann-hero-stat-label">Placement Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter + Search Bar -->
+    <div class="filter-bar">
+      <div class="ann-search">
+        <span>🔍</span>
+        <input type="text" placeholder="Search announcements..." id="annSearch" oninput="filterAnn()" />
+      </div>
+      <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+      <button class="filter-btn" onclick="setFilter('drive', this)">🏢 Campus Drives</button>
+      <button class="filter-btn" onclick="setFilter('internship', this)">💼 Internships</button>
+      <button class="filter-btn" onclick="setFilter('notice', this)">📋 Notices</button>
+      <button class="filter-btn" onclick="setFilter('result', this)">🏆 Results</button>
+    </div>
+
+    <!-- Pinned Notice -->
+    <div class="pinned-strip">
+      <span>📌</span>
+      <span>PINNED: Last date to register for TCS Digital Drive is <strong>May 12, 2025</strong>. Submit your resume to placement cell by 5 PM.</span>
+      <span style="margin-left:auto; font-size:11px; opacity:0.7;">Pinned by Admin</span>
+    </div>
+
+    <!-- ── ANNOUNCEMENTS LIST ── -->
+    <div id="annList">
+
+      <!-- Drive 1 -->
+      <div class="big-ann-card" data-cat="drive" style="--ann-color:#2563eb; animation-delay:0.05s;">
+        <div class="ann-icon-box" style="background:#dbeafe;">🏢</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">TCS Digital — Campus Placement Drive 2025</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="unread-dot"></div>
+              <span class="badge badge-blue">Open</span>
+            </div>
+          </div>
+          <div class="ann-card-desc">TCS is conducting an on-campus placement drive for B.Tech / BCA / MCA students. Roles offered: Systems Engineer, Digital Developer. All eligible students must register via the placement portal.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-blue">Campus Drive</span>
+            <span class="badge badge-teal">ServiceNow Track</span>
+            <span class="badge badge-purple">Full-Time</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Drive Date: May 15, 2025</span>
+            <span class="ann-meta-item">⏰ Registration: May 12, 2025</span>
+            <span class="ann-meta-item">💰 Package: ₹7 LPA</span>
+            <span class="ann-meta-item">📍 Venue: Seminar Hall A</span>
+          </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" onclick="registerDrive(this, 'TCS Digital')">✅ Register Now</button>
+            <button class="btn btn-outline btn-sm" onclick="showDetails('TCS Digital requires: Aptitude Test → Technical → HR. Eligible: 70%+ aggregate, no active backlogs. Bring 5 copies of resume.')">📋 View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drive 2 -->
+      <div class="big-ann-card" data-cat="drive" style="--ann-color:#16a34a; animation-delay:0.1s;">
+        <div class="ann-icon-box" style="background:#dcfce7;">☁️</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">ServiceNow — Trainee Developer Recruitment 2025</div>
+            <span class="badge badge-new">🔥 New</span>
+          </div>
+          <div class="ann-card-desc">ServiceNow is hiring Trainee Developers for their Hyderabad office. Freshers with basic knowledge of JavaScript, HTML/CSS, and SQL are eligible. Excellent learning opportunity with real-time project exposure.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-teal">ServiceNow</span>
+            <span class="badge badge-easy">Freshers Welcome</span>
+            <span class="badge badge-blue">Cloud Platform</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Drive Date: June 2, 2025</span>
+            <span class="ann-meta-item">⏰ Last Date: May 28, 2025</span>
+            <span class="ann-meta-item">💰 Package: ₹5.5 LPA</span>
+            <span class="ann-meta-item">📍 Venue: Online + Campus</span>
+          </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-green btn-sm" onclick="registerDrive(this, 'ServiceNow')">✅ Register Now</button>
+            <button class="btn btn-outline btn-sm" onclick="showDetails('ServiceNow rounds: Written Test (Aptitude + Tech) → Technical Round 1 → Technical Round 2 → Managerial + HR. Prepare: OOP, JavaScript, SQL, ServiceNow basics.')">📋 View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drive 3 -->
+      <div class="big-ann-card" data-cat="drive" style="--ann-color:#7c3aed; animation-delay:0.15s;">
+        <div class="ann-icon-box" style="background:#ede9fe;">🏛</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Infosys — Systems Engineer | SP (Power Programmer)</div>
+            <span class="badge badge-purple">Registering</span>
+          </div>
+          <div class="ann-card-desc">Infosys is conducting campus hiring for two tracks: Systems Engineer (₹3.6 LPA) and SP Power Programmer (₹6.5 LPA). Selection based on InfyTQ certification + campus test + HR interview.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-purple">Two Tracks</span>
+            <span class="badge badge-blue">Full-Time</span>
+            <span class="badge badge-medium">InfyTQ Required</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Drive Date: May 22, 2025</span>
+            <span class="ann-meta-item">⏰ Last Date: May 18, 2025</span>
+            <span class="ann-meta-item">💰 ₹3.6 – ₹6.5 LPA</span>
+            <span class="ann-meta-item">📍 Venue: Seminar Hall B</span>
+          </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-sm" style="background:#7c3aed;color:#fff;border-radius:8px;padding:8px 16px;font-weight:600;border:none;cursor:pointer;font-size:13px;" onclick="registerDrive(this, 'Infosys')">✅ Register</button>
+            <button class="btn btn-outline btn-sm" onclick="showDetails('Infosys SP requires InfyTQ certification (90%+). Track 1: SE - basic aptitude + HR. Track 2: SP - advanced coding round. Complete InfyTQ course first!')">📋 View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drive 4 -->
+      <div class="big-ann-card" data-cat="drive" style="--ann-color:#ea580c; animation-delay:0.2s;">
+        <div class="ann-icon-box" style="background:#ffedd5;">🔶</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Wipro WILP — Work Integrated Learning Program</div>
+            <span class="badge badge-hot">⏰ Closing</span>
+          </div>
+          <div class="ann-card-desc">Wipro WILP offers a unique dual-benefit program — earn while you learn. Get a full-time job while completing your post-graduation. Final year students eligible. Last few seats remaining!</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-orange">WILP Program</span>
+            <span class="badge badge-blue">Work + Study</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Drive Date: May 30, 2025</span>
+            <span class="ann-meta-item">⏰ Last Date: May 25, 2025</span>
+            <span class="ann-meta-item">💰 Package: ₹3.5 LPA</span>
+            <span class="ann-meta-item">📍 Venue: Online</span>
+          </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-sm" style="background:#ea580c;color:#fff;border-radius:8px;padding:8px 16px;font-weight:600;border:none;cursor:pointer;font-size:13px;" onclick="registerDrive(this, 'Wipro WILP')">✅ Register</button>
+            <button class="btn btn-outline btn-sm" onclick="showDetails('Wipro WILP: Aptitude Test → Essay Writing → Technical Interview → HR. Prepare for AMCAT-style test. Strong communication skills needed.')">📋 View Details</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Internship 1 -->
+      <div class="big-ann-card" data-cat="internship" style="--ann-color:#0d9488; animation-delay:0.25s;">
+        <div class="ann-icon-box" style="background:#ccfbf1;">💼</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Google Summer of Code 2025 — Open Applications</div>
+            <span class="badge badge-teal">Internship</span>
+          </div>
+          <div class="ann-card-desc">Google Summer of Code (GSoC) 2025 applications are now open! Contribute to open-source organizations, get mentored by industry experts, and earn a stipend. Pre-final and final year students eligible.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-teal">Open Source</span>
+            <span class="badge badge-easy">Remote</span>
+            <span class="badge badge-blue">Stipend</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Deadline: April 30, 2025</span>
+            <span class="ann-meta-item">💰 Stipend: $1500–$3300</span>
+            <span class="ann-meta-item">🌍 Fully Remote</span>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="btn btn-sm" style="background:#0d9488;color:#fff;border-radius:8px;padding:8px 16px;font-weight:600;border:none;cursor:pointer;font-size:13px;" onclick="registerDrive(this, 'GSoC 2025')">🔗 Apply Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Internship 2 -->
+      <div class="big-ann-card" data-cat="internship" style="--ann-color:#2563eb; animation-delay:0.3s;">
+        <div class="ann-icon-box" style="background:#dbeafe;">🖥</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Microsoft — Internship 2025 (SDET & SWE Roles)</div>
+            <span class="badge badge-blue">Open</span>
+          </div>
+          <div class="ann-card-desc">Microsoft is hiring Summer Interns for SWE (Software Engineer) and SDET (Test Engineer) roles. Candidates must be strong in Data Structures, Algorithms, and System Design basics.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-blue">Microsoft</span>
+            <span class="badge badge-purple">Pre-Final Year</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Deadline: May 5, 2025</span>
+            <span class="ann-meta-item">💰 Stipend: ₹2L/month</span>
+            <span class="ann-meta-item">📍 Hyderabad / Bangalore</span>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="btn btn-primary btn-sm" onclick="registerDrive(this, 'Microsoft Internship')">🔗 Apply Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notice 1 -->
+      <div class="big-ann-card" data-cat="notice" style="--ann-color:#f59e0b; animation-delay:0.35s;">
+        <div class="ann-icon-box" style="background:#fef9c3;">📋</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Resume Submission Deadline — Placement Cell Notice</div>
+            <span class="badge badge-medium">Important</span>
+          </div>
+          <div class="ann-card-desc">All final year students must submit their updated resumes to the placement cell by May 10, 2025. Resumes not submitted will be ineligible for campus placements. Use the Resume Builder tool on this portal.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-medium">Deadline</span>
+            <span class="badge badge-orange">Action Required</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Deadline: May 10, 2025</span>
+            <span class="ann-meta-item">📧 placement@college.ac.in</span>
+          </div>
+          <div style="margin-top:14px;">
+            <a href="resume-builder.html" class="btn btn-sm" style="background:#f59e0b;color:#fff;border-radius:8px;padding:8px 16px;font-weight:600;text-decoration:none;font-size:13px;">📄 Build Resume Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notice 2 -->
+      <div class="big-ann-card" data-cat="notice" style="--ann-color:#6366f1; animation-delay:0.4s;">
+        <div class="ann-icon-box" style="background:#e0e7ff;">📝</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Pre-Placement Talk — Amazon & Flipkart (Joint Session)</div>
+            <span class="badge badge-blue">Upcoming</span>
+          </div>
+          <div class="ann-card-desc">Amazon and Flipkart representatives will conduct a joint pre-placement talk covering selection process, roles, culture, and Q&A. Attendance is mandatory for eligible students. Formal dress code required.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-blue">Mandatory</span>
+            <span class="badge badge-purple">Pre-PPT</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Date: May 8, 2025 at 10:00 AM</span>
+            <span class="ann-meta-item">📍 Main Auditorium</span>
+            <span class="ann-meta-item">👔 Formal Dress</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="big-ann-card" data-cat="result" style="--ann-color:#16a34a; animation-delay:0.45s;">
+        <div class="ann-icon-box" style="background:#dcfce7;">🏆</div>
+        <div class="ann-card-body">
+          <div class="ann-card-top">
+            <div class="ann-card-title">Cognizant GenC Results Declared — 47 Students Selected!</div>
+            <span class="badge badge-easy">Result Out</span>
+          </div>
+          <div class="ann-card-desc">Congratulations to all 47 students selected in the Cognizant GenC drive held on April 22, 2025. Offer letters will be shared via email within 2 weeks. Selected students: check your registered email IDs.</div>
+          <div class="ann-card-tags">
+            <span class="badge badge-easy">🎉 Results</span>
+            <span class="badge badge-blue">47 Selected</span>
+          </div>
+          <div class="ann-card-meta">
+            <span class="ann-meta-item">📅 Result Date: April 30, 2025</span>
+            <span class="ann-meta-item">💰 Package: ₹4.5 LPA</span>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="btn btn-outline btn-sm" onclick="showDetails('Selected students list has been shared to your registered email. Joining date: July 14, 2025. Background verification forms will be sent separately.')">📋 View Selected List</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#annList -->
+
+    <!-- ── TWO COLUMN BOTTOM ── -->
+    <div class="two-col mt-6" style="gap:22px; align-items:start;">
+
+      <!-- Upcoming Drive Timeline -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📅 Drive Calendar — May 2025</span>
+        </div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot green"></div>
+              <div class="timeline-date">May 8, 2025</div>
+              <div class="timeline-title">Amazon + Flipkart Pre-PPT</div>
+              <div class="timeline-desc">Joint pre-placement talk • Main Auditorium</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot orange"></div>
+              <div class="timeline-date">May 10, 2025</div>
+              <div class="timeline-title">Resume Submission Deadline</div>
+              <div class="timeline-desc">Submit to placement cell by 5 PM</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">May 15, 2025</div>
+              <div class="timeline-title">TCS Digital Drive</div>
+              <div class="timeline-desc">Aptitude → Technical → HR • Seminar Hall A</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-date">May 22, 2025</div>
+              <div class="timeline-title">Infosys SE & SP Drive</div>
+              <div class="timeline-desc">Two tracks • InfyTQ certified students</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot orange"></div>
+              <div class="timeline-date">May 30, 2025</div>
+              <div class="timeline-title">Wipro WILP Drive</div>
+              <div class="timeline-desc">Online test + interview • Closing soon</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot green"></div>
+              <div class="timeline-date">June 2, 2025</div>
+              <div class="timeline-title">ServiceNow Trainee Drive</div>
+              <div class="timeline-desc">4 rounds • Online + campus</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Notice Boards -->
+      <div style="display:flex; flex-direction:column; gap:18px;">
+
+        <!-- Important Notices -->
+        <div class="notice-card" style="--ann-color:#ef4444;">
+          <div class="notice-card-header" style="background:#fee2e2; color:#dc2626;">
+            🚨 Important Notices
+          </div>
+          <div class="notice-card-body">
+            <div class="notice-item">
+              <span>⚠️</span>
+              <div>
+                <div class="notice-item-text">CGPA must be ≥ 7.0 for premium companies (TCS, Infosys, Wipro)</div>
+                <div class="notice-item-date">Updated April 28, 2025</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span>⚠️</span>
+              <div>
+                <div class="notice-item-text">No active backlogs allowed at time of interview</div>
+                <div class="notice-item-date">Placement Cell Policy</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span>⚠️</span>
+              <div>
+                <div class="notice-item-text">Register on company portals before campus registration deadline</div>
+                <div class="notice-item-date">General Advisory</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placement Tips -->
+        <div class="notice-card">
+          <div class="notice-card-header" style="background:#dcfce7; color:#16a34a;">
+            💡 Placement Preparation Tips
+          </div>
+          <div class="notice-card-body">
+            <div class="notice-item">
+              <span>✅</span>
+              <div>
+                <div class="notice-item-text">Solve 2 DSA problems daily on LeetCode</div>
+                <div class="notice-item-date">Recommended by Alumni</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span>✅</span>
+              <div>
+                <div class="notice-item-text">Complete ServiceNow Fundamentals course on Now Learning</div>
+                <div class="notice-item-date">For ServiceNow roles</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span>✅</span>
+              <div>
+                <div class="notice-item-text">Practice mock aptitude tests 3x per week</div>
+                <div class="notice-item-date">Use Aptitude section here</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span>✅</span>
+              <div>
+                <div class="notice-item-text">Build your GitHub profile with 3+ projects</div>
+                <div class="notice-item-date">Boosts resume score</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="notice-card">
+          <div class="notice-card-header" style="background:#dbeafe; color:#2563eb;">
+            📞 Placement Cell Contact
+          </div>
+          <div class="notice-card-body">
+            <div class="notice-item"><span>📧</span><div><div class="notice-item-text">placement@college.ac.in</div></div></div>
+            <div class="notice-item"><span>📱</span><div><div class="notice-item-text">+91 98765 43210 (TPO Office)</div></div></div>
+            <div class="notice-item"><span>🕘</span><div><div class="notice-item-text">Mon–Fri, 9:00 AM – 5:00 PM</div></div></div>
+            <div class="notice-item"><span>🏢</span><div><div class="notice-item-text">Room 201, Admin Block</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Empty State (shown when no results) -->
+    <div id="emptyState" class="hidden" style="text-align:center;padding:60px 20px;">
+      <div style="font-size:52px;margin-bottom:16px;">🔍</div>
+      <p style="font-size:16px;font-weight:700;color:var(--text-primary);">No announcements found</p>
+      <p class="text-muted" style="margin-top:6px;">Try a different search or filter.</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- Detail Modal -->
+<div id="detailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;display:none;align-items:center;justify-content:center;" onclick="closeModal(event)">
+  <div style="background:#fff;border-radius:18px;padding:32px;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);animation:fadeUp 0.3s ease;">
+    <h3 style="font-size:18px;font-weight:800;margin-bottom:14px;color:var(--text-primary);">📋 Drive Details</h3>
+    <p id="modalText" style="font-size:14px;line-height:1.7;color:var(--text-secondary);"></p>
+    <button class="btn btn-primary" style="margin-top:22px;width:100%;" onclick="document.getElementById('detailModal').style.display='none'">Close</button>
+  </div>
+</div>
+
+<script src="scripts.js"></script>
+<script>
+  /* ── Filter ── */
+  function setFilter(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cards = document.querySelectorAll('#annList .big-ann-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = show ? 'flex' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('emptyState').classList.toggle('hidden', visible > 0);
+  }
+
+  /* ── Search ── */
+  function filterAnn() {
+    const q = document.getElementById('annSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('#annList .big-ann-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      const show = text.includes(q);
+      card.style.display = show ? 'flex' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('emptyState').classList.toggle('hidden', visible > 0);
+  }
+
+  /* ── Register ── */
+  function registerDrive(btn, name) {
+    btn.textContent = '✅ Registered!';
+    btn.disabled = true;
+    btn.style.background = '#16a34a';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+    showToast(`Registered for ${name}! Check your email.`, 'success');
+  }
+
+  /* ── Details Modal ── */
+  function showDetails(text) {
+    document.getElementById('modalText').textContent = text;
+    document.getElementById('detailModal').style.display = 'flex';
+  }
+  function closeModal(e) {
+    if (e.target === document.getElementById('detailModal')) {
+      document.getElementById('detailModal').style.display = 'none';
+    }
+  }
+</script>
+</body>
+</html>
